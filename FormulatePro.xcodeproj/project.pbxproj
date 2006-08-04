@@ -1,0 +1,467 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */; };
+		8D15AC2E0486D014006FF6A4 /* MyDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B4FDCFA73011CA2CEA /* MyDocument.nib */; };
+		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
+		8D15AC310486D014006FF6A4 /* MyDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */; settings = {ATTRIBUTES = (); }; };
+		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
+		C4AB3EE90A5B010000EE29B2 /* PDFKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4AB3EE80A5B010000EE29B2 /* PDFKit.framework */; };
+		C4AB3FBD0A5B06B200EE29B2 /* MyPDFView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4AB3FBC0A5B06B200EE29B2 /* MyPDFView.m */; };
+		C4AB40380A5BB5D200EE29B2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C4AB40370A5BB5D200EE29B2 /* AppDelegate.m */; };
+		C4AB420E0A5F926500EE29B2 /* circleTool.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB420D0A5F926500EE29B2 /* circleTool.psd */; };
+		C4AB42100A5F928600EE29B2 /* rectangleTool.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB420F0A5F928600EE29B2 /* rectangleTool.psd */; };
+		C4AB42120A5F929600EE29B2 /* squiggleTool.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB42110A5F929600EE29B2 /* squiggleTool.psd */; };
+		C4AB42140A5F929B00EE29B2 /* textTool.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB42130A5F929B00EE29B2 /* textTool.psd */; };
+		C4AB423D0A5FA01D00EE29B2 /* arrowTool.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB423C0A5FA01D00EE29B2 /* arrowTool.psd */; };
+		C4AB42820A623A6800EE29B2 /* FPToolPaletteController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4AB42810A623A6800EE29B2 /* FPToolPaletteController.m */; };
+		C4AB42D20A6245F100EE29B2 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = C4AB42D00A6245F100EE29B2 /* Credits.html */; };
+		C4AB43800A67C3E600EE29B2 /* stampTool.png in Resources */ = {isa = PBXBuildFile; fileRef = C4AB437F0A67C3E600EE29B2 /* stampTool.png */; };
+		C4AB43970A6A3B0D00EE29B2 /* oneUp.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB43960A6A3B0D00EE29B2 /* oneUp.psd */; };
+		C4AB440B0A711A0D00EE29B2 /* twoUp.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB440A0A711A0C00EE29B2 /* twoUp.psd */; };
+		C4AB442E0A71200C00EE29B2 /* book.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB442D0A71200C00EE29B2 /* book.psd */; };
+		C4AB447F0A718D7600EE29B2 /* continuous.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB447E0A718D7600EE29B2 /* continuous.psd */; };
+		C4DC0CB20A82AA6100DB476E /* FPGraphic.m in Sources */ = {isa = PBXBuildFile; fileRef = C4AB40E40A5BDC7D00EE29B2 /* FPGraphic.m */; };
+		C4DC0D980A82D28800DB476E /* viewmag-.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0D960A82D28800DB476E /* viewmag-.png */; };
+		C4DC0D990A82D28800DB476E /* viewmag+.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0D970A82D28800DB476E /* viewmag+.png */; };
+		C4DC0DA60A82D35500DB476E /* next.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DA40A82D35500DB476E /* next.png */; };
+		C4DC0DA70A82D35500DB476E /* previous.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DA50A82D35500DB476E /* previous.png */; };
+		C4DC0DB70A82D99700DB476E /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DB60A82D99700DB476E /* LICENSE.txt */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		4A9504D0FFE6A4CB11CA0CBA /* Debug */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PREBINDING = NO;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		4A9504D1FFE6A4CB11CA0CBA /* Release */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				PREBINDING = NO;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXFileReference section */
+		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		13E42FBA07B3F13500E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDocument.m; sourceTree = "<group>"; };
+		2A37F4AEFDCFA73011CA2CEA /* MyDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDocument.h; sourceTree = "<group>"; };
+		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2A37F4B5FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MyDocument.nib; sourceTree = "<group>"; };
+		2A37F4B7FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		32DBCF750370BD2300C91783 /* FormulatePro_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormulatePro_Prefix.pch; sourceTree = "<group>"; };
+		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8D15AC370486D014006FF6A4 /* FormulatePro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FormulatePro.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4AB3EE80A5B010000EE29B2 /* PDFKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PDFKit.framework; path = /System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/PDFKit.framework; sourceTree = "<absolute>"; };
+		C4AB3FBB0A5B06B200EE29B2 /* MyPDFView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPDFView.h; sourceTree = "<group>"; };
+		C4AB3FBC0A5B06B200EE29B2 /* MyPDFView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPDFView.m; sourceTree = "<group>"; };
+		C4AB40360A5BB5D200EE29B2 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C4AB40370A5BB5D200EE29B2 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C4AB40E30A5BDC7D00EE29B2 /* FPGraphic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPGraphic.h; sourceTree = "<group>"; };
+		C4AB40E40A5BDC7D00EE29B2 /* FPGraphic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPGraphic.m; sourceTree = "<group>"; };
+		C4AB420D0A5F926500EE29B2 /* circleTool.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = circleTool.psd; sourceTree = "<group>"; };
+		C4AB420F0A5F928600EE29B2 /* rectangleTool.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = rectangleTool.psd; sourceTree = "<group>"; };
+		C4AB42110A5F929600EE29B2 /* squiggleTool.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = squiggleTool.psd; sourceTree = "<group>"; };
+		C4AB42130A5F929B00EE29B2 /* textTool.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = textTool.psd; sourceTree = "<group>"; };
+		C4AB423C0A5FA01D00EE29B2 /* arrowTool.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = arrowTool.psd; sourceTree = "<group>"; };
+		C4AB42800A623A6800EE29B2 /* FPToolPaletteController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FPToolPaletteController.h; sourceTree = "<group>"; };
+		C4AB42810A623A6800EE29B2 /* FPToolPaletteController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FPToolPaletteController.m; sourceTree = "<group>"; };
+		C4AB42D10A6245F100EE29B2 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = English; path = English.lproj/Credits.html; sourceTree = "<group>"; };
+		C4AB437F0A67C3E600EE29B2 /* stampTool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stampTool.png; sourceTree = "<group>"; };
+		C4AB43960A6A3B0D00EE29B2 /* oneUp.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = oneUp.psd; sourceTree = "<group>"; };
+		C4AB440A0A711A0C00EE29B2 /* twoUp.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = twoUp.psd; sourceTree = "<group>"; };
+		C4AB442D0A71200C00EE29B2 /* book.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = book.psd; sourceTree = "<group>"; };
+		C4AB447E0A718D7600EE29B2 /* continuous.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = continuous.psd; sourceTree = "<group>"; };
+		C4DC0D960A82D28800DB476E /* viewmag-.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "viewmag-.png"; sourceTree = SOURCE_ROOT; };
+		C4DC0D970A82D28800DB476E /* viewmag+.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "viewmag+.png"; sourceTree = SOURCE_ROOT; };
+		C4DC0DA40A82D35500DB476E /* next.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = next.png; sourceTree = SOURCE_ROOT; };
+		C4DC0DA50A82D35500DB476E /* previous.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = previous.png; sourceTree = SOURCE_ROOT; };
+		C4DC0DB60A82D99700DB476E /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = LICENSE.txt; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D15AC330486D014006FF6A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
+				C4AB3EE90A5B010000EE29B2 /* PDFKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A8FEA54F5311CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */,
+				13E42FBA07B3F13500E4EEF1 /* CoreData.framework */,
+				2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */,
+				C4AB3EE80A5B010000EE29B2 /* PDFKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FB0FE9D524F11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D15AC370486D014006FF6A4 /* FormulatePro.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2A37F4AAFDCFA73011CA2CEA /* FormulatePro */ = {
+			isa = PBXGroup;
+			children = (
+				2A37F4ABFDCFA73011CA2CEA /* Classes */,
+				C4AB40EA0A5BDCC900EE29B2 /* Overlay Graphics */,
+				2A37F4AFFDCFA73011CA2CEA /* Other Sources */,
+				2A37F4B8FDCFA73011CA2CEA /* Resources */,
+				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
+				19C28FB0FE9D524F11CA2CBB /* Products */,
+			);
+			name = FormulatePro;
+			sourceTree = "<group>";
+		};
+		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				C4AB40360A5BB5D200EE29B2 /* AppDelegate.h */,
+				C4AB40370A5BB5D200EE29B2 /* AppDelegate.m */,
+				C4AB3FBB0A5B06B200EE29B2 /* MyPDFView.h */,
+				C4AB3FBC0A5B06B200EE29B2 /* MyPDFView.m */,
+				2A37F4AEFDCFA73011CA2CEA /* MyDocument.h */,
+				2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */,
+				C4AB42800A623A6800EE29B2 /* FPToolPaletteController.h */,
+				C4AB42810A623A6800EE29B2 /* FPToolPaletteController.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		2A37F4AFFDCFA73011CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32DBCF750370BD2300C91783 /* FormulatePro_Prefix.pch */,
+				2A37F4B0FDCFA73011CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C4AB42D00A6245F100EE29B2 /* Credits.html */,
+				C4DC0DB60A82D99700DB476E /* LICENSE.txt */,
+				2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */,
+				2A37F4B4FDCFA73011CA2CEA /* MyDocument.nib */,
+				8D15AC360486D014006FF6A4 /* Info.plist */,
+				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
+				C4AB420D0A5F926500EE29B2 /* circleTool.psd */,
+				C4AB420F0A5F928600EE29B2 /* rectangleTool.psd */,
+				C4AB42110A5F929600EE29B2 /* squiggleTool.psd */,
+				C4AB42130A5F929B00EE29B2 /* textTool.psd */,
+				C4AB423C0A5FA01D00EE29B2 /* arrowTool.psd */,
+				C4AB437F0A67C3E600EE29B2 /* stampTool.png */,
+				C4AB43960A6A3B0D00EE29B2 /* oneUp.psd */,
+				C4AB440A0A711A0C00EE29B2 /* twoUp.psd */,
+				C4AB442D0A71200C00EE29B2 /* book.psd */,
+				C4AB447E0A718D7600EE29B2 /* continuous.psd */,
+				C4DC0D960A82D28800DB476E /* viewmag-.png */,
+				C4DC0D970A82D28800DB476E /* viewmag+.png */,
+				C4DC0DA40A82D35500DB476E /* next.png */,
+				C4DC0DA50A82D35500DB476E /* previous.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */,
+				1058C7A8FEA54F5311CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C4AB40EA0A5BDCC900EE29B2 /* Overlay Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				C4AB40E30A5BDC7D00EE29B2 /* FPGraphic.h */,
+				C4AB40E40A5BDC7D00EE29B2 /* FPGraphic.m */,
+			);
+			name = "Overlay Graphics";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D15AC270486D014006FF6A4 /* FormulatePro */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C4AB3E9B0A5AFE1100EE29B2 /* Build configuration list for PBXNativeTarget "FormulatePro" */;
+			buildPhases = (
+				8D15AC2B0486D014006FF6A4 /* Resources */,
+				8D15AC300486D014006FF6A4 /* Sources */,
+				8D15AC330486D014006FF6A4 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = FormulatePro_Prefix.pch;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = FormulatePro;
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			name = FormulatePro;
+			productInstallPath = "$(HOME)/Applications";
+			productName = FormulatePro;
+			productReference = 8D15AC370486D014006FF6A4 /* FormulatePro.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C4AB3E9F0A5AFE1100EE29B2 /* Build configuration list for PBXProject "FormulatePro" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				4A9504D0FFE6A4CB11CA0CBA /* Debug */,
+				4A9504D1FFE6A4CB11CA0CBA /* Release */,
+			);
+			hasScannedForEncodings = 1;
+			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* FormulatePro */;
+			projectDirPath = "";
+			targets = (
+				8D15AC270486D014006FF6A4 /* FormulatePro */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D15AC2B0486D014006FF6A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */,
+				8D15AC2E0486D014006FF6A4 /* MyDocument.nib in Resources */,
+				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
+				C4AB420E0A5F926500EE29B2 /* circleTool.psd in Resources */,
+				C4AB42100A5F928600EE29B2 /* rectangleTool.psd in Resources */,
+				C4AB42120A5F929600EE29B2 /* squiggleTool.psd in Resources */,
+				C4AB42140A5F929B00EE29B2 /* textTool.psd in Resources */,
+				C4AB423D0A5FA01D00EE29B2 /* arrowTool.psd in Resources */,
+				C4AB42D20A6245F100EE29B2 /* Credits.html in Resources */,
+				C4AB43800A67C3E600EE29B2 /* stampTool.png in Resources */,
+				C4AB43970A6A3B0D00EE29B2 /* oneUp.psd in Resources */,
+				C4AB440B0A711A0D00EE29B2 /* twoUp.psd in Resources */,
+				C4AB442E0A71200C00EE29B2 /* book.psd in Resources */,
+				C4AB447F0A718D7600EE29B2 /* continuous.psd in Resources */,
+				C4DC0D980A82D28800DB476E /* viewmag-.png in Resources */,
+				C4DC0D990A82D28800DB476E /* viewmag+.png in Resources */,
+				C4DC0DA60A82D35500DB476E /* next.png in Resources */,
+				C4DC0DA70A82D35500DB476E /* previous.png in Resources */,
+				C4DC0DB70A82D99700DB476E /* LICENSE.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D15AC300486D014006FF6A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D15AC310486D014006FF6A4 /* MyDocument.m in Sources */,
+				8D15AC320486D014006FF6A4 /* main.m in Sources */,
+				C4AB3FBD0A5B06B200EE29B2 /* MyPDFView.m in Sources */,
+				C4AB40380A5BB5D200EE29B2 /* AppDelegate.m in Sources */,
+				C4AB42820A623A6800EE29B2 /* FPToolPaletteController.m in Sources */,
+				C4DC0CB20A82AA6100DB476E /* FPGraphic.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165FFE840EACC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C1660FE840EACC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		2A37F4B4FDCFA73011CA2CEA /* MyDocument.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2A37F4B5FDCFA73011CA2CEA /* English */,
+			);
+			name = MyDocument.nib;
+			sourceTree = "<group>";
+		};
+		2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2A37F4B7FDCFA73011CA2CEA /* English */,
+			);
+			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+		C4AB42D00A6245F100EE29B2 /* Credits.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C4AB42D10A6245F100EE29B2 /* English */,
+			);
+			name = Credits.html;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C4AB3E9C0A5AFE1100EE29B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Quartz.framework/Versions/A/Frameworks\"";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = FormulatePro_Prefix.pch;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PREBINDING = NO;
+				PRODUCT_NAME = FormulatePro;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		C4AB3E9D0A5AFE1100EE29B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Quartz.framework/Versions/A/Frameworks\"";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = FormulatePro_Prefix.pch;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PREBINDING = NO;
+				PRODUCT_NAME = FormulatePro;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		C4AB3E9E0A5AFE1100EE29B2 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Quartz.framework/Versions/A/Frameworks\"";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = FormulatePro_Prefix.pch;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = FormulatePro;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		C4AB3EA00A5AFE1100EE29B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+			};
+			name = Debug;
+		};
+		C4AB3EA10A5AFE1100EE29B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+			};
+			name = Release;
+		};
+		C4AB3EA20A5AFE1100EE29B2 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C4AB3E9B0A5AFE1100EE29B2 /* Build configuration list for PBXNativeTarget "FormulatePro" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C4AB3E9C0A5AFE1100EE29B2 /* Debug */,
+				C4AB3E9D0A5AFE1100EE29B2 /* Release */,
+				C4AB3E9E0A5AFE1100EE29B2 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		C4AB3E9F0A5AFE1100EE29B2 /* Build configuration list for PBXProject "FormulatePro" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C4AB3EA00A5AFE1100EE29B2 /* Debug */,
+				C4AB3EA10A5AFE1100EE29B2 /* Release */,
+				C4AB3EA20A5AFE1100EE29B2 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+}

@@ -1,0 +1,26 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                chooseToolArrow = id; 
+                chooseToolCircle = id; 
+                toggleTwoUp = id; 
+                zoomIn = id; 
+                zoomOut = id; 
+            }; 
+            CLASS = MyDocument; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_document_window" = NSWindow; 
+                "_one_up_vs_two_up_vs_book" = NSSegmentedControl; 
+                "_pdf_view" = MyPDFView; 
+                "_single_vs_continuous" = NSSegmentedControl; 
+            }; 
+            SUPERCLASS = NSDocument; 
+        }, 
+        {CLASS = MyPDFView; LANGUAGE = ObjC; SUPERCLASS = PDFView; }, 
+        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }
+    ); 
+    IBVersion = 1; 
+}

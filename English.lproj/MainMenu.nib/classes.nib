@@ -1,0 +1,28 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {provideFeedback = id; showLicense = id; }; 
+            CLASS = AppDelegate; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {chooseTool = id; }; 
+            CLASS = FPToolPaletteController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                arrowToolButton = NSButton; 
+                checkmarkToolButton = NSButton; 
+                ellipseToolButton = NSButton; 
+                rectangleToolButton = NSButton; 
+                squiggleToolButton = NSButton; 
+                stampToolButton = NSButton; 
+                textToolButton = NSButton; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }
+    ); 
+    IBVersion = 1; 
+}
