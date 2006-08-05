@@ -13,18 +13,16 @@
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
-    NSLog(@"initWithFrame\n");
     if (self) {
         // Initialization code here.
-        _overlay_graphics = [[NSMutableArray alloc] initWithCapacity:5];
-        NSLog(@"initWithFrame 2\n");
+        _overlay_graphics = [[NSMutableArray alloc] initWithCapacity:1];
     }
     return self;
 }
 
 - (void)awakeFromNib
 {
-    _overlay_graphics = [[NSMutableArray alloc] initWithCapacity:5];
+    _overlay_graphics = [[NSMutableArray alloc] initWithCapacity:1];
 }
 
 - (void)drawPage:(PDFPage *)page
@@ -35,11 +33,9 @@
     int i;
     
     count = [_overlay_graphics count];
-    NSLog(@"pdf draw cnt: %d\n", count);
     for (i = 0; i < count; i++) {
         FPGraphic *g;
         g = [_overlay_graphics objectAtIndex:i];
-        NSLog(@"pdf page: 0x%08x, graphic page: 0x%08x\n", page, [g page]);
         if ([g page] == page)
             [g draw];
     }
@@ -64,12 +60,10 @@
 {
     FPGraphic *graphic;
     
-    NSLog(@"making graphic\n");
     graphic = [FPGraphic graphicInPDFView:self];
     assert(graphic);
     [_overlay_graphics addObject:graphic];
     [graphic placeWithEvent:theEvent];
-    NSLog(@"made graphic cnt: %d\n", [_overlay_graphics count]);
 }
 
 @end

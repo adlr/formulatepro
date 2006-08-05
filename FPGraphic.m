@@ -33,7 +33,6 @@
     for (;;) {
         NSPoint point;
         
-        NSLog(@"in loop\n");
         if (_page) { // invalidate where the shape used to be, if anywhere
             [_pdfView setNeedsDisplayInRect:[_pdfView convertRect:[self safeBounds] fromPage:_page]];
         }
@@ -58,11 +57,27 @@
 {
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:_bounds];
     [path setLineWidth:_lineWidth];
-    NSLog(@"draw graphic\n");
     [[NSColor redColor] set];
     [path fill];
     [[NSColor blackColor] set];
     [path stroke];
+
+    NSPoint p = NSMakePoint(_bounds.origin.x + _bounds.size.width+_lineWidth/2.0,
+                            _bounds.origin.y + _bounds.size.height+_lineWidth/2.0);
+    NSPoint q;
+    NSRect rect;
+    NSRect pdf_rect;
+    q = [_pdfView convertPoint:p fromPage:_page];
+    rect = NSMakeRect(floorf(q.x)+0.5 -2.0,
+                      floorf(q.y)+0.5 -2.0,
+                      4.0,4.0);
+    pdf_rect = [_pdfView convertRect:rect toPage:_page];
+    NSBezierPath *newpath = [NSBezierPath bezierPathWithRect:pdf_rect];
+    [newpath setLineWidth:(1.0/[_pdfView scaleFactor])];
+    [[NSColor whiteColor] set];
+    [newpath fill];
+    [[NSColor blackColor] set];
+    [newpath stroke];
 }
 
 - (PDFPage*)page
@@ -75,8 +90,8 @@
     float halfWidth = _lineWidth/2.0;
     return NSMakeRect(_bounds.origin.x - halfWidth,
                       _bounds.origin.y - halfWidth,
-                      _bounds.size.width + _lineWidth,
-                      _bounds.size.height + _lineWidth);
+                      _bounds.size.width + _lineWidth + 100,
+                      _bounds.size.height + _lineWidth + 100);
 }
 
 /*
