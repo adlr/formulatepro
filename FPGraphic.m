@@ -3,7 +3,7 @@
 //  FormulatePro
 //
 //  Created by Andrew de los Reyes on 7/5/06.
-//  Copyright 2006 __MyCompanyName__. All rights reserved.
+//  Copyright 2006 Andrew de los Reyes. All rights reserved.
 //
 
 #import "FPGraphic.h"
@@ -28,7 +28,7 @@
     return self;
 }
 
-- (void)placeWithEvent:(NSEvent *)theEvent
+- (BOOL)placeWithEvent:(NSEvent *)theEvent
 {
     for (;;) {
         NSPoint point;
@@ -51,6 +51,134 @@
             break;
     }
     assert(_page);
+    return YES;
+}
+
+// returns YES if flipped
+BOOL FPRectSetTopAbs(NSRect *rect, float top)
+{
+    BOOL flip = top < rect->origin.y;
+    if (flip) {
+        rect->size.height = rect->origin.y - top;
+        rect->origin.y = top;
+    } else {
+        rect->size.height = top - rect->origin.y;
+    }
+    return flip;
+}
+
+// returns YES if flipped
+BOOL FPRectSetRightAbs(NSRect *rect, float right)
+{
+    BOOL flip = right < rect->origin.x;
+    if (flip) {
+        rect->size.width = rect->origin.x - right;
+        rect->origin.x = right;
+    } else {
+        rect->size.width = right - rect->origin.x;
+    }
+    return flip;
+}
+
+// returns YES if flipped
+BOOL FPRectSetBottomAbs(NSRect *rect, float bottom)
+{
+    BOOL flip = bottom > (rect->origin.y + rect->size.height);
+    if (flip) {
+        rect->origin.y += rect->size.height;
+        rect->size.height = bottom - rect->origin.y;
+    } else {
+        rect->size.height += (rect->origin.y - bottom);
+        rect->origin.y = bottom;
+    }
+    return flip;
+}
+
+// returns YES if flipped
+BOOL FPRectSetLeftAbs(NSRect *rect, float left)
+{
+    BOOL flip = left > (rect->origin.x + rect->size.width);
+    if (flip) {
+        rect->origin.x += rect->size.width;
+        rect->size.width = left - rect->origin.x;
+    } else {
+        rect->size.width += (rect->origin.x - left);
+        rect->origin.x = left;
+    }
+    return flip;
+}
+
+- (void)resizeWithEvent:(NSEvent *)theEvent byKnob:(int)knob
+{
+    assert(knob == LowerRightKnob);
+    BOOL flipX;
+    BOOL flipY;
+    
+    for (;;) {
+        flipX = NO;
+        flipY = NO;
+        assert(_bounds.size.width >= 0.0);
+        assert(_bounds.size.height >= 0.0);
+        
+        NSLog(@"resize x: %.1f y: %.1f w: %.1f h: %.1f\n",
+              _bounds.origin.x,
+              _bounds.origin.y,
+              _bounds.size.width,
+              _bounds.size.height);
+        
+        NSPoint docPoint = [_pdfView convertPagePointFromEvent:theEvent
+                                                          page:_page];
+        [_pdfView setNeedsDisplayInRect:[_pdfView convertRect:[self safeBounds] fromPage:_page]];
+        
+        if (knob == UpperLeftKnob ||
+            knob == UpperMiddleKnob ||
+            knob == UpperRightKnob)
+            flipY = FPRectSetTopAbs(&_bounds, docPoint.y);
+        if (knob == LowerLeftKnob ||
+            knob == LowerMiddleKnob ||
+            knob == LowerRightKnob)
+            flipY = FPRectSetBottomAbs(&_bounds, docPoint.y);
+        
+        if (knob == UpperLeftKnob ||
+            knob == MiddleLeftKnob ||
+            knob == LowerLeftKnob)
+            flipX = FPRectSetLeftAbs(&_bounds, docPoint.x);
+        if (knob == UpperRightKnob ||
+            knob == MiddleRightKnob ||
+            knob == LowerRightKnob)
+            flipX = FPRectSetRightAbs(&_bounds, docPoint.x);
+        
+        [_pdfView setNeedsDisplayInRect:[_pdfView convertRect:[self safeBounds] fromPage:_page]];
+
+        if (flipY) {
+            NSLog(@"FLIP Y\n");
+            switch (knob) {
+                case UpperLeftKnob: knob = LowerLeftKnob; break;
+                case UpperMiddleKnob: knob = LowerMiddleKnob; break;
+                case UpperRightKnob: knob = LowerRightKnob; break;
+                case LowerLeftKnob: knob = UpperLeftKnob; break;
+                case LowerMiddleKnob: knob = UpperMiddleKnob; break;
+                case LowerRightKnob: knob = UpperRightKnob; break;
+            }
+        }
+        if (flipX) {
+            NSLog(@"FLIP X\n");
+            switch (knob) {
+                case UpperLeftKnob: knob = UpperRightKnob; break;
+                case MiddleLeftKnob: knob = MiddleRightKnob; break;
+                case LowerLeftKnob: knob = LowerRightKnob; break;
+                case UpperRightKnob: knob = UpperLeftKnob; break;
+                case MiddleRightKnob: knob = MiddleLeftKnob; break;
+                case LowerRightKnob: knob = LowerLeftKnob; break;
+            }
+        }
+        
+        // get ready for next iteration of the loop, or break out of loop
+        theEvent = [[_pdfView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
+        if ([theEvent type] == NSLeftMouseUp)
+            break;
+    }
+
 }
 
 - (void)draw
@@ -70,7 +198,7 @@
     q = [_pdfView convertPoint:p fromPage:_page];
     rect = NSMakeRect(floorf(q.x)+0.5 -2.0,
                       floorf(q.y)+0.5 -2.0,
-                      4.0,4.0);
+                      4.0, 4.0);
     pdf_rect = [_pdfView convertRect:rect toPage:_page];
     NSBezierPath *newpath = [NSBezierPath bezierPathWithRect:pdf_rect];
     [newpath setLineWidth:(1.0/[_pdfView scaleFactor])];
@@ -88,153 +216,20 @@
 - (NSRect)safeBounds
 {
     float halfWidth = _lineWidth/2.0;
-    return NSMakeRect(_bounds.origin.x - halfWidth,
-                      _bounds.origin.y - halfWidth,
-                      _bounds.size.width + _lineWidth + 100,
-                      _bounds.size.height + _lineWidth + 100);
+    return NSMakeRect(_bounds.origin.x - halfWidth - 1.0,
+                      _bounds.origin.y - halfWidth - 1.0,
+                      _bounds.size.width + _lineWidth + 2.0,
+                      _bounds.size.height + _lineWidth + 2.0);
 }
 
-/*
-- (NSBezierPath *)bezierPath {
-    // Subclasses that just have a simple path override this to return it.  The basic drawInView:isSelected: implementation below will stroke and fill this path.  Subclasses that need more complex drawing will just override drawInView:isSelected:.
-    return nil;
+- (float)lineWidth
+{
+    return _lineWidth;
 }
 
-- (void)setBounds:(NSRect)bounds {
-    if (!NSEqualRects(bounds, _bounds)) {
-        if (!_gFlags.manipulatingBounds) {
-            // Send the notification before and after so that observers who invalidate display in views will wind up invalidating both the original rect and the new one.
-            [self didChange];
-            [[[self undoManager] prepareWithInvocationTarget:self] setBounds:_bounds];
-        }
-        _bounds = bounds;
-        if (!_gFlags.manipulatingBounds) {
-            [self didChange];
-        }
-    }
-}
-
-- (void)startBoundsManipulation {
-    // Save the original bounds.
-    _gFlags.manipulatingBounds = YES;
-    _origBounds = _bounds;
-}
-
-- (void)stopBoundsManipulation {
-    if (_gFlags.manipulatingBounds) {
-        // Restore the original bounds, the set the new bounds.
-        if (!NSEqualRects(_origBounds, _bounds)) {
-            NSRect temp;
-            
-            _gFlags.manipulatingBounds = NO;
-            temp = _bounds;
-            _bounds = _origBounds;
-            [self setBounds:temp];
-        } else {
-            _gFlags.manipulatingBounds = NO;
-        }
-    }
-}
-
-- (NSRect)bounds {
+- (NSRect)bounds
+{
     return _bounds;
 }
 
-- (int)resizeByMovingKnob:(int)knob toPoint:(NSPoint)point maintainAspectRatio:(BOOL)maintain_ar {
-    NSRect bounds = [self bounds];
-    
-    if ((knob == UpperLeftKnob) || (knob == MiddleLeftKnob) || (knob == LowerLeftKnob)) {
-        // Adjust left edge
-        bounds.size.width = NSMaxX(bounds) - point.x;
-        bounds.origin.x = point.x;
-    } else if ((knob == UpperRightKnob) || (knob == MiddleRightKnob) || (knob == LowerRightKnob)) {
-        // Adjust left edge
-        bounds.size.width = point.x - bounds.origin.x;
-    }
-    if (bounds.size.width < 0.0) {
-        knob = [SKTGraphic flipKnob:knob horizontal:YES];
-        bounds.size.width = -bounds.size.width;
-        bounds.origin.x -= bounds.size.width;
-        [self flipHorizontally];
-    }
-    
-    if ((knob == UpperLeftKnob) || (knob == UpperMiddleKnob) || (knob == UpperRightKnob)) {
-        // Adjust top edge
-        bounds.size.height = NSMaxY(bounds) - point.y;
-        bounds.origin.y = point.y;
-    } else if ((knob == LowerLeftKnob) || (knob == LowerMiddleKnob) || (knob == LowerRightKnob)) {
-        // Adjust bottom edge
-        bounds.size.height = point.y - bounds.origin.y;
-    }
-    if (bounds.size.height < 0.0) {
-        knob = [SKTGraphic flipKnob:knob horizontal:NO];
-        bounds.size.height = -bounds.size.height;
-        bounds.origin.y -= bounds.size.height;
-        [self flipVertically];
-    }
-    [self setBounds:bounds];
-    return knob;
-}
-
-- (void)drawInView:(SKTGraphicView *)view isSelected:(BOOL)flag {
-    NSBezierPath *path = [self bezierPath];
-    if (path) {
-        if ([self drawsFill]) {
-            [[self fillColor] set];
-            [path fill];
-        }
-        if ([self drawsStroke]) {
-            [[self strokeColor] set];
-            [path stroke];
-        }
-    }
-    if (flag) {
-        [self drawHandlesInView:view];
-    }
-}
-
-- (BOOL)createWithEvent:(NSEvent *)theEvent inView:(MyPDFView *)view {
-    // default implementation tracks until mouseUp: just setting the bounds of the new graphic.
-    NSPoint point = [view convertPoint:[theEvent locationInWindow] fromView:nil];
-    int knob = LowerRightKnob;
-    NSRect bounds;
-    BOOL snapsToGrid = [view snapsToGrid];
-    float spacing = [view gridSpacing];
-    BOOL echoToRulers = [[view enclosingScrollView] rulersVisible];
-    
-    [self startBoundsManipulation];
-    if (snapsToGrid) {
-        point.x = floor((point.x / spacing) + 0.5) * spacing;
-        point.y = floor((point.y / spacing) + 0.5) * spacing;
-    }
-    [self setBounds:NSMakeRect(point.x, point.y, 0.0, 0.0)];
-    if (echoToRulers) {
-        [view beginEchoingMoveToRulers:[self bounds]];
-    }
-    while (1) {
-        theEvent = [[view window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
-        NSLog(@"tracking graphic creation\n");
-        point = [view convertPoint:[theEvent locationInWindow] fromView:nil];
-        if (snapsToGrid) {
-            point.x = floor((point.x / spacing) + 0.5) * spacing;
-            point.y = floor((point.y / spacing) + 0.5) * spacing;
-        }
-        [view setNeedsDisplayInRect:[self drawingBounds]];
-        knob = [self resizeByMovingKnob:knob toPoint:point];
-        [view setNeedsDisplayInRect:[self drawingBounds]];
-        if ([theEvent type] == NSLeftMouseUp) {
-            break;
-        }
-    }
-
-    [self stopBoundsManipulation];
-    
-    bounds = [self bounds];
-    if ((bounds.size.width > 0.0) || (bounds.size.height > 0.0)) {
-        return YES;
-    } else {
-        return NO;
-    }
-}
-*/
 @end

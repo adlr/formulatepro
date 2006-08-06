@@ -34,6 +34,9 @@
 		C4DC0DA60A82D35500DB476E /* next.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DA40A82D35500DB476E /* next.png */; };
 		C4DC0DA70A82D35500DB476E /* previous.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DA50A82D35500DB476E /* previous.png */; };
 		C4DC0DB70A82D99700DB476E /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DB60A82D99700DB476E /* LICENSE.txt */; };
+		C4DC0E650A85907800DB476E /* FPRectangle.m in Sources */ = {isa = PBXBuildFile; fileRef = C4DC0E640A85907800DB476E /* FPRectangle.m */; };
+		C4DC0E720A85925A00DB476E /* FPEllipse.m in Sources */ = {isa = PBXBuildFile; fileRef = C4DC0E710A85925A00DB476E /* FPEllipse.m */; };
+		C4DC0FF00A85C4BA00DB476E /* FPSquiggle.m in Sources */ = {isa = PBXBuildFile; fileRef = C4DC0FEF0A85C4BA00DB476E /* FPSquiggle.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
@@ -102,6 +105,12 @@
 		C4DC0DA40A82D35500DB476E /* next.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = next.png; sourceTree = SOURCE_ROOT; };
 		C4DC0DA50A82D35500DB476E /* previous.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = previous.png; sourceTree = SOURCE_ROOT; };
 		C4DC0DB60A82D99700DB476E /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = LICENSE.txt; sourceTree = SOURCE_ROOT; };
+		C4DC0E630A85907800DB476E /* FPRectangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPRectangle.h; sourceTree = "<group>"; };
+		C4DC0E640A85907800DB476E /* FPRectangle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPRectangle.m; sourceTree = "<group>"; };
+		C4DC0E700A85925A00DB476E /* FPEllipse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPEllipse.h; sourceTree = "<group>"; };
+		C4DC0E710A85925A00DB476E /* FPEllipse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPEllipse.m; sourceTree = "<group>"; };
+		C4DC0FEE0A85C4BA00DB476E /* FPSquiggle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPSquiggle.h; sourceTree = "<group>"; };
+		C4DC0FEF0A85C4BA00DB476E /* FPSquiggle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPSquiggle.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -222,6 +231,12 @@
 			children = (
 				C4AB40E30A5BDC7D00EE29B2 /* FPGraphic.h */,
 				C4AB40E40A5BDC7D00EE29B2 /* FPGraphic.m */,
+				C4DC0E630A85907800DB476E /* FPRectangle.h */,
+				C4DC0E640A85907800DB476E /* FPRectangle.m */,
+				C4DC0E700A85925A00DB476E /* FPEllipse.h */,
+				C4DC0E710A85925A00DB476E /* FPEllipse.m */,
+				C4DC0FEE0A85C4BA00DB476E /* FPSquiggle.h */,
+				C4DC0FEF0A85C4BA00DB476E /* FPSquiggle.m */,
 			);
 			name = "Overlay Graphics";
 			sourceTree = "<group>";
@@ -319,6 +334,9 @@
 				C4AB40380A5BB5D200EE29B2 /* AppDelegate.m in Sources */,
 				C4AB42820A623A6800EE29B2 /* FPToolPaletteController.m in Sources */,
 				C4DC0CB20A82AA6100DB476E /* FPGraphic.m in Sources */,
+				C4DC0E650A85907800DB476E /* FPRectangle.m in Sources */,
+				C4DC0E720A85925A00DB476E /* FPEllipse.m in Sources */,
+				C4DC0FF00A85C4BA00DB476E /* FPSquiggle.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -3,7 +3,7 @@
 //  FormulatePro
 //
 //  Created by Andrew de los Reyes on 7/5/06.
-//  Copyright 2006 __MyCompanyName__. All rights reserved.
+//  Copyright 2006 Andrew de los Reyes. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -30,7 +30,6 @@ enum {
         unsigned int manipulatingBounds:1;
         unsigned int _pad:29;
     } _gFlags;
-    float _aspect_ratio; // width/height
     float _lineWidth;
     NSColor *_fillColor;
     NSColor *_strokeColor;
@@ -42,11 +41,15 @@ enum {
 + (FPGraphic *)graphicInPDFView:(MyPDFView *)pdfView;
 - (FPGraphic *)initInPDFView:(MyPDFView *)pdfView;
 
-- (void)placeWithEvent:(NSEvent *)theEvent;
+- (BOOL)placeWithEvent:(NSEvent *)theEvent;
 
 - (PDFPage *)page;
 - (void)draw;
 - (NSRect)safeBounds;
+- (float)lineWidth;
+- (NSRect)bounds;
+
+- (void)resizeWithEvent:(NSEvent *)theEvent byKnob:(int)knob;
 
 //- (void)setBounds:(NSRect)bounds;
 //- (NSRect)bounds;

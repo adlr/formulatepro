@@ -1,6 +1,12 @@
 #import "FPToolPaletteController.h"
 
+#import "FPRectangle.h"
+#import "FPEllipse.h"
+#import "FPSquiggle.h"
+
 @implementation FPToolPaletteController
+
+static FPToolPaletteController *_sharedController;
 
 - (void)windowDidLoad {
     [super windowDidLoad];
@@ -11,6 +17,16 @@
     [textToolButton setRefusesFirstResponder:YES];
     [(NSPanel *)[self window] setFloatingPanel:YES];
     [(NSPanel *)[self window] setBecomesKeyOnlyIfNeeded:YES];
+}
+
+- (void)awakeFromNib
+{
+    _sharedController = self;
+}
+
++ (FPToolPaletteController *)sharedToolPaletteController
+{
+    return _sharedController;
 }
 
 - (IBAction)chooseTool:(id)sender
@@ -27,7 +43,19 @@
 
 - (unsigned int)currentTool
 {
-    return 0;
+    if ([ellipseToolButton state] == NSOnState) return FPToolEllipse;
+    if ([squiggleToolButton state] == NSOnState) return FPToolSquiggle;
+    return FPToolRectangle;
+}
+
+- (Class)classForCurrentTool
+{
+    switch ([self currentTool]) {
+        case FPToolEllipse: NSLog(@"ellispe\n"); return [FPEllipse class];
+        case FPToolRectangle: NSLog(@"rect\n"); return [FPRectangle class];
+        case FPToolSquiggle: NSLog(@"squiggle\n"); return [FPSquiggle class];
+    }
+    return [FPRectangle class];
 }
 
 @end

@@ -3,7 +3,7 @@
 //  FormulatePro
 //
 //  Created by Andrew de los Reyes on 7/4/06.
-//  Copyright __MyCompanyName__ 2006 . All rights reserved.
+//  Copyright Andrew de los Reyes 2006 . All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>

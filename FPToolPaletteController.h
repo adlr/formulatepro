@@ -22,5 +22,7 @@ enum {
     IBOutlet NSButton *checkmarkToolButton;
     IBOutlet NSButton *stampToolButton;
 }
++ (FPToolPaletteController*)sharedToolPaletteController;
 - (IBAction)chooseTool:(id)sender;
+- (Class)classForCurrentTool;
 @end

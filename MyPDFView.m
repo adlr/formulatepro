@@ -3,11 +3,13 @@
 //  FormulatePro
 //
 //  Created by Andrew de los Reyes on 7/4/06.
-//  Copyright 2006 __MyCompanyName__. All rights reserved.
+//  Copyright 2006 Andrew de los Reyes. All rights reserved.
 //
 
 #import "MyPDFView.h"
 #import "FPGraphic.h"
+#import "FPToolPaletteController.h"
+#import "FPEllipse.h"
 
 @implementation MyPDFView
 
@@ -49,6 +51,8 @@
     PDFPage *page;
     
     loc_in_window = [event locationInWindow];
+    loc_in_window.x += 0.5;
+    loc_in_window.y -= 0.5; // correct for coordinates being between pixels
     loc_in_view = [[[self window] contentView] convertPoint:loc_in_window toView:self];
     page = [self pageForPoint:loc_in_view nearest:YES];
     loc_in_page = [self convertPoint:loc_in_view toPage:page];
@@ -56,14 +60,32 @@
     return loc_in_page;
 }
 
+- (NSPoint)convertPagePointFromEvent:(NSEvent *)event page:(PDFPage *)page
+{
+    NSPoint loc_in_window;
+    NSPoint loc_in_view;
+    NSPoint loc_in_page;
+    
+    loc_in_window = [event locationInWindow];
+    loc_in_window.x += 0.5;
+    loc_in_window.y -= 0.5; // correct for coordinates being between pixels
+    loc_in_view = [[[self window] contentView] convertPoint:loc_in_window toView:self];
+    loc_in_page = [self convertPoint:loc_in_view toPage:page];
+    return loc_in_page;
+}
+
 - (void)mouseDown:(NSEvent *)theEvent
 {
     FPGraphic *graphic;
+    BOOL keep;
     
-    graphic = [FPGraphic graphicInPDFView:self];
+    graphic = [[[FPToolPaletteController sharedToolPaletteController] classForCurrentTool] graphicInPDFView:self];
     assert(graphic);
     [_overlay_graphics addObject:graphic];
-    [graphic placeWithEvent:theEvent];
+    keep = [graphic placeWithEvent:theEvent];
+    if (keep == NO) {
+        [_overlay_graphics removeLastObject];
+    }
 }
 
 @end
