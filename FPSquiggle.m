@@ -70,8 +70,6 @@
             [gc flushGraphics];
         }
 
-        //[_pdfView setNeedsDisplayInRect:[_pdfView convertRect:[_path bounds] fromPage:_page]];
-
         // get ready for next iteration of the loop, or break out of loop
         point = new_point;
         

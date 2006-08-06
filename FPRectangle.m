@@ -36,10 +36,11 @@
     _bounds.origin = point;
     _bounds.size = NSMakeSize(0.0,0.0);
     
-    // get ready for next iteration of the loop, or break out of loop
+    // if the next event is mouse up, then the user didn't drag at all, so scrap the shape.
     theEvent = [[_pdfView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
     if ([theEvent type] == NSLeftMouseUp)
-        return NO; // XXX delete shape?
+        return NO;
+    // ok, we have a shape, and user is dragging to size it
     [self resizeWithEvent:theEvent byKnob:LowerRightKnob];
     return YES;
 }

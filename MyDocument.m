@@ -236,7 +236,7 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
     // Set up toolbar properties: Allow customization, give a default display mode, and remember state in user defaults 
     [toolbar setAllowsUserCustomization:YES];
     [toolbar setAutosavesConfiguration:YES];
-    [toolbar setDisplayMode:NSToolbarDisplayModeLabelOnly];
+    [toolbar setDisplayMode:NSToolbarDisplayModeIconAndLabel];
     
     // We are the delegate
     [toolbar setDelegate: self];
@@ -360,10 +360,11 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
     return [NSArray arrayWithObjects:
         MyDocToolbarIdentifierZoomIn,
         MyDocToolbarIdentifierZoomOut,
-        MyDocToolbarIdentifierOneUpTwoUpBook,
-        MyDocToolbarIdentifierSingleContinuous,
-        MyDocToolbarIdentifierNextPage,
+        NSToolbarSeparatorItemIdentifier,
         MyDocToolbarIdentifierPreviousPage,
+        MyDocToolbarIdentifierNextPage,
+        NSToolbarFlexibleSpaceItemIdentifier,
+        NSToolbarCustomizeToolbarItemIdentifier,
         nil];
 }
 
@@ -376,8 +377,8 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
         MyDocToolbarIdentifierZoomOut,
         MyDocToolbarIdentifierOneUpTwoUpBook,
         MyDocToolbarIdentifierSingleContinuous,
-        MyDocToolbarIdentifierNextPage,
         MyDocToolbarIdentifierPreviousPage,
+        MyDocToolbarIdentifierNextPage,
         
         NSToolbarCustomizeToolbarItemIdentifier,
         NSToolbarFlexibleSpaceItemIdentifier,
