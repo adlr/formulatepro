@@ -8,6 +8,7 @@
 
 #import "FPSquiggle.h"
 
+#import "MyPDFView.h"
 
 @implementation FPSquiggle
 
@@ -19,8 +20,17 @@
 
 - (void)draw
 {
+    NSBezierPath *tempPath = [[_path copy] autorelease];
+    NSAffineTransform *scaleTransform = [NSAffineTransform transform];
+    NSAffineTransform *translateTransform = [NSAffineTransform transform];
+    [scaleTransform scaleXBy:(_bounds.size.width/[tempPath bounds].size.width)
+                         yBy:(_bounds.size.height/[tempPath bounds].size.height)];
+    [tempPath transformUsingAffineTransform:scaleTransform];
+    [translateTransform translateXBy:(_bounds.origin.x - [tempPath bounds].origin.x)
+                                 yBy:(_bounds.origin.y - [tempPath bounds].origin.y)];
+    [tempPath transformUsingAffineTransform:translateTransform];
     [[NSColor blackColor] set];
-    [_path stroke];
+    [tempPath stroke];
 }
 
 // this function not tested ever

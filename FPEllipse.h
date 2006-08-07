@@ -7,9 +7,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "FPGraphic.h"
+#import "FPRectangle.h"
 
-@interface FPEllipse : FPGraphic {
+@interface FPEllipse : FPRectangle {
 
 }
 

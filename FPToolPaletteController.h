@@ -24,5 +24,6 @@ enum {
 }
 + (FPToolPaletteController*)sharedToolPaletteController;
 - (IBAction)chooseTool:(id)sender;
+- (unsigned int)currentTool;
 - (Class)classForCurrentTool;
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "FPGraphic.h"
-
+#import "MyPDFView.h"
 
 @implementation FPGraphic
 
@@ -24,6 +24,7 @@
         _page = nil;
         _pdfView = pdfView;
         _lineWidth = 1.0;
+        _knobMask = 0xff; // all knobs
     }
     return self;
 }
@@ -40,7 +41,7 @@
         point = [_pdfView convertPointFromEvent:theEvent toPage:&_page];
         
         _bounds.origin = point;
-        _bounds.size = NSMakeSize(10.0,10.0);
+        _bounds.size = NSMakeSize(1.0,1.0);
         
         // invalidate where the shape is now
         [_pdfView setNeedsDisplayInRect:[_pdfView convertRect:[self safeBounds] fromPage:_page]];
@@ -110,9 +111,16 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
 
 - (void)resizeWithEvent:(NSEvent *)theEvent byKnob:(int)knob
 {
-    assert(knob == LowerRightKnob);
     BOOL flipX;
     BOOL flipY;
+    
+    float shiftSlope = 0.0;
+    if (_bounds.size.width > 0.0 &&
+        _bounds.size.height > 0.0)
+        shiftSlope = _bounds.size.height / _bounds.size.width;
+    else
+        shiftSlope = _naturalBounds.size.height / _naturalBounds.size.width;
+    assert(shiftSlope != 0.0);
     
     for (;;) {
         flipX = NO;
@@ -120,15 +128,17 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
         assert(_bounds.size.width >= 0.0);
         assert(_bounds.size.height >= 0.0);
         
+        /*
         NSLog(@"resize x: %.1f y: %.1f w: %.1f h: %.1f\n",
               _bounds.origin.x,
               _bounds.origin.y,
               _bounds.size.width,
               _bounds.size.height);
+         */
         
         NSPoint docPoint = [_pdfView convertPagePointFromEvent:theEvent
                                                           page:_page];
-        [_pdfView setNeedsDisplayInRect:[_pdfView convertRect:[self safeBounds] fromPage:_page]];
+        [_pdfView setNeedsDisplayInRect:[_pdfView convertRect:[self boundsWithKnobs] fromPage:_page]];
         
         if (knob == UpperLeftKnob ||
             knob == UpperMiddleKnob ||
@@ -148,10 +158,7 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
             knob == LowerRightKnob)
             flipX = FPRectSetRightAbs(&_bounds, docPoint.x);
         
-        [_pdfView setNeedsDisplayInRect:[_pdfView convertRect:[self safeBounds] fromPage:_page]];
-
         if (flipY) {
-            NSLog(@"FLIP Y\n");
             switch (knob) {
                 case UpperLeftKnob: knob = LowerLeftKnob; break;
                 case UpperMiddleKnob: knob = LowerMiddleKnob; break;
@@ -162,7 +169,6 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
             }
         }
         if (flipX) {
-            NSLog(@"FLIP X\n");
             switch (knob) {
                 case UpperLeftKnob: knob = UpperRightKnob; break;
                 case MiddleLeftKnob: knob = MiddleRightKnob; break;
@@ -173,6 +179,33 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
             }
         }
         
+        if ([theEvent modifierFlags] & NSShiftKeyMask) {
+            BOOL didFlip;
+            switch (knob) {
+                case LowerRightKnob:
+                    didFlip = FPRectSetRightAbs(&_bounds,
+                                                _bounds.origin.x + _bounds.size.height);
+                    break;
+                case UpperLeftKnob:
+                    didFlip = FPRectSetLeftAbs(&_bounds,
+                                               _bounds.origin.x + _bounds.size.width - _bounds.size.height);
+                    break;
+                case UpperRightKnob:
+                    didFlip = NO;
+                    _bounds.size.width = _bounds.size.height;
+                    break;
+                case LowerLeftKnob:
+                    didFlip = FPRectSetLeftAbs(&_bounds,
+                                               _bounds.origin.x + _bounds.size.width - _bounds.size.height);
+                    break;
+                default:
+                    assert(0); // XXX need to support shift on middle knobs
+            }
+            assert(didFlip == NO);
+        }
+        
+        [_pdfView setNeedsDisplayInRect:[_pdfView convertRect:[self boundsWithKnobs] fromPage:_page]];
+
         // get ready for next iteration of the loop, or break out of loop
         theEvent = [[_pdfView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
         if ([theEvent type] == NSLeftMouseUp)
@@ -208,18 +241,146 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
     [newpath stroke];
 }
 
+#define AVG(a, b) (((a) + (b)) / 2.0)
+
+#define FPAvgX(a) (AVG((a).origin.x, (a).origin.x + (a).size.width))
+
+#define FPAvgY(a) (AVG((a).origin.y, (a).origin.y + (a).size.height))
+
+// returns rect for a knob in page coordinates. remember that there is a 1 screen-pixel thick border
+// if isBound is set, returns a bounds rectangle in page coordinates that includes 1 screen-pixel thick border
+- (NSRect)pageRectForKnob:(int)knob isBoundRect:(BOOL)isBound
+{
+    NSPoint p;
+    switch (knob) {
+        case UpperLeftKnob:
+            p = NSMakePoint(NSMinX(_bounds),
+                            NSMaxY(_bounds));
+            break;
+        case UpperMiddleKnob:
+            p = NSMakePoint(FPAvgX(_bounds),
+                            NSMaxY(_bounds));
+            break;
+        case UpperRightKnob:
+            p = NSMakePoint(NSMaxX(_bounds),
+                            NSMaxY(_bounds));
+            break;
+        case MiddleLeftKnob:
+            p = NSMakePoint(NSMinX(_bounds),
+                            FPAvgY(_bounds));
+            break;
+        case MiddleRightKnob:
+            p = NSMakePoint(NSMaxX(_bounds),
+                            FPAvgY(_bounds));
+            break;
+        case LowerLeftKnob:
+            p = NSMakePoint(NSMinX(_bounds),
+                            NSMinY(_bounds));
+            break;
+        case LowerMiddleKnob:
+            p = NSMakePoint(FPAvgX(_bounds),
+                            NSMinY(_bounds));
+            break;
+        case LowerRightKnob:
+            p = NSMakePoint(NSMaxX(_bounds),
+                            NSMinY(_bounds));
+            break;
+        default:
+            assert(0); // bad knob
+    }
+    NSPoint window_point = [_pdfView convertPoint:p fromPage:_page];
+    NSRect knobRect = NSMakeRect(floorf(window_point.x)+0.5 -2.0 - (isBound?0.5:0.0),
+                                 floorf(window_point.y)+0.5 -2.0 - (isBound?0.5:0.0),
+                                 4.0 + (isBound?1.0:0.0),
+                                 4.0 + (isBound?1.0:0.0));
+    return [_pdfView convertRect:knobRect toPage:_page];
+}
+
+- (void)drawKnobs
+{
+    int i;
+    for (i = 0; i <= 7; i++) {
+        if (_knobMask & (1 << i)) {
+            NSBezierPath *knobPDFRectPath = [NSBezierPath bezierPathWithRect:[self pageRectForKnob:(1 << i)
+                                                                                       isBoundRect:NO]];
+            [knobPDFRectPath setLineWidth:(1.0/[_pdfView scaleFactor])];
+            [[NSColor whiteColor] set];
+            [knobPDFRectPath fill];
+            [[NSColor blackColor] set];
+            [knobPDFRectPath stroke];
+        }
+    }
+}
+
+- (int)knobForEvent:(NSEvent *)theEvent
+{
+    int i;
+    NSPoint p = [_pdfView convertPagePointFromEvent:theEvent page:_page];
+    for (i = 0; i <= 7; i++) {
+        if (_knobMask & (1 << i)) {
+            NSRect knobBounds = [self pageRectForKnob:(1 << i)
+                                          isBoundRect:YES];
+            if (NSPointInRect(p, knobBounds))
+                return (1 << i);
+        }
+    }
+    return NoKnob;
+}
+
 - (PDFPage*)page
 {
     return _page;
 }
 
+- (NSRect)boundsWithKnobs
+{
+    NSRect bounds = [self safeBounds];
+    NSRect knobRect;
+    float diff;
+    if (_knobMask & (UpperLeftKnob |
+                     UpperMiddleKnob |
+                     UpperRightKnob)) {
+        knobRect = [self pageRectForKnob:UpperMiddleKnob isBoundRect:YES];
+        if (NSMaxY(knobRect) > NSMaxY(bounds))
+            bounds.size.height += (NSMaxY(knobRect) - NSMaxY(bounds));
+    }
+    if (_knobMask & (UpperRightKnob |
+                     MiddleRightKnob |
+                     LowerRightKnob)) {
+        knobRect = [self pageRectForKnob:MiddleRightKnob isBoundRect:YES];
+        if (NSMaxX(knobRect) > NSMaxX(bounds))
+            bounds.size.width += (NSMaxX(knobRect) - NSMaxX(bounds));
+    }
+    if (_knobMask & (LowerLeftKnob |
+                     LowerMiddleKnob |
+                     LowerRightKnob)) {
+        knobRect = [self pageRectForKnob:LowerMiddleKnob isBoundRect:YES];
+        diff = NSMinY(bounds) - NSMinY(knobRect);
+        if (diff > 0.0) {
+            bounds.size.height += diff;
+            bounds.origin.y -= diff;
+        }
+    }
+    if (_knobMask & (UpperLeftKnob |
+                     MiddleLeftKnob |
+                     LowerLeftKnob)) {
+        knobRect = [self pageRectForKnob:MiddleLeftKnob isBoundRect:YES];
+        diff = NSMinX(bounds) - NSMinX(knobRect);
+        if (diff > 0.0) {
+            bounds.size.width += diff;
+            bounds.origin.x -= diff;
+        }
+    }
+    return bounds;
+}
+
 - (NSRect)safeBounds
 {
     float halfWidth = _lineWidth/2.0;
-    return NSMakeRect(_bounds.origin.x - halfWidth - 1.0,
-                      _bounds.origin.y - halfWidth - 1.0,
-                      _bounds.size.width + _lineWidth + 2.0,
-                      _bounds.size.height + _lineWidth + 2.0);
+    return NSMakeRect(_bounds.origin.x - halfWidth,
+                      _bounds.origin.y - halfWidth,
+                      _bounds.size.width + _lineWidth,
+                      _bounds.size.height + _lineWidth);
 }
 
 - (float)lineWidth

@@ -9,8 +9,11 @@
 #import <Cocoa/Cocoa.h>
 #import <Quartz/Quartz.h>
 
+@class FPGraphic;
+
 @interface MyPDFView : PDFView {
-    NSMutableArray *_overlay_graphics;
+    NSMutableArray *_overlayGraphics;
+    FPGraphic *_selectedGraphic;
 }
 
 // returns point in coordinates of the page 'out_page'. out_page is set to the proper page from the PDFDocument.

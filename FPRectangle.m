@@ -7,7 +7,7 @@
 //
 
 #import "FPRectangle.h"
-
+#import "MyPDFView.h"
 
 @implementation FPRectangle
 
@@ -35,6 +35,8 @@
     
     _bounds.origin = point;
     _bounds.size = NSMakeSize(0.0,0.0);
+    _naturalBounds.origin = point;
+    _naturalBounds.size = NSMakeSize(1.0, 1.0);
     
     // if the next event is mouse up, then the user didn't drag at all, so scrap the shape.
     theEvent = [[_pdfView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];

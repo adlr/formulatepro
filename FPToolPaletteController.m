@@ -43,6 +43,7 @@ static FPToolPaletteController *_sharedController;
 
 - (unsigned int)currentTool
 {
+    if ([arrowToolButton state] == NSOnState) return FPToolArrow;
     if ([ellipseToolButton state] == NSOnState) return FPToolEllipse;
     if ([squiggleToolButton state] == NSOnState) return FPToolSquiggle;
     return FPToolRectangle;

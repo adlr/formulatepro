@@ -7,22 +7,25 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "MyPDFView.h"
+
+@class MyPDFView;
+@class PDFPage;
 
 enum {
     NoKnob = 0,
-    UpperLeftKnob,
-    UpperMiddleKnob,
-    UpperRightKnob,
-    MiddleLeftKnob,
-    MiddleRightKnob,
-    LowerLeftKnob,
-    LowerMiddleKnob,
-    LowerRightKnob,
+    UpperLeftKnob   = 1 << 0,
+    UpperMiddleKnob = 1 << 1,
+    UpperRightKnob  = 1 << 2,
+    MiddleLeftKnob  = 1 << 3,
+    MiddleRightKnob = 1 << 4,
+    LowerLeftKnob   = 1 << 5,
+    LowerMiddleKnob = 1 << 6,
+    LowerRightKnob  = 1 << 7,
 };
 
 @interface FPGraphic : NSObject {
     NSRect _bounds;
+    NSRect _naturalBounds;
     NSRect _origBounds; // for bulk move operations
     struct __gFlags {
         unsigned int drawsFill:1;
@@ -33,6 +36,7 @@ enum {
     float _lineWidth;
     NSColor *_fillColor;
     NSColor *_strokeColor;
+    int _knobMask;
     
     MyPDFView *_pdfView;
     PDFPage *_page;
@@ -42,17 +46,19 @@ enum {
 - (FPGraphic *)initInPDFView:(MyPDFView *)pdfView;
 
 - (BOOL)placeWithEvent:(NSEvent *)theEvent;
-
-- (PDFPage *)page;
-- (void)draw;
-- (NSRect)safeBounds;
-- (float)lineWidth;
-- (NSRect)bounds;
-
 - (void)resizeWithEvent:(NSEvent *)theEvent byKnob:(int)knob;
 
-//- (void)setBounds:(NSRect)bounds;
-//- (NSRect)bounds;
-//- (int)resizeByMovingKnob:(int)knob toPoint:(NSPoint)point maintainAspectRatio:(BOOL)maintain_ar;
+- (PDFPage *)page;
+
+- (void)draw;
+- (void)drawKnobs;
+- (int)knobForEvent:(NSEvent *)theEvent;
+- (NSRect)pageRectForKnob:(int)knob isBoundRect:(BOOL)isBound;
+
+- (NSRect)bounds;
+- (NSRect)safeBounds;
+- (NSRect)boundsWithKnobs;
+- (float)lineWidth;
+
 
 @end

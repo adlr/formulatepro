@@ -17,14 +17,14 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code here.
-        _overlay_graphics = [[NSMutableArray alloc] initWithCapacity:1];
+        _overlayGraphics = [[NSMutableArray alloc] initWithCapacity:1];
     }
     return self;
 }
 
 - (void)awakeFromNib
 {
-    _overlay_graphics = [[NSMutableArray alloc] initWithCapacity:1];
+    _overlayGraphics = [[NSMutableArray alloc] initWithCapacity:1];
 }
 
 - (void)drawPage:(PDFPage *)page
@@ -34,13 +34,15 @@
     int count;
     int i;
     
-    count = [_overlay_graphics count];
+    count = [_overlayGraphics count];
     for (i = 0; i < count; i++) {
         FPGraphic *g;
-        g = [_overlay_graphics objectAtIndex:i];
+        g = [_overlayGraphics objectAtIndex:i];
         if ([g page] == page)
             [g draw];
     }
+    if (_selectedGraphic)
+        [_selectedGraphic drawKnobs];
 }
 
 - (NSPoint)convertPointFromEvent:(NSEvent *)event toPage:(PDFPage **)out_page
@@ -78,13 +80,43 @@
 {
     FPGraphic *graphic;
     BOOL keep;
+    unsigned int tool = [[FPToolPaletteController sharedToolPaletteController] currentTool];
+
+    if (tool == FPToolArrow) {
+        int i;
+        NSPoint point;
+        
+        if (_selectedGraphic) {
+            int knob = [_selectedGraphic knobForEvent:theEvent];
+            if (knob != NoKnob) {
+                [_selectedGraphic resizeWithEvent:theEvent byKnob:knob];
+                return;
+            }
+        }
+        
+        for (i = [_overlayGraphics count] - 1; i >= 0; i--) {
+            FPGraphic *graphic = [_overlayGraphics objectAtIndex:i];
+            _selectedGraphic = nil;
+            point = [self convertPagePointFromEvent:theEvent page:[graphic page]];
+            if (NSPointInRect(point, [graphic safeBounds])) {
+                _selectedGraphic = graphic;
+                break;
+            }
+        }
+        if (_selectedGraphic) {
+            //[graphic moveWithEvent:theEvent];
+        }
+        //[self setNeedsDisplayInRect:[graphic knobBounds]];
+        [self setNeedsDisplay:YES];
+        return;
+    }
     
     graphic = [[[FPToolPaletteController sharedToolPaletteController] classForCurrentTool] graphicInPDFView:self];
     assert(graphic);
-    [_overlay_graphics addObject:graphic];
+    [_overlayGraphics addObject:graphic];
     keep = [graphic placeWithEvent:theEvent];
     if (keep == NO) {
-        [_overlay_graphics removeLastObject];
+        [_overlayGraphics removeLastObject];
     }
 }
 
