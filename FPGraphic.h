@@ -47,6 +47,7 @@ enum {
 
 - (BOOL)placeWithEvent:(NSEvent *)theEvent;
 - (void)resizeWithEvent:(NSEvent *)theEvent byKnob:(int)knob;
+- (void)moveGraphicByX:(float)x byY:(float)y;
 
 - (PDFPage *)page;
 

@@ -37,6 +37,7 @@
 		C4DC0E650A85907800DB476E /* FPRectangle.m in Sources */ = {isa = PBXBuildFile; fileRef = C4DC0E640A85907800DB476E /* FPRectangle.m */; };
 		C4DC0E720A85925A00DB476E /* FPEllipse.m in Sources */ = {isa = PBXBuildFile; fileRef = C4DC0E710A85925A00DB476E /* FPEllipse.m */; };
 		C4DC0FF00A85C4BA00DB476E /* FPSquiggle.m in Sources */ = {isa = PBXBuildFile; fileRef = C4DC0FEF0A85C4BA00DB476E /* FPSquiggle.m */; };
+		C4FDF1630A8BEB1800032EF5 /* FPTextArea.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FDF1620A8BEB1800032EF5 /* FPTextArea.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +85,8 @@
 		C4DC0E710A85925A00DB476E /* FPEllipse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPEllipse.m; sourceTree = "<group>"; };
 		C4DC0FEE0A85C4BA00DB476E /* FPSquiggle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPSquiggle.h; sourceTree = "<group>"; };
 		C4DC0FEF0A85C4BA00DB476E /* FPSquiggle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPSquiggle.m; sourceTree = "<group>"; };
+		C4FDF1610A8BEB1800032EF5 /* FPTextArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPTextArea.h; sourceTree = "<group>"; };
+		C4FDF1620A8BEB1800032EF5 /* FPTextArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPTextArea.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,6 +213,8 @@
 				C4DC0E710A85925A00DB476E /* FPEllipse.m */,
 				C4DC0FEE0A85C4BA00DB476E /* FPSquiggle.h */,
 				C4DC0FEF0A85C4BA00DB476E /* FPSquiggle.m */,
+				C4FDF1610A8BEB1800032EF5 /* FPTextArea.h */,
+				C4FDF1620A8BEB1800032EF5 /* FPTextArea.m */,
 			);
 			name = "Overlay Graphics";
 			sourceTree = "<group>";
@@ -293,6 +298,7 @@
 				C4DC0E650A85907800DB476E /* FPRectangle.m in Sources */,
 				C4DC0E720A85925A00DB476E /* FPEllipse.m in Sources */,
 				C4DC0FF00A85C4BA00DB476E /* FPSquiggle.m in Sources */,
+				C4FDF1630A8BEB1800032EF5 /* FPTextArea.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

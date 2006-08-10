@@ -211,7 +211,13 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
         if ([theEvent type] == NSLeftMouseUp)
             break;
     }
+    [_pdfView discardCursorRects];
+}
 
+- (void)moveGraphicByX:(float)x byY:(float)y
+{
+    _bounds.origin.x += x;
+    _bounds.origin.y += y;
 }
 
 - (void)draw
