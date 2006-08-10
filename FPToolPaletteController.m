@@ -21,6 +21,8 @@ static FPToolPaletteController *_sharedController;
 
 - (void)awakeFromNib
 {
+    [(NSPanel *)[self window] setFloatingPanel:YES];
+    [(NSPanel *)[self window] setBecomesKeyOnlyIfNeeded:YES];
     _sharedController = self;
 }
 
