@@ -127,7 +127,7 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
 
 - (IBAction)toggleContinuous:(id)sender
 {
-    PDFDisplayMode new_mode;
+    PDFDisplayMode new_mode = kPDFDisplaySinglePage;
     
     if (sender == _single_vs_continuous) {
         int ss = [_single_vs_continuous selectedSegment];
@@ -152,9 +152,9 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
 
 - (IBAction)toggleOneUpTwoUpBookMode:(id)sender
 {
-    PDFDisplayMode new_up_mode;
-    BOOL book_mode;
-    int sc_idx;
+    PDFDisplayMode new_up_mode = kPDFDisplaySinglePage;
+    BOOL book_mode = NO;
+    int sc_idx = 0;
     
     if (sender == _one_up_vs_two_up_vs_book) {
         int cont = [_pdf_view displayMode] == kPDFDisplaySinglePageContinuous ||
