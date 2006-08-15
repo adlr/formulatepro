@@ -1,5 +1,10 @@
 {
     IBClasses = (
+        {
+            CLASS = AOSegmentedControl; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSSegmentedControl; 
+        }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {
