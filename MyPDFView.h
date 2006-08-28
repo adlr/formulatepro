@@ -14,6 +14,7 @@
 @interface MyPDFView : PDFView {
     NSMutableArray *_overlayGraphics;
     NSMutableSet *_selectedGraphics;
+    FPGraphic *_editingGraphic;
 }
 
 // returns point in coordinates of the page 'out_page'. out_page is set to the proper page from the PDFDocument.

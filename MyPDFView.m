@@ -19,6 +19,7 @@
         // Initialization code here.
         _overlayGraphics = [[NSMutableArray alloc] initWithCapacity:1];
         _selectedGraphics = [[NSMutableSet alloc] initWithCapacity:1];
+        _editingGraphic = nil;
     }
     return self;
 }
@@ -27,6 +28,7 @@
 {
     _overlayGraphics = [[NSMutableArray alloc] initWithCapacity:1];
     _selectedGraphics = [[NSMutableSet alloc] initWithCapacity:1];
+    _editingGraphic = nil;
 }
 
 - (void)drawPage:(PDFPage *)page
@@ -97,6 +99,11 @@
     BOOL keep;
     unsigned int tool = [[FPToolPaletteController sharedToolPaletteController] currentTool];
 
+    if (_editingGraphic) {
+        [_editingGraphic stopEditing];
+        _editingGraphic = nil;
+    }
+    
     if (tool == FPToolArrow) {
         int i;
         NSPoint point;
@@ -158,6 +165,11 @@
     keep = [graphic placeWithEvent:theEvent];
     if (keep == NO) {
         [_overlayGraphics removeLastObject];
+    } else {
+        if ([graphic isEditable]) {
+            _editingGraphic = graphic;
+            [graphic startEditing];
+        }
     }
 }
 

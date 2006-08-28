@@ -4,8 +4,10 @@
             ACTIONS = {provideFeedback = id; showLicense = id; }; 
             CLASS = AppDelegate; 
             LANGUAGE = ObjC; 
+            OUTLETS = {"_renderWindow" = NSWindow; }; 
             SUPERCLASS = NSObject; 
         }, 
+        {CLASS = FPTextRenderingView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
         {
             ACTIONS = {chooseTool = id; }; 
             CLASS = FPToolPaletteController; 
@@ -17,7 +19,7 @@
                 rectangleToolButton = NSButton; 
                 squiggleToolButton = NSButton; 
                 stampToolButton = NSButton; 
-                textToolButton = NSButton; 
+                textAreaToolButton = NSButton; 
             }; 
             SUPERCLASS = NSWindowController; 
         }, 

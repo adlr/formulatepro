@@ -17,7 +17,7 @@
     return [ret autorelease];
 }
 
-- (FPGraphic *)initInPDFView:(MyPDFView *)pdfView
+- (id)initInPDFView:(MyPDFView *)pdfView
 {
     self = [super init];
     if (self) {
@@ -398,5 +398,13 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
 {
     return _bounds;
 }
+
+- (BOOL)isEditable
+{
+    return NO;
+}
+
+- (void)startEditing {}
+- (void)stopEditing {}
 
 @end

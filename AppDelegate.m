@@ -31,6 +31,11 @@
     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"mailto:formulate@adlr.info"]];
 }
 
+- (NSWindow *)renderWindow
+{
+    return _renderWindow;
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     /* // this code copies the arrow cursor image to the clipboard

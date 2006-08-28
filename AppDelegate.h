@@ -7,10 +7,12 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+#import "FPTextRenderingView.h"
 
 @interface AppDelegate : NSObject {
+    IBOutlet NSWindow *_renderWindow;
 }
 - (IBAction)showLicense:(id)sender;
 - (IBAction)provideFeedback:(id)sender;
+- (NSWindow *)renderWindow;
 @end

@@ -7,7 +7,7 @@ enum {
     FPToolEllipse,
     FPToolRectangle,
     FPToolSquiggle,
-    FPToolText,
+    FPToolTextArea,
     FPToolCheckmark,
     FPToolStamp
 };
@@ -18,7 +18,7 @@ enum {
     IBOutlet NSButton *ellipseToolButton;
     IBOutlet NSButton *rectangleToolButton;
     IBOutlet NSButton *squiggleToolButton;
-    IBOutlet NSButton *textToolButton;
+    IBOutlet NSButton *textAreaToolButton;
     IBOutlet NSButton *checkmarkToolButton;
     IBOutlet NSButton *stampToolButton;
 }

@@ -43,7 +43,7 @@ enum {
 }
 
 + (FPGraphic *)graphicInPDFView:(MyPDFView *)pdfView;
-- (FPGraphic *)initInPDFView:(MyPDFView *)pdfView;
+- (id)initInPDFView:(MyPDFView *)pdfView;
 
 - (BOOL)placeWithEvent:(NSEvent *)theEvent;
 - (void)resizeWithEvent:(NSEvent *)theEvent byKnob:(int)knob;
@@ -61,5 +61,8 @@ enum {
 - (NSRect)boundsWithKnobs;
 - (float)lineWidth;
 
+- (BOOL)isEditable;
+- (void)startEditing;
+- (void)stopEditing;
 
 @end

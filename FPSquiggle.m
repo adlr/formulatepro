@@ -18,6 +18,15 @@
     return [ret autorelease];
 }
 
+- (id)initInPDFView:(MyPDFView *)pdfView
+{
+    self = [super initInPDFView:pdfView];
+    if (self) {
+        _path = nil;
+    }
+    return self;
+}
+
 - (void)draw
 {
     NSBezierPath *tempPath = [[_path copy] autorelease];

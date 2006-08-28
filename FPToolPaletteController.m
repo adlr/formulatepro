@@ -3,6 +3,7 @@
 #import "FPRectangle.h"
 #import "FPEllipse.h"
 #import "FPSquiggle.h"
+#import "FPTextArea.h"
 
 @implementation FPToolPaletteController
 
@@ -14,7 +15,7 @@ static FPToolPaletteController *_sharedController;
     [ellipseToolButton setRefusesFirstResponder:YES];
     [rectangleToolButton setRefusesFirstResponder:YES];
     [squiggleToolButton setRefusesFirstResponder:YES];
-    [textToolButton setRefusesFirstResponder:YES];
+    [textAreaToolButton setRefusesFirstResponder:YES];
     [(NSPanel *)[self window] setFloatingPanel:YES];
     [(NSPanel *)[self window] setBecomesKeyOnlyIfNeeded:YES];
 }
@@ -37,7 +38,7 @@ static FPToolPaletteController *_sharedController;
     [ellipseToolButton setState:NSOffState];
     [rectangleToolButton setState:NSOffState];
     [squiggleToolButton setState:NSOffState];
-    [textToolButton setState:NSOffState];
+    [textAreaToolButton setState:NSOffState];
     [checkmarkToolButton setState:NSOffState];
     [stampToolButton setState:NSOffState];
     [sender setState:NSOnState];
@@ -48,6 +49,7 @@ static FPToolPaletteController *_sharedController;
     if ([arrowToolButton state] == NSOnState) return FPToolArrow;
     if ([ellipseToolButton state] == NSOnState) return FPToolEllipse;
     if ([squiggleToolButton state] == NSOnState) return FPToolSquiggle;
+    if ([textAreaToolButton state] == NSOnState) return FPToolTextArea;
     return FPToolRectangle;
 }
 
@@ -57,6 +59,7 @@ static FPToolPaletteController *_sharedController;
         case FPToolEllipse: NSLog(@"ellispe\n"); return [FPEllipse class];
         case FPToolRectangle: NSLog(@"rect\n"); return [FPRectangle class];
         case FPToolSquiggle: NSLog(@"squiggle\n"); return [FPSquiggle class];
+        case FPToolTextArea: NSLog(@"text area\n"); return [FPTextArea class];
     }
     return [FPRectangle class];
 }
