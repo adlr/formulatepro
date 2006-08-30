@@ -9,7 +9,7 @@
 #import "FPTextArea.h"
 #import "MyPDFView.h"
 #import "AppDelegate.h"
-#import "FPTextRenderingView.h"
+//#import "FPTextRenderingView.h"
 
 @implementation FPTextArea
 
@@ -32,6 +32,34 @@
     }
     return self;
 }
+
+#define ROUND_SIZE 0
+#define ROUND_ALL 1
+
+#define ROUND_SCHEME ROUND_ALL
+
+- (void)setBounds:(NSRect)bounds
+{
+#if (ROUND_SCHEME == ROUND_SIZE)
+    bounds.size.width = roundf(bounds.size.width);
+    bounds.size.height = roundf(bounds.size.height);
+#else
+    float right = bounds.origin.x + bounds.size.width;
+    float top = bounds.origin.y + bounds.size.height;
+    bounds.origin.x = floorf(bounds.origin.x) + 0.5;
+    bounds.origin.y = floorf(bounds.origin.y) + 0.5;
+    bounds.size.width = roundf(right - bounds.origin.x);
+    bounds.size.height = roundf(top - bounds.origin.y);
+#endif
+    assert(bounds.size.width >= 0.0);
+    assert(bounds.size.height >= 0.0);
+    [super setBounds:bounds];
+}
+
+#define PDF_METHOD_A 0
+#define PDF_METHOD_B 1
+
+#define PDF_METHOD PDF_METHOD_B
 
 #define DRAW_WITH_PDF 0
 #define DRAW_WITH_BITMAP 1
@@ -61,6 +89,10 @@
 #if (DRAW_METHOD == DRAW_WITH_PDF)
         //[pdfData writeToFile:@"/tmp/foo.pdf" atomically:YES];
         NSImage *image = [[NSImage alloc] initWithData:pdfData];
+#if (PDF_METHOD == PDF_METHOD_A)
+        NSPDFImageRep *rep = [[image representations] objectAtIndex:0];
+        [rep drawInRect:_bounds];
+#else
         NSLog(@"img size: %@, bnd size: %@\n",
               NSStringFromSize([image size]),
               NSStringFromSize(_bounds.size));
@@ -79,12 +111,11 @@
                                      _bounds.size.height - 2.0)
                 operation:NSCompositeSourceOver
                  fraction:1.0];
-        //assert([[[image representations] objectAtIndex:0] class] == [NSPDFImageRep class]);
-        //NSPDFImageRep *rep = [[image representations] objectAtIndex:0];
-        //[rep drawInRect:_bounds];
-#else
+#endif // PDF_METHOD
+        
+#else // DRAW_METHOD
         [bitmap drawAtPoint:NSMakePoint(_bounds.origin.x + 0.5,_bounds.origin.y + 0.5)];
-#endif
+#endif // DRAW_METHOD
     }
         
 //        NSLayoutManager *lm = sharedDrawingLayoutManager();

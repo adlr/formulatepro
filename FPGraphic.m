@@ -123,6 +123,7 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
     assert(shiftSlope != 0.0);
     
     for (;;) {
+        NSRect newBounds = _bounds;
         flipX = NO;
         flipY = NO;
         assert(_bounds.size.width >= 0.0);
@@ -143,20 +144,22 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
         if (knob == UpperLeftKnob ||
             knob == UpperMiddleKnob ||
             knob == UpperRightKnob)
-            flipY = FPRectSetTopAbs(&_bounds, docPoint.y);
+            flipY = FPRectSetTopAbs(&newBounds, docPoint.y);
         if (knob == LowerLeftKnob ||
             knob == LowerMiddleKnob ||
             knob == LowerRightKnob)
-            flipY = FPRectSetBottomAbs(&_bounds, docPoint.y);
+            flipY = FPRectSetBottomAbs(&newBounds, docPoint.y);
         
         if (knob == UpperLeftKnob ||
             knob == MiddleLeftKnob ||
             knob == LowerLeftKnob)
-            flipX = FPRectSetLeftAbs(&_bounds, docPoint.x);
+            flipX = FPRectSetLeftAbs(&newBounds, docPoint.x);
         if (knob == UpperRightKnob ||
             knob == MiddleRightKnob ||
             knob == LowerRightKnob)
-            flipX = FPRectSetRightAbs(&_bounds, docPoint.x);
+            flipX = FPRectSetRightAbs(&newBounds, docPoint.x);
+        
+        [self setBounds:newBounds];
         
         if (flipY) {
             switch (knob) {
@@ -216,8 +219,10 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
 
 - (void)moveGraphicByX:(float)x byY:(float)y
 {
-    _bounds.origin.x += x;
-    _bounds.origin.y += y;
+    NSRect bounds = _bounds;
+    bounds.origin.x += x;
+    bounds.origin.y += y;
+    [self setBounds:bounds];
 }
 
 - (void)draw
@@ -397,6 +402,13 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
 - (NSRect)bounds
 {
     return _bounds;
+}
+
+- (void)setBounds:(NSRect)bounds
+{
+    assert(bounds.size.width >= 0.0);
+    assert(bounds.size.height >= 0.0);
+    _bounds = bounds;
 }
 
 - (BOOL)isEditable

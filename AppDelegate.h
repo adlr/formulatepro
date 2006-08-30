@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "FPTextRenderingView.h"
+//#import "FPTextRenderingView.h"
 
 @interface AppDelegate : NSObject {
     IBOutlet NSWindow *_renderWindow;

@@ -57,6 +57,7 @@ enum {
 - (NSRect)pageRectForKnob:(int)knob isBoundRect:(BOOL)isBound;
 
 - (NSRect)bounds;
+- (void)setBounds:(NSRect)bounds;
 - (NSRect)safeBounds;
 - (NSRect)boundsWithKnobs;
 - (float)lineWidth;
