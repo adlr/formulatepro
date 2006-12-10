@@ -4,8 +4,22 @@
             ACTIONS = {provideFeedback = id; showLicense = id; }; 
             CLASS = AppDelegate; 
             LANGUAGE = ObjC; 
-            OUTLETS = {"_renderWindow" = NSWindow; }; 
+            OUTLETS = {"_inspectorWindow" = NSPanel; "_renderWindow" = NSWindow; }; 
             SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {checkFill = id; checkStroke = id; setStroke = id; stepStroke = id; }; 
+            CLASS = FPInspectorController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_fillCheckbox" = NSButton; 
+                "_fillColorWell" = NSColorWell; 
+                "_strokeCheckbox" = NSButton; 
+                "_widthLabel" = NSTextField; 
+                "_widthStepper" = NSStepper; 
+                "_widthTextField" = NSTextField; 
+            }; 
+            SUPERCLASS = NSWindowController; 
         }, 
         {CLASS = FPTextRenderingView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
         {
@@ -20,6 +34,7 @@
                 squiggleToolButton = NSButton; 
                 stampToolButton = NSButton; 
                 textAreaToolButton = NSButton; 
+                textFieldToolButton = NSButton; 
             }; 
             SUPERCLASS = NSWindowController; 
         }, 

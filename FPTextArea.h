@@ -16,6 +16,7 @@
     NSTextView *_editor;
     BOOL _isPlacing;
     BOOL _isEditing;
+	BOOL _isAutoSized;
 }
 
 - (void)startEditing;

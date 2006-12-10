@@ -29,6 +29,7 @@
         _editor = nil;
         _isPlacing = NO;
         _isEditing = NO;
+		_isAutoSized = YES;
     }
     return self;
 }
@@ -44,12 +45,71 @@
     bounds.size.width = roundf(bounds.size.width);
     bounds.size.height = roundf(bounds.size.height);
 #else
-    float right = bounds.origin.x + bounds.size.width;
-    float top = bounds.origin.y + bounds.size.height;
-    bounds.origin.x = floorf(bounds.origin.x) + 0.5;
-    bounds.origin.y = floorf(bounds.origin.y) + 0.5;
-    bounds.size.width = roundf(right - bounds.origin.x);
-    bounds.size.height = roundf(top - bounds.origin.y);
+    BOOL moveTop = NSMaxY(_bounds) != NSMaxY(bounds);
+    BOOL moveBottom = NSMinY(_bounds) != NSMinY(bounds);
+    BOOL moveLeft = NSMinX(_bounds) != NSMinX(bounds);
+    BOOL moveRight = NSMaxX(_bounds) != NSMaxX(bounds);
+
+    if (moveTop != moveBottom) {
+        if (moveTop) {
+            bounds.size.height = roundf(bounds.size.height);
+        } else {
+            float unused;
+            float snap_y_fpart = modff(_bounds.origin.y, &unused);
+            float bottom_ipart;
+            float bottom_fpart = modff(bounds.origin.y, &bottom_ipart);
+            float newY;
+            
+            if (fabsf(bottom_fpart - snap_y_fpart) <= 0.5) {
+                newY = bottom_ipart + snap_y_fpart;
+            } else if (bottom_fpart < snap_y_fpart) {
+                newY = bottom_ipart - 1.0 + snap_y_fpart;
+            } else {
+                newY = bottom_ipart + 1.0 + snap_y_fpart;
+            }
+            
+            bounds.size.height += bounds.origin.y - newY;
+            bounds.origin.y = newY;
+        }
+    } else {
+        // we are assuming if both bottom and top edge change,
+        // that they're moving and so the height will still be an integer
+        assert(bounds.size.height == floorf(bounds.size.height));
+    }
+
+    // now, the same for the x-axis
+    if (moveRight != moveLeft) {
+        if (moveRight) {
+            bounds.size.width = roundf(bounds.size.width);
+        } else {
+            float unused;
+            float snap_x_fpart = modff(_bounds.origin.x, &unused);
+            float left_ipart;
+            float left_fpart = modff(bounds.origin.x, &left_ipart);
+            float newX;
+            
+            if (fabsf(left_fpart - snap_x_fpart) <= 0.5) {
+                newX = left_ipart + snap_x_fpart;
+            } else if (left_fpart < snap_x_fpart) {
+                newX = left_ipart - 1.0 + snap_x_fpart;
+            } else {
+                newX = left_ipart + 1.0 + snap_x_fpart;
+            }
+            
+            bounds.size.width += bounds.origin.x - newX;
+            bounds.origin.x = newX;
+        }
+    } else {
+        // we are assuming if both left and right edge change,
+        // that they're moving and so the width will still be an integer
+        if (bounds.size.width != floorf(bounds.size.width)) {
+            NSLog(@"b.s.wid: %f, f(b.s.wid): %f\n",
+                  bounds.size.width,
+                  floorf(bounds.size.width));
+        }
+        assert(bounds.size.width == floorf(bounds.size.width));
+    }
+    
 #endif
     assert(bounds.size.width >= 0.0);
     assert(bounds.size.height >= 0.0);
@@ -184,14 +244,17 @@
     _naturalBounds.origin = point;
     _naturalBounds.size = NSMakeSize(1.0, 1.0);
     
-    // if the next event is mouse up, then the user didn't drag at all, so scrap the shape.
+    // if the next event is mouse up, then we're auto-sized
     theEvent = [[_pdfView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
     if ([theEvent type] != NSLeftMouseUp) {
         // ok, we have a shape, and user is dragging to size it
+		_isAutoSized = NO;
         _isPlacing = YES;
         [self resizeWithEvent:theEvent byKnob:LowerRightKnob];
         _isPlacing = NO;
-    }
+    } else {
+		_isAutoSized = YES;
+	}
     return YES;
 }
 
@@ -269,20 +332,32 @@ PDFDisplayViewForMatteView(NSView *p)
 
 - (void)startEditing
 {
+	NSLog(@"start editing\n");
     NSRect frame;
-    if (_editor == nil)
+    if (_editor == nil) {
         _editor = [[NSTextView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 40.0, 40.0)];
+		[[_editor textContainer] setLineFragmentPadding:1.0];
+	}
 
     [[_editor textContainer] setWidthTracksTextView:NO];
     [_editor setHorizontallyResizable:NO]; //x
 
     [[_editor textContainer] setHeightTracksTextView:NO];
     [_editor setVerticallyResizable:NO]; //x
-     
-    [[_editor textContainer] setContainerSize:_bounds.size];
+	
+	if (_isAutoSized) {
+		[[_editor textContainer] setContainerSize:NSMakeSize(300.0, 300.0)];
+	} else {
+		[[_editor textContainer] setContainerSize:_bounds.size];
+	}
     [_editor setMinSize:NSMakeSize(10.0, 15.0)];
     [_editor setMaxSize:NSMakeSize(1.0e6, 1.0e6)];
     
+	if (_isAutoSized) {
+		_bounds.size = [[_editor layoutManager] usedRectForTextContainer:[_editor textContainer]].size;
+		[[_editor layoutManager] setDelegate:self];
+	}
+
     frame = [_pdfView convertRect:[_pdfView convertRect:_bounds fromPage:_page] toView:PDFDisplayViewForMatteView(documentViewForPDFView(_pdfView))];
     NSLog(@"frame: %@\n", NSStringFromRect(frame));
     [_editor setFrame:frame];
@@ -299,6 +374,44 @@ PDFDisplayViewForMatteView(NSView *p)
     
     [[_pdfView window] makeFirstResponder:_editor];
     _isEditing = YES;
+}
+
+- (NSSize)containerSizeOfString:(NSString*)text withFontname:(NSString*)fontname fontSize:(float)fontSize
+{
+    NSTextStorage *textStorage = [[NSTextStorage alloc] initWithString:text];
+    [textStorage addAttribute:NSFontAttributeName value:[NSFont fontWithName:fontname size:fontSize] range:NSMakeRange(0,[textStorage length])];
+ 
+    NSLayoutManager *layoutManager = [[NSLayoutManager alloc] init];
+    [textStorage addLayoutManager:layoutManager];
+    NSTextContainer *textContainer = [[NSTextContainer alloc] initWithContainerSize:NSMakeSize(300.0,300.0)];
+ 
+    [textContainer setLineFragmentPadding:0.0];
+    [layoutManager addTextContainer:textContainer];
+    [layoutManager glyphRangeForTextContainer:textContainer];
+    NSRect rect = [layoutManager usedRectForTextContainer:textContainer];
+    [textContainer release];
+    [layoutManager release];
+    [textStorage release];
+    return NSMakeSize(rect.size.width,rect.size.height);
+}
+
+- (void)layoutManager:(NSLayoutManager *)aLayoutManager
+didCompleteLayoutForTextContainer:(NSTextContainer *)aTextContainer
+atEnd:(BOOL)flag
+{
+	NSLog(@"layoutManager:didCompleteLayoutForTextContainer:atEnd:\n");
+	NSLog(@"Test: size: %@\n", NSStringFromSize([self containerSizeOfString:@"a\nb"
+		withFontname:@"Helvetica"
+		fontSize:12.0]));
+	//NSTextContainer tempContainer = [[[NSTextContainer alloc] initWithContainerSize:NSMakeSize(300.0,300.0)] autorelease];
+	//NSLayoutManger tempLayoutManager = [[[NSLayoutManager alloc] init] autorelease];
+	
+	NSRect frame;
+	_bounds.size = [[_editor layoutManager] usedRectForTextContainer:[_editor textContainer]].size;
+	//[[_editor textContainer] containerSize];
+    frame = [_pdfView convertRect:[_pdfView convertRect:_bounds fromPage:_page] toView:PDFDisplayViewForMatteView(documentViewForPDFView(_pdfView))];
+	[_editor setFrame:frame];
+	NSLog(@"setting frame to : %@\n", NSStringFromRect(frame));
 }
 
 /*
@@ -318,8 +431,10 @@ flippedFont(NSFont * font)
 
 - (void)stopEditing
 {
+	NSLog(@"stop editing\n");
     assert(_editor);
     [_editor setDelegate:nil];
+	[[_editor layoutManager] setDelegate:nil];
     [_editor removeFromSuperview];
     _isEditing = NO;
     /*

@@ -28,6 +28,7 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
     if (self) {
         // Add your subclass-specific initialization here.
         // If an error occurs here, send a [self release] message and return nil.
+        _pdf_document = nil;
     }
     return self;
 }
@@ -36,6 +37,7 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
 {
     [_one_up_vs_two_up_vs_book release];
     [_single_vs_continuous release];
+    [_pdf_document release];
     [super dealloc];
 }
 
@@ -54,10 +56,8 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
 	// Load PDF.
 	if ([self fileName])
 	{
-        PDFDocument	*pdfDoc;
-		
-		pdfDoc = [[[PDFDocument alloc] initWithURL: [NSURL fileURLWithPath: [self fileName]]] autorelease];
-		[_pdf_view setDocument: pdfDoc];
+		_pdf_document = [[PDFDocument alloc] initWithURL: [NSURL fileURLWithPath: [self fileName]]];
+        [_document_view setPDFDocument:_pdf_document];
 	}
     
     // toolbar item views
@@ -67,36 +67,36 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
     [_single_vs_continuous retain];
     [_single_vs_continuous removeFromSuperview];
     
-    switch ([_pdf_view displayMode]) {
-        case kPDFDisplaySinglePage:
-            [_pdf_view setDisplaysAsBook:NO];
-            [_one_up_vs_two_up_vs_book setSelectedSegment:0];
-            [_single_vs_continuous setSelectedSegment:0];
-            break;
-        case kPDFDisplaySinglePageContinuous:
-            [_pdf_view setDisplaysAsBook:NO];
-            [_one_up_vs_two_up_vs_book setSelectedSegment:0];
-            [_single_vs_continuous setSelectedSegment:1];
-            break;
-        case kPDFDisplayTwoUp:
-            if ([_pdf_view displaysAsBook]) {
-                [_one_up_vs_two_up_vs_book setSelectedSegment:2];
-                [_single_vs_continuous setSelectedSegment:0];
-            } else {
-                [_one_up_vs_two_up_vs_book setSelectedSegment:1];
-                [_single_vs_continuous setSelectedSegment:0];
-            }
-            break;
-        case kPDFDisplayTwoUpContinuous:
-            if ([_pdf_view displaysAsBook]) {
-                [_one_up_vs_two_up_vs_book setSelectedSegment:2];
-                [_single_vs_continuous setSelectedSegment:1];
-            } else {
-                [_one_up_vs_two_up_vs_book setSelectedSegment:1];
-                [_single_vs_continuous setSelectedSegment:1];
-            }
-            break;
-    }
+//    switch ([_pdf_view displayMode]) {
+//        case kPDFDisplaySinglePage:
+//            [_pdf_view setDisplaysAsBook:NO];
+//            [_one_up_vs_two_up_vs_book setSelectedSegment:0];
+//            [_single_vs_continuous setSelectedSegment:0];
+//            break;
+//        case kPDFDisplaySinglePageContinuous:
+//            [_pdf_view setDisplaysAsBook:NO];
+//            [_one_up_vs_two_up_vs_book setSelectedSegment:0];
+//            [_single_vs_continuous setSelectedSegment:1];
+//            break;
+//        case kPDFDisplayTwoUp:
+//            if ([_pdf_view displaysAsBook]) {
+//                [_one_up_vs_two_up_vs_book setSelectedSegment:2];
+//                [_single_vs_continuous setSelectedSegment:0];
+//            } else {
+//                [_one_up_vs_two_up_vs_book setSelectedSegment:1];
+//                [_single_vs_continuous setSelectedSegment:0];
+//            }
+//            break;
+//        case kPDFDisplayTwoUpContinuous:
+//            if ([_pdf_view displaysAsBook]) {
+//                [_one_up_vs_two_up_vs_book setSelectedSegment:2];
+//                [_single_vs_continuous setSelectedSegment:1];
+//            } else {
+//                [_one_up_vs_two_up_vs_book setSelectedSegment:1];
+//                [_single_vs_continuous setSelectedSegment:1];
+//            }
+//            break;
+//    }
     
     [self setupToolbar];
 }
@@ -117,113 +117,113 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
 
 - (IBAction)zoomIn:(id)sender
 {
-    [_pdf_view zoomIn:sender];
+    //[_document_view zoomIn:sender];
 }
 
 - (IBAction)zoomOut:(id)sender
 {
-    [_pdf_view zoomOut:sender];
+    //[_document_view zoomOut:sender];
 }
 
 - (IBAction)toggleContinuous:(id)sender
 {
-    PDFDisplayMode new_mode = kPDFDisplaySinglePage;
-    
-    if (sender == _single_vs_continuous) {
-        int ss = [_single_vs_continuous selectedSegment];
-        switch([_pdf_view displayMode]) {
-            case kPDFDisplaySinglePage: // fall through
-            case kPDFDisplaySinglePageContinuous:
-                new_mode = (ss==1?kPDFDisplaySinglePageContinuous:kPDFDisplaySinglePage); break;
-            case kPDFDisplayTwoUp: // fall through
-            case kPDFDisplayTwoUpContinuous:
-                new_mode = (ss==1?kPDFDisplayTwoUpContinuous:kPDFDisplayTwoUp); break;
-        }
-    } else {
-        switch([_pdf_view displayMode]) {
-            case kPDFDisplaySinglePage: new_mode = kPDFDisplaySinglePageContinuous; break;
-            case kPDFDisplaySinglePageContinuous: new_mode = kPDFDisplaySinglePage; break;
-            case kPDFDisplayTwoUp: new_mode = kPDFDisplayTwoUpContinuous; break;
-            case kPDFDisplayTwoUpContinuous: new_mode = kPDFDisplayTwoUp; break;
-        }
-    }
-    [_pdf_view setDisplayMode:new_mode];    
+//    PDFDisplayMode new_mode = kPDFDisplaySinglePage;
+//    
+//    if (sender == _single_vs_continuous) {
+//        int ss = [_single_vs_continuous selectedSegment];
+//        switch([_pdf_view displayMode]) {
+//            case kPDFDisplaySinglePage: // fall through
+//            case kPDFDisplaySinglePageContinuous:
+//                new_mode = (ss==1?kPDFDisplaySinglePageContinuous:kPDFDisplaySinglePage); break;
+//            case kPDFDisplayTwoUp: // fall through
+//            case kPDFDisplayTwoUpContinuous:
+//                new_mode = (ss==1?kPDFDisplayTwoUpContinuous:kPDFDisplayTwoUp); break;
+//        }
+//    } else {
+//        switch([_pdf_view displayMode]) {
+//            case kPDFDisplaySinglePage: new_mode = kPDFDisplaySinglePageContinuous; break;
+//            case kPDFDisplaySinglePageContinuous: new_mode = kPDFDisplaySinglePage; break;
+//            case kPDFDisplayTwoUp: new_mode = kPDFDisplayTwoUpContinuous; break;
+//            case kPDFDisplayTwoUpContinuous: new_mode = kPDFDisplayTwoUp; break;
+//        }
+//    }
+//    [_pdf_view setDisplayMode:new_mode];    
 }
 
 - (IBAction)toggleOneUpTwoUpBookMode:(id)sender
 {
-    PDFDisplayMode new_up_mode = kPDFDisplaySinglePage;
-    BOOL book_mode = NO;
-    int sc_idx = 0;
-    
-    if (sender == _one_up_vs_two_up_vs_book) {
-        int cont = [_pdf_view displayMode] == kPDFDisplaySinglePageContinuous ||
-        [_pdf_view displayMode] == kPDFDisplayTwoUpContinuous;
-        if ([_one_up_vs_two_up_vs_book selectedSegment] == 0) {
-            if (cont)
-                new_up_mode = kPDFDisplaySinglePageContinuous;
-            else
-                new_up_mode = kPDFDisplaySinglePage;
-        } else {
-            if (cont)
-                new_up_mode = kPDFDisplayTwoUpContinuous;
-            else
-                new_up_mode = kPDFDisplayTwoUp;
-        }
-        [_pdf_view setDisplaysAsBook:([_one_up_vs_two_up_vs_book selectedSegment] == 2)];
-        [_pdf_view setDisplayMode:new_up_mode];
-        return;
-    }
-    
-    switch([_pdf_view displayMode]) {
-        case kPDFDisplaySinglePage:
-            new_up_mode = kPDFDisplayTwoUp;
-            book_mode = NO;
-            sc_idx = 1;
-            break;
-        case kPDFDisplaySinglePageContinuous:
-            new_up_mode = kPDFDisplayTwoUpContinuous;
-            book_mode = NO;
-            sc_idx = 1;
-            break;
-        case kPDFDisplayTwoUp:
-            if ([_pdf_view displaysAsBook] == NO) {
-                new_up_mode = [_pdf_view displayMode];
-                book_mode = YES;
-                sc_idx = 2;
-            } else {
-                new_up_mode = kPDFDisplaySinglePage;
-                book_mode = NO;
-                sc_idx = 3;
-            }
-            break;
-        case kPDFDisplayTwoUpContinuous:
-            if ([_pdf_view displaysAsBook] == NO) {
-                new_up_mode = [_pdf_view displayMode];
-                book_mode = YES;
-                sc_idx = 2;
-            } else {
-                new_up_mode = kPDFDisplaySinglePageContinuous;
-                book_mode = NO;
-                sc_idx = 3;
-            }
-            break;
-            
-    }
-    [_pdf_view setDisplayMode:new_up_mode];
-    if ([_pdf_view displaysAsBook] != book_mode)
-        [_pdf_view setDisplaysAsBook:book_mode];
-    [_one_up_vs_two_up_vs_book setSelectedSegment:sc_idx];
+//    PDFDisplayMode new_up_mode = kPDFDisplaySinglePage;
+//    BOOL book_mode = NO;
+//    int sc_idx = 0;
+//    
+//    if (sender == _one_up_vs_two_up_vs_book) {
+//        int cont = [_pdf_view displayMode] == kPDFDisplaySinglePageContinuous ||
+//        [_pdf_view displayMode] == kPDFDisplayTwoUpContinuous;
+//        if ([_one_up_vs_two_up_vs_book selectedSegment] == 0) {
+//            if (cont)
+//                new_up_mode = kPDFDisplaySinglePageContinuous;
+//            else
+//                new_up_mode = kPDFDisplaySinglePage;
+//        } else {
+//            if (cont)
+//                new_up_mode = kPDFDisplayTwoUpContinuous;
+//            else
+//                new_up_mode = kPDFDisplayTwoUp;
+//        }
+//        [_pdf_view setDisplaysAsBook:([_one_up_vs_two_up_vs_book selectedSegment] == 2)];
+//        [_pdf_view setDisplayMode:new_up_mode];
+//        return;
+//    }
+//    
+//    switch([_pdf_view displayMode]) {
+//        case kPDFDisplaySinglePage:
+//            new_up_mode = kPDFDisplayTwoUp;
+//            book_mode = NO;
+//            sc_idx = 1;
+//            break;
+//        case kPDFDisplaySinglePageContinuous:
+//            new_up_mode = kPDFDisplayTwoUpContinuous;
+//            book_mode = NO;
+//            sc_idx = 1;
+//            break;
+//        case kPDFDisplayTwoUp:
+//            if ([_pdf_view displaysAsBook] == NO) {
+//                new_up_mode = [_pdf_view displayMode];
+//                book_mode = YES;
+//                sc_idx = 2;
+//            } else {
+//                new_up_mode = kPDFDisplaySinglePage;
+//                book_mode = NO;
+//                sc_idx = 3;
+//            }
+//            break;
+//        case kPDFDisplayTwoUpContinuous:
+//            if ([_pdf_view displaysAsBook] == NO) {
+//                new_up_mode = [_pdf_view displayMode];
+//                book_mode = YES;
+//                sc_idx = 2;
+//            } else {
+//                new_up_mode = kPDFDisplaySinglePageContinuous;
+//                book_mode = NO;
+//                sc_idx = 3;
+//            }
+//            break;
+//            
+//    }
+//    [_pdf_view setDisplayMode:new_up_mode];
+//    if ([_pdf_view displaysAsBook] != book_mode)
+//        [_pdf_view setDisplaysAsBook:book_mode];
+//    [_one_up_vs_two_up_vs_book setSelectedSegment:sc_idx];
 }
 
 - (IBAction)goToNextPage:(id)sender
 {
-    [_pdf_view goToNextPage:sender];
+    //[_pdf_view goToNextPage:sender];
 }
 
 - (IBAction)goToPreviousPage:(id)sender
 {
-    [_pdf_view goToPreviousPage:sender];
+    //[_pdf_view goToPreviousPage:sender];
 }
 
 #pragma mark -

@@ -11,6 +11,7 @@
 
 @interface AppDelegate : NSObject {
     IBOutlet NSWindow *_renderWindow;
+    IBOutlet NSPanel *_inspectorWindow;
 }
 - (IBAction)showLicense:(id)sender;
 - (IBAction)provideFeedback:(id)sender;

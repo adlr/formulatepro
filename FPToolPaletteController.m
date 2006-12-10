@@ -39,6 +39,7 @@ static FPToolPaletteController *_sharedController;
     [rectangleToolButton setState:NSOffState];
     [squiggleToolButton setState:NSOffState];
     [textAreaToolButton setState:NSOffState];
+    [textFieldToolButton setState:NSOffState];
     [checkmarkToolButton setState:NSOffState];
     [stampToolButton setState:NSOffState];
     [sender setState:NSOnState];
@@ -50,6 +51,7 @@ static FPToolPaletteController *_sharedController;
     if ([ellipseToolButton state] == NSOnState) return FPToolEllipse;
     if ([squiggleToolButton state] == NSOnState) return FPToolSquiggle;
     if ([textAreaToolButton state] == NSOnState) return FPToolTextArea;
+    if ([textFieldToolButton state] == NSOnState) return FPToolTextField;
     return FPToolRectangle;
 }
 
@@ -60,6 +62,7 @@ static FPToolPaletteController *_sharedController;
         case FPToolRectangle: NSLog(@"rect\n"); return [FPRectangle class];
         case FPToolSquiggle: NSLog(@"squiggle\n"); return [FPSquiggle class];
         case FPToolTextArea: NSLog(@"text area\n"); return [FPTextArea class];
+        //case FPToolTextField: NSLog(@"text field\n"); return [FPTextField class];
     }
     return [FPRectangle class];
 }

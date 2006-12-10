@@ -14,6 +14,8 @@
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		C449817A0A922A890084F508 /* AOSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = C44981790A922A890084F508 /* AOSegmentedControl.m */; };
+		C44988D10AA7B0F80084F508 /* FPInspectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = C44988CF0AA7B0F80084F508 /* FPInspectorController.m */; };
+		C4A904480B2C86E00015511A /* FPDocumentView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A904470B2C86E00015511A /* FPDocumentView.m */; };
 		C4AB3EE90A5B010000EE29B2 /* PDFKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4AB3EE80A5B010000EE29B2 /* PDFKit.framework */; };
 		C4AB3FBD0A5B06B200EE29B2 /* MyPDFView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4AB3FBC0A5B06B200EE29B2 /* MyPDFView.m */; };
 		C4AB40380A5BB5D200EE29B2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C4AB40370A5BB5D200EE29B2 /* AppDelegate.m */; };
@@ -57,6 +59,10 @@
 		8D15AC370486D014006FF6A4 /* FormulatePro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FormulatePro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C44981780A922A890084F508 /* AOSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOSegmentedControl.h; sourceTree = "<group>"; };
 		C44981790A922A890084F508 /* AOSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOSegmentedControl.m; sourceTree = "<group>"; };
+		C44988CF0AA7B0F80084F508 /* FPInspectorController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FPInspectorController.m; sourceTree = "<group>"; };
+		C44988D00AA7B0F80084F508 /* FPInspectorController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FPInspectorController.h; sourceTree = "<group>"; };
+		C4A904460B2C86E00015511A /* FPDocumentView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FPDocumentView.h; sourceTree = "<group>"; };
+		C4A904470B2C86E00015511A /* FPDocumentView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FPDocumentView.m; sourceTree = "<group>"; };
 		C4AB3EE80A5B010000EE29B2 /* PDFKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PDFKit.framework; path = /System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/PDFKit.framework; sourceTree = "<absolute>"; };
 		C4AB3FBB0A5B06B200EE29B2 /* MyPDFView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPDFView.h; sourceTree = "<group>"; };
 		C4AB3FBC0A5B06B200EE29B2 /* MyPDFView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPDFView.m; sourceTree = "<group>"; };
@@ -156,8 +162,12 @@
 				2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */,
 				C4AB42800A623A6800EE29B2 /* FPToolPaletteController.h */,
 				C4AB42810A623A6800EE29B2 /* FPToolPaletteController.m */,
+				C44988D00AA7B0F80084F508 /* FPInspectorController.h */,
+				C44988CF0AA7B0F80084F508 /* FPInspectorController.m */,
 				C44981780A922A890084F508 /* AOSegmentedControl.h */,
 				C44981790A922A890084F508 /* AOSegmentedControl.m */,
+				C4A904460B2C86E00015511A /* FPDocumentView.h */,
+				C4A904470B2C86E00015511A /* FPDocumentView.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -305,6 +315,8 @@
 				C4DC0FF00A85C4BA00DB476E /* FPSquiggle.m in Sources */,
 				C4FDF1630A8BEB1800032EF5 /* FPTextArea.m in Sources */,
 				C449817A0A922A890084F508 /* AOSegmentedControl.m in Sources */,
+				C44988D10AA7B0F80084F508 /* FPInspectorController.m in Sources */,
+				C4A904480B2C86E00015511A /* FPDocumentView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,6 +419,7 @@
 		C4AB3EA00A5AFE1100EE29B2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_PEDANTIC = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
@@ -422,6 +435,7 @@
 					ppc,
 					i386,
 				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_PEDANTIC = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
@@ -432,6 +446,7 @@
 		C4AB3EA20A5AFE1100EE29B2 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_C_LANGUAGE_STANDARD = gnu99;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Default;
