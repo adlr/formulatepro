@@ -79,7 +79,7 @@
     return loc_in_page;
 }
 
-- (NSPoint)convertPagePointFromEvent:(NSEvent *)event page:(PDFPage *)page
+- (NSPoint)pagePointForPointFromEvent:(NSEvent *)event page:(PDFPage *)page
 {
     NSPoint loc_in_window;
     NSPoint loc_in_view;
@@ -131,7 +131,7 @@
         //   else make shape the only selected shape
         for (i = [_overlayGraphics count] - 1; i >= 0; i--) {
             graphic = [_overlayGraphics objectAtIndex:i];
-            point = [self convertPagePointFromEvent:theEvent page:[graphic page]];
+            point = [self pagePointForPointFromEvent:theEvent page:[graphic page]];
             if (NSPointInRect(point, [graphic safeBounds])) {
                 if ([theEvent modifierFlags] & NSShiftKeyMask) {
                     if ([_selectedGraphics containsObject:graphic])
@@ -192,7 +192,7 @@
             break;
         
         // main loop body
-        newPoint = [self convertPagePointFromEvent:theEvent
+        newPoint = [self pagePointForPointFromEvent:theEvent
                                               page:page];
         
         deltaX = newPoint.x - oldPoint.x;

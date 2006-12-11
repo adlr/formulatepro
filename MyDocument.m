@@ -117,12 +117,12 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
 
 - (IBAction)zoomIn:(id)sender
 {
-    //[_document_view zoomIn:sender];
+    [_document_view zoomIn:sender];
 }
 
 - (IBAction)zoomOut:(id)sender
 {
-    //[_document_view zoomOut:sender];
+    [_document_view zoomOut:sender];
 }
 
 - (IBAction)toggleContinuous:(id)sender

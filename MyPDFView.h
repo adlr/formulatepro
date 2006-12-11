@@ -19,7 +19,7 @@
 
 // returns point in coordinates of the page 'out_page'. out_page is set to the proper page from the PDFDocument.
 - (NSPoint)convertPointFromEvent:(NSEvent *)event toPage:(PDFPage **)out_page;
-- (NSPoint)convertPagePointFromEvent:(NSEvent *)event page:(PDFPage *)page;
+- (NSPoint)pagePointForPointFromEvent:(NSEvent *)event page:(PDFPage *)page;
 - (void)moveSelectionWithEvent:(NSEvent *)theEvent;
 
 @end

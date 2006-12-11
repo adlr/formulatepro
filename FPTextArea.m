@@ -15,15 +15,15 @@
 
 //static NSLayoutManager *sharedDrawingLayoutManager();
 
-+ (FPGraphic *)graphicInPDFView:(MyPDFView *)pdfView
++ (FPGraphic *)graphicInDocumentView:(FPDocumentView *)pdfView
 {
-    FPGraphic *ret = [[FPTextArea alloc] initInPDFView:pdfView];
+    FPGraphic *ret = [[FPTextArea alloc] initInDocumentView:pdfView];
     return [ret autorelease];
 }
 
-- (id)initInPDFView:(MyPDFView *)pdfView
+- (id)initInDocumentView:(FPDocumentView *)pdfView
 {
-    self = [super initInPDFView:pdfView];
+    self = [super initInDocumentView:pdfView];
     if (self) {
         _contents = [[NSTextStorage alloc] init];
         _editor = nil;
@@ -237,7 +237,8 @@
 {
     NSPoint point;
     
-    point = [_pdfView convertPointFromEvent:theEvent toPage:&_page];
+    _page = [_docView pageForPointFromEvent:theEvent];
+    point = [_docView pagePointForPointFromEvent:theEvent page:_page];
     
     _bounds.origin = point;
     _bounds.size = NSMakeSize(0.0,0.0);
@@ -245,7 +246,7 @@
     _naturalBounds.size = NSMakeSize(1.0, 1.0);
     
     // if the next event is mouse up, then we're auto-sized
-    theEvent = [[_pdfView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
+    theEvent = [[_docView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
     if ([theEvent type] != NSLeftMouseUp) {
         // ok, we have a shape, and user is dragging to size it
 		_isAutoSized = NO;
@@ -358,7 +359,7 @@ PDFDisplayViewForMatteView(NSView *p)
 		[[_editor layoutManager] setDelegate:self];
 	}
 
-    frame = [_pdfView convertRect:[_pdfView convertRect:_bounds fromPage:_page] toView:PDFDisplayViewForMatteView(documentViewForPDFView(_pdfView))];
+    frame = [_docView convertRect:[_docView convertRect:_bounds fromPage:_page] toView:PDFDisplayViewForMatteView(documentViewForPDFView(_docView))];
     NSLog(@"frame: %@\n", NSStringFromRect(frame));
     [_editor setFrame:frame];
     
@@ -366,13 +367,13 @@ PDFDisplayViewForMatteView(NSView *p)
     [_contents addLayoutManager:[_editor layoutManager]];
     [_editor setSelectedRange:NSMakeRange(0, [_contents length])];
      */
-    [PDFDisplayViewForMatteView(documentViewForPDFView(_pdfView)) addSubview:_editor];
+    [PDFDisplayViewForMatteView(documentViewForPDFView(_docView)) addSubview:_editor];
     [_editor setDelegate:self];
     
     // Make sure we redisplay
-    [_pdfView setNeedsDisplay:YES];
+    [_docView setNeedsDisplay:YES];
     
-    [[_pdfView window] makeFirstResponder:_editor];
+    [[_docView window] makeFirstResponder:_editor];
     _isEditing = YES;
 }
 
@@ -409,7 +410,7 @@ atEnd:(BOOL)flag
 	NSRect frame;
 	_bounds.size = [[_editor layoutManager] usedRectForTextContainer:[_editor textContainer]].size;
 	//[[_editor textContainer] containerSize];
-    frame = [_pdfView convertRect:[_pdfView convertRect:_bounds fromPage:_page] toView:PDFDisplayViewForMatteView(documentViewForPDFView(_pdfView))];
+    frame = [_docView convertRect:[_docView convertRect:_bounds fromPage:_page] toView:PDFDisplayViewForMatteView(documentViewForPDFView(_docView))];
 	[_editor setFrame:frame];
 	NSLog(@"setting frame to : %@\n", NSStringFromRect(frame));
 }

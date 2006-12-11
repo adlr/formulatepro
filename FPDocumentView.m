@@ -1,9 +1,21 @@
 #import "FPDocumentView.h"
+#import "FPToolPaletteController.h"
+#import "FPGraphic.h"
 
 @implementation FPDocumentView
 
 // Draw this many pixels around each page. used for the shadow
 static const float PageBorderSize = 10.0;
+static const float ZoomScaleFactor = 1.3;
+
+- (NSSize)sizeForPage:(unsigned int)page
+{
+    PDFPage *pg = [_pdf_document pageAtIndex:page];
+    NSSize ret = [pg boundsForBox:_box].size;
+    ret.width *= _scale_factor;
+    ret.height *= _scale_factor;
+    return ret;
+}
 
 - (NSRect)frame
 {
@@ -13,15 +25,25 @@ static const float PageBorderSize = 10.0;
     }
     NSRect ret = NSMakeRect(0.0, 0.0, 0.0, 0.0);
     for (unsigned int i = 0; i < [_pdf_document pageCount]; i++) {
-        PDFPage *pg = [_pdf_document pageAtIndex:i];
-        NSRect bounds = [pg boundsForBox:_box];
-        if (NSWidth(bounds) > NSWidth(ret))
-            ret.size.width = NSWidth(bounds);
-        ret.size.height += (NSHeight(bounds) + PageBorderSize);
+        NSSize sz = [self sizeForPage:i];
+        if (sz.width > NSWidth(ret))
+            ret.size.width = sz.width;
+        ret.size.height += sz.height + PageBorderSize;
     }
     ret.size.width += 2.0 * PageBorderSize;
     ret.size.height += PageBorderSize;
     return ret;
+}
+
+- (void)initMemberVariables
+{
+    _pdf_document = nil;
+    _box = kPDFDisplayBoxCropBox;
+    _scale_factor = 1.0;
+
+    _overlayGraphics = [[NSMutableArray alloc] initWithCapacity:1];
+    _selectedGraphics = [[NSMutableSet alloc] initWithCapacity:1];
+    _editingGraphic = nil;
 }
 
 - (id)initWithFrame:(NSRect)frameRect
@@ -30,10 +52,14 @@ static const float PageBorderSize = 10.0;
     frameRect = [self frame];
     if ((self = [super initWithFrame:frameRect]) != nil) {
         // Add initialization code here
-        _pdf_document = nil;
-        _box = kPDFDisplayBoxCropBox;
+        [self initMemberVariables];
     }
     return self;
+}
+
+- (void)awakeFromNib
+{
+    [self initMemberVariables];
 }
 
 - (void)setPDFDocument:(PDFDocument *)pdf_document
@@ -45,34 +71,71 @@ static const float PageBorderSize = 10.0;
     [self setNeedsDisplay:YES];
 }
 
+- (void)zoomIn:(id)sender
+{
+    _scale_factor *= ZoomScaleFactor;
+    [self setFrame:[self frame]];
+    [self setNeedsDisplay:YES];
+}
+
+- (void)zoomOut:(id)sender
+{
+    _scale_factor /= ZoomScaleFactor;
+    [self setFrame:[self frame]];
+    [self setNeedsDisplay:YES];
+}
+
+- (float)scaleFactor
+{
+    return _scale_factor;
+}
+
 - (void)drawRect:(NSRect)rect
 {
     NSGraphicsContext* theContext = [NSGraphicsContext currentContext];
     NSLog(@"draw rect\n");
+
+    // draw background
     [[NSColor grayColor] set];
     NSRectFill([self frame]);
     if (nil == _pdf_document) return;
-    [[NSColor whiteColor] set];
+    
+    // draw the shadow and white page backgrounds, and pdf pages
     float how_far_down = PageBorderSize;
     NSShadow *shadow = [[[NSShadow alloc] init] autorelease];
     [shadow setShadowColor:[NSColor blackColor]];
     [shadow setShadowBlurRadius:5.0];
     [shadow setShadowOffset:NSMakeSize(0.0, -2.0)];
     for (unsigned int i = 0; i < [_pdf_document pageCount]; i++) {
-        PDFPage *pg = [_pdf_document pageAtIndex:i];
-        NSSize sz = [pg boundsForBox:_box].size;
+        NSSize sz = [self sizeForPage:i];
         NSRect page_rect = NSMakeRect(PageBorderSize, how_far_down,
-                              sz.width, sz.height);
+                                      sz.width, sz.height);
         [theContext saveGraphicsState];
         [shadow set];
+        [[NSColor whiteColor] set];
         NSRectFill(page_rect);
         [theContext restoreGraphicsState];
-        NSAffineTransform *at = [NSAffineTransform transform];
-        [at scaleXBy:1.0 yBy:(-1.0)];
-        [at translateXBy:PageBorderSize yBy:(-1.0*(how_far_down + NSHeight(page_rect)))];
-        //[at translateXBy:30.0 yBy:30.0];
+        NSAffineTransform *at = [self transformForPage:i];
+//        NSAffineTransform *at = [NSAffineTransform transform];
+//        [at scaleXBy:1.0 yBy:(-1.0)];
+//        [at translateXBy:PageBorderSize yBy:(-1.0*(how_far_down + NSHeight(page_rect)))];
+//        [at scaleXBy:_scale_factor yBy:_scale_factor];
         [at concat];
-        [pg drawWithBox:_box];
+        [[_pdf_document pageAtIndex:i] drawWithBox:_box];
+
+        for (unsigned int j = 0; j < [_overlayGraphics count]; j++) {
+            FPGraphic *g;
+            g = [_overlayGraphics objectAtIndex:j];
+            if ([g page] == i)
+                [g draw];
+        }
+        for (unsigned int j = 0; j < [_overlayGraphics count]; j++) {
+            FPGraphic *g;
+            g = [_overlayGraphics objectAtIndex:j];
+            if ([g page] == i && [_selectedGraphics containsObject:g])
+                [g drawKnobs];
+        }
+
         [at invert];
         [at concat];
 
@@ -80,6 +143,223 @@ static const float PageBorderSize = 10.0;
     }
 }
 
+- (unsigned int)pageForPointFromEvent:(NSEvent *)theEvent
+{
+    NSPoint loc_in_window = [theEvent locationInWindow];
+    loc_in_window.x += 0.5;
+    loc_in_window.y -= 0.5; // correct for coordinates being between pixels
+    NSPoint loc_in_view = [[[self window] contentView] convertPoint:loc_in_window toView:self];
+
+    if (nil == _pdf_document) return 0;
+    float bottom_border = PageBorderSize / 2.0;
+    for (unsigned int i = 0; i < [_pdf_document pageCount]; i++) {
+        NSSize sz = [self sizeForPage:i];
+        bottom_border += sz.height + PageBorderSize;
+        if (loc_in_view.y < bottom_border) return i;
+    }
+    return [_pdf_document pageCount] - 1;
+}
+
+// thre returned transform works in the following direction:
+// page-coordinate ==(transform)==> doc-view-coordinate
+- (NSAffineTransform *)transformForPage:(unsigned int)page
+{
+    assert(_pdf_document);
+    assert(page < [_pdf_document pageCount]);
+
+    NSAffineTransform *at = [NSAffineTransform transform];
+    [at scaleXBy:1.0 yBy:-1.0];
+    float yTranslate = 0.0;
+    for (unsigned int i = 0; i <= page; i++) {
+        NSSize sz = [self sizeForPage:i];
+        yTranslate -= (PageBorderSize + sz.height);
+    }
+    [at translateXBy:PageBorderSize yBy:yTranslate];
+    [at scaleXBy:_scale_factor yBy:_scale_factor];
+    return at;
+}
+
+- (NSPoint)convertPoint:(NSPoint)point toPage:(unsigned int)page
+{
+    NSAffineTransform *transform = [self transformForPage:page];
+    [transform invert];
+    return [transform transformPoint:point];
+}
+
+- (NSPoint)convertPoint:(NSPoint)point fromPage:(unsigned int)page
+{
+    NSAffineTransform *transform = [self transformForPage:page];
+    return [transform transformPoint:point];
+}
+
+- (NSRect)convertRect:(NSRect)rect toPage:(unsigned int)page
+{
+    assert(rect.size.width >= 0.0);
+    assert(rect.size.height >= 0.0);
+    NSPoint bottomLeft = NSMakePoint(NSMinX(rect), NSMaxY(rect));
+    NSPoint upperRight = NSMakePoint(NSMaxX(rect), NSMinY(rect));
+    NSPoint newBottomLeft = [self convertPoint:bottomLeft toPage:page];
+    NSPoint newUpperRight = [self convertPoint:upperRight toPage:page];
+    NSRect ret;
+    ret.origin = newBottomLeft;
+    ret.size = NSMakeSize(newUpperRight.x - newBottomLeft.x, newUpperRight.y - newBottomLeft.y);
+    assert(ret.size.width >= 0.0);
+    assert(ret.size.height >= 0.0);
+    return ret;
+}
+
+- (NSRect)convertRect:(NSRect)rect fromPage:(unsigned int)page
+{
+    assert(rect.size.width >= 0.0);
+    assert(rect.size.height >= 0.0);
+    NSPoint bottomLeft = rect.origin;
+    NSPoint upperRight = NSMakePoint(NSMaxX(rect), NSMaxY(rect));
+    NSPoint newBottomLeft = [self convertPoint:bottomLeft fromPage:page];
+    NSPoint newUpperRight = [self convertPoint:upperRight fromPage:page];
+    NSRect ret;
+    ret.origin.x = newBottomLeft.x;
+    ret.origin.y = newUpperRight.y;
+    ret.size.width = newUpperRight.x - newBottomLeft.x;
+    ret.size.height = newBottomLeft.y - newUpperRight.y;
+    assert(ret.size.width >= 0.0);
+    assert(ret.size.height >= 0.0);
+    return ret;
+}
+
+- (NSPoint)pagePointForPointFromEvent:(NSEvent *)theEvent page:(unsigned int)page
+{
+    NSPoint loc_in_window = [theEvent locationInWindow];
+    loc_in_window.x += 0.5;
+    loc_in_window.y -= 0.5; // correct for coordinates being between pixels
+    NSPoint loc_in_view = [[[self window] contentView] convertPoint:loc_in_window toView:self];
+    NSPoint loc_in_page = [self convertPoint:loc_in_view toPage:page];
+    return loc_in_page;
+}
+
+- (BOOL)isFlipped
+{
+    return YES;
+}
+
+- (void)moveSelectionWithEvent:(NSEvent *)theEvent
+{
+    NSPoint oldPoint;
+    NSPoint newPoint;
+    float deltaX, deltaY;
+    unsigned int page;
+    int i;
+    
+    NSArray *selectedGraphics = [_selectedGraphics allObjects];
+    
+    page = [self pageForPointFromEvent:theEvent];
+    oldPoint = [self pagePointForPointFromEvent:theEvent page:page];
+    
+    for (;;) {
+        // get ready for next iteration of the loop, or break out of loop
+        theEvent = [[self window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
+        if ([theEvent type] == NSLeftMouseUp)
+            break;
+        
+        // main loop body
+        newPoint = [self pagePointForPointFromEvent:theEvent
+                                               page:page];
+        
+        deltaX = newPoint.x - oldPoint.x;
+        deltaY = newPoint.y - oldPoint.y;
+        
+        // move the graphics. invalide view for before and after positions
+        for (i = 0; i < [selectedGraphics count]; i++) {
+            FPGraphic *g = [selectedGraphics objectAtIndex:i];
+            [self setNeedsDisplayInRect:[self convertRect:[g boundsWithKnobs] fromPage:[g page]]];
+            [g moveGraphicByX:deltaX byY:deltaY];
+            [self setNeedsDisplayInRect:[self convertRect:[g boundsWithKnobs] fromPage:[g page]]];
+        }
+        
+        oldPoint = newPoint;
+    }
+}
+
+- (void)mouseDown:(NSEvent *)theEvent
+{
+    FPGraphic *graphic;
+    BOOL keep;
+    unsigned int tool = [[FPToolPaletteController sharedToolPaletteController] currentTool];
+
+    if (_editingGraphic) {
+        [_editingGraphic stopEditing];
+        _editingGraphic = nil;
+    }
+    
+    if (tool == FPToolArrow) {
+        int i;
+        NSPoint point;
+        
+        // if we hit a knob, resize that shape by its knob
+        if ([_selectedGraphics count]) {
+            for (i = [_overlayGraphics count] - 1; i >= 0; i--) {
+                graphic = [_overlayGraphics objectAtIndex:i];
+                if (![_selectedGraphics containsObject:graphic]) continue;
+                int knob = [graphic knobForEvent:theEvent];
+                if (knob != NoKnob) {
+                    [_selectedGraphics removeAllObjects];
+                    [_selectedGraphics addObject:graphic];
+                    [self setNeedsDisplay:YES]; // to fix which knobs are showing
+                    [graphic resizeWithEvent:theEvent byKnob:knob];
+                    return;
+                }
+            }
+        }
+        
+        // if we hit a shape, then:
+        // if holding shift: add or remove shape from selection
+        // if not holding shift:
+        //   if shape is selected, do nothing
+        //   else make shape the only selected shape
+        for (i = [_overlayGraphics count] - 1; i >= 0; i--) {
+            graphic = [_overlayGraphics objectAtIndex:i];
+            point = [self pagePointForPointFromEvent:theEvent page:[graphic page]];
+            if (NSPointInRect(point, [graphic safeBounds])) {
+                if ([theEvent modifierFlags] & NSShiftKeyMask) {
+                    if ([_selectedGraphics containsObject:graphic])
+                        [_selectedGraphics removeObject:graphic];
+                    else
+                        [_selectedGraphics addObject:graphic];
+                } else {
+                    if (![_selectedGraphics containsObject:graphic]) {
+                        [_selectedGraphics removeAllObjects];
+                        [_selectedGraphics addObject:graphic];
+                    }
+                }
+                break;
+            }
+        }
+        if (i < 0) { // point didn't hit any shape
+            [_selectedGraphics removeAllObjects];
+        }
+        if ([_selectedGraphics count]) {
+            [self setNeedsDisplay:YES];
+            [self moveSelectionWithEvent:theEvent];
+        }
+        //[self setNeedsDisplayInRect:[graphic knobBounds]];
+        [self setNeedsDisplay:YES];
+        return;
+    }
+    
+    graphic = [[[FPToolPaletteController sharedToolPaletteController] classForCurrentTool] graphicInDocumentView:self];
+    assert(graphic);
+    [_overlayGraphics addObject:graphic];
+    keep = [graphic placeWithEvent:theEvent];
+    if (keep == NO) {
+        [_overlayGraphics removeLastObject];
+    } else {
+        if ([graphic isEditable]) {
+            _editingGraphic = graphic;
+            [graphic startEditing];
+        }
+    }
+}
+
+/*
 static NSTextView *newEditor() {
     // This method returns an NSTextView whose NSLayoutManager has a refcount of 1.  It is the caller's responsibility to release the NSLayoutManager.  This function is only for the use of the following method.
     NSLayoutManager *lm = [[NSLayoutManager allocWithZone:NULL] init];
@@ -96,11 +376,6 @@ static NSTextView *newEditor() {
     [tv release];
 
     return tv;
-}
-
-- (BOOL)isFlipped
-{
-    return YES;
 }
 
 - (void)mouseDown:(NSEvent *)theEvent
@@ -149,5 +424,6 @@ static NSTextView *newEditor() {
         // MF: For multiple editors we must fix up the others...  but we don't support multiple views of a document yet, and that's the only way we'd ever have the potential for multiple editors.
     }
 }
+*/
 
 @end

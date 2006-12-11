@@ -16,8 +16,11 @@
 		C449817A0A922A890084F508 /* AOSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = C44981790A922A890084F508 /* AOSegmentedControl.m */; };
 		C44988D10AA7B0F80084F508 /* FPInspectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = C44988CF0AA7B0F80084F508 /* FPInspectorController.m */; };
 		C4A904480B2C86E00015511A /* FPDocumentView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A904470B2C86E00015511A /* FPDocumentView.m */; };
+		C4A906000B2CBF900015511A /* FPEllipse.m in Sources */ = {isa = PBXBuildFile; fileRef = C4DC0E710A85925A00DB476E /* FPEllipse.m */; };
+		C4A906010B2CBF910015511A /* FPGraphic.m in Sources */ = {isa = PBXBuildFile; fileRef = C4AB40E40A5BDC7D00EE29B2 /* FPGraphic.m */; };
+		C4A906020B2CBF920015511A /* FPRectangle.m in Sources */ = {isa = PBXBuildFile; fileRef = C4DC0E640A85907800DB476E /* FPRectangle.m */; };
+		C4A906030B2CBF920015511A /* FPSquiggle.m in Sources */ = {isa = PBXBuildFile; fileRef = C4DC0FEF0A85C4BA00DB476E /* FPSquiggle.m */; };
 		C4AB3EE90A5B010000EE29B2 /* PDFKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4AB3EE80A5B010000EE29B2 /* PDFKit.framework */; };
-		C4AB3FBD0A5B06B200EE29B2 /* MyPDFView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4AB3FBC0A5B06B200EE29B2 /* MyPDFView.m */; };
 		C4AB40380A5BB5D200EE29B2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C4AB40370A5BB5D200EE29B2 /* AppDelegate.m */; };
 		C4AB420E0A5F926500EE29B2 /* circleTool.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB420D0A5F926500EE29B2 /* circleTool.psd */; };
 		C4AB42100A5F928600EE29B2 /* rectangleTool.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB420F0A5F928600EE29B2 /* rectangleTool.psd */; };
@@ -31,16 +34,11 @@
 		C4AB440B0A711A0D00EE29B2 /* twoUp.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB440A0A711A0C00EE29B2 /* twoUp.psd */; };
 		C4AB442E0A71200C00EE29B2 /* book.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB442D0A71200C00EE29B2 /* book.psd */; };
 		C4AB447F0A718D7600EE29B2 /* continuous.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB447E0A718D7600EE29B2 /* continuous.psd */; };
-		C4DC0CB20A82AA6100DB476E /* FPGraphic.m in Sources */ = {isa = PBXBuildFile; fileRef = C4AB40E40A5BDC7D00EE29B2 /* FPGraphic.m */; };
 		C4DC0D980A82D28800DB476E /* viewmag-.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0D960A82D28800DB476E /* viewmag-.png */; };
 		C4DC0D990A82D28800DB476E /* viewmag+.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0D970A82D28800DB476E /* viewmag+.png */; };
 		C4DC0DA60A82D35500DB476E /* next.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DA40A82D35500DB476E /* next.png */; };
 		C4DC0DA70A82D35500DB476E /* previous.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DA50A82D35500DB476E /* previous.png */; };
 		C4DC0DB70A82D99700DB476E /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DB60A82D99700DB476E /* LICENSE.txt */; };
-		C4DC0E650A85907800DB476E /* FPRectangle.m in Sources */ = {isa = PBXBuildFile; fileRef = C4DC0E640A85907800DB476E /* FPRectangle.m */; };
-		C4DC0E720A85925A00DB476E /* FPEllipse.m in Sources */ = {isa = PBXBuildFile; fileRef = C4DC0E710A85925A00DB476E /* FPEllipse.m */; };
-		C4DC0FF00A85C4BA00DB476E /* FPSquiggle.m in Sources */ = {isa = PBXBuildFile; fileRef = C4DC0FEF0A85C4BA00DB476E /* FPSquiggle.m */; };
-		C4FDF1630A8BEB1800032EF5 /* FPTextArea.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FDF1620A8BEB1800032EF5 /* FPTextArea.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -306,17 +304,15 @@
 			files = (
 				8D15AC310486D014006FF6A4 /* MyDocument.m in Sources */,
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
-				C4AB3FBD0A5B06B200EE29B2 /* MyPDFView.m in Sources */,
 				C4AB40380A5BB5D200EE29B2 /* AppDelegate.m in Sources */,
 				C4AB42820A623A6800EE29B2 /* FPToolPaletteController.m in Sources */,
-				C4DC0CB20A82AA6100DB476E /* FPGraphic.m in Sources */,
-				C4DC0E650A85907800DB476E /* FPRectangle.m in Sources */,
-				C4DC0E720A85925A00DB476E /* FPEllipse.m in Sources */,
-				C4DC0FF00A85C4BA00DB476E /* FPSquiggle.m in Sources */,
-				C4FDF1630A8BEB1800032EF5 /* FPTextArea.m in Sources */,
 				C449817A0A922A890084F508 /* AOSegmentedControl.m in Sources */,
 				C44988D10AA7B0F80084F508 /* FPInspectorController.m in Sources */,
 				C4A904480B2C86E00015511A /* FPDocumentView.m in Sources */,
+				C4A906000B2CBF900015511A /* FPEllipse.m in Sources */,
+				C4A906010B2CBF910015511A /* FPGraphic.m in Sources */,
+				C4A906020B2CBF920015511A /* FPRectangle.m in Sources */,
+				C4A906030B2CBF920015511A /* FPSquiggle.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

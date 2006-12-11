@@ -11,9 +11,9 @@
 
 @implementation FPEllipse
 
-+ (FPGraphic *)graphicInPDFView:(MyPDFView *)pdfView
++ (FPGraphic *)graphicInDocumentView:(FPDocumentView *)docView
 {
-    FPGraphic *ret = [[FPEllipse alloc] initInPDFView:pdfView];
+    FPGraphic *ret = [[FPEllipse alloc] initInDocumentView:docView];
     return [ret autorelease];
 }
 

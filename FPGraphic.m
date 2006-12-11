@@ -7,22 +7,23 @@
 //
 
 #import "FPGraphic.h"
-#import "MyPDFView.h"
+#import "FPDocumentView.h"
 
 @implementation FPGraphic
 
-+ (FPGraphic *)graphicInPDFView:(MyPDFView *)pdfView
++ (FPGraphic *)graphicInDocumentView:(FPDocumentView *)docView
 {
-    FPGraphic *ret = [[FPGraphic alloc] initInPDFView:pdfView];
+    FPGraphic *ret = [[FPGraphic alloc] initInDocumentView:docView];
     return [ret autorelease];
 }
 
-- (id)initInPDFView:(MyPDFView *)pdfView
+- (id)initInDocumentView:(FPDocumentView *)docView
 {
     self = [super init];
     if (self) {
-        _page = nil;
-        _pdfView = pdfView;
+        _hasPage = NO;
+        _page = 0;
+        _docView = docView;
         _lineWidth = 1.0;
         _knobMask = 0xff; // all knobs
     }
@@ -34,24 +35,25 @@
     for (;;) {
         NSPoint point;
         
-        if (_page) { // invalidate where the shape used to be, if anywhere
-            [_pdfView setNeedsDisplayInRect:[_pdfView convertRect:[self safeBounds] fromPage:_page]];
+        if (_hasPage) { // invalidate where the shape used to be, if anywhere
+            [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds] fromPage:_page]];
         }
 
-        point = [_pdfView convertPointFromEvent:theEvent toPage:&_page];
+        _page = [_docView pageForPointFromEvent:theEvent];
+        point = [_docView pagePointForPointFromEvent:theEvent page:_page];
         
         _bounds.origin = point;
         _bounds.size = NSMakeSize(1.0,1.0);
         
         // invalidate where the shape is now
-        [_pdfView setNeedsDisplayInRect:[_pdfView convertRect:[self safeBounds] fromPage:_page]];
+        [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds] fromPage:_page]];
         
         // get ready for next iteration of the loop, or break out of loop
-        theEvent = [[_pdfView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
+        theEvent = [[_docView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
         if ([theEvent type] == NSLeftMouseUp)
             break;
     }
-    assert(_page);
+    assert(_hasPage);
     return YES;
 }
 
@@ -137,9 +139,9 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
               _bounds.size.height);
          */
         
-        NSPoint docPoint = [_pdfView convertPagePointFromEvent:theEvent
-                                                          page:_page];
-        [_pdfView setNeedsDisplayInRect:[_pdfView convertRect:[self boundsWithKnobs] fromPage:_page]];
+        NSPoint docPoint = [_docView pagePointForPointFromEvent:theEvent
+                                                           page:_page];
+        [_docView setNeedsDisplayInRect:[_docView convertRect:[self boundsWithKnobs] fromPage:_page]];
         
         if (knob == UpperLeftKnob ||
             knob == UpperMiddleKnob ||
@@ -207,14 +209,14 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
             assert(didFlip == NO);
         }
         
-        [_pdfView setNeedsDisplayInRect:[_pdfView convertRect:[self boundsWithKnobs] fromPage:_page]];
+        [_docView setNeedsDisplayInRect:[_docView convertRect:[self boundsWithKnobs] fromPage:_page]];
 
         // get ready for next iteration of the loop, or break out of loop
-        theEvent = [[_pdfView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
+        theEvent = [[_docView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
         if ([theEvent type] == NSLeftMouseUp)
             break;
     }
-    [_pdfView discardCursorRects];
+    [_docView discardCursorRects];
 }
 
 - (void)moveGraphicByX:(float)x byY:(float)y
@@ -239,13 +241,13 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
     NSPoint q;
     NSRect rect;
     NSRect pdf_rect;
-    q = [_pdfView convertPoint:p fromPage:_page];
+    q = [_docView convertPoint:p fromPage:_page];
     rect = NSMakeRect(floorf(q.x)+0.5 -2.0,
                       floorf(q.y)+0.5 -2.0,
                       4.0, 4.0);
-    pdf_rect = [_pdfView convertRect:rect toPage:_page];
+    pdf_rect = [_docView convertRect:rect toPage:_page];
     NSBezierPath *newpath = [NSBezierPath bezierPathWithRect:pdf_rect];
-    [newpath setLineWidth:(1.0/[_pdfView scaleFactor])];
+    [newpath setLineWidth:(1.0/[_docView scaleFactor])];
     [[NSColor whiteColor] set];
     [newpath fill];
     [[NSColor blackColor] set];
@@ -299,12 +301,12 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
         default:
             assert(0); // bad knob
     }
-    NSPoint window_point = [_pdfView convertPoint:p fromPage:_page];
+    NSPoint window_point = [_docView convertPoint:p fromPage:_page];
     NSRect knobRect = NSMakeRect(floorf(window_point.x)+0.5 -2.0 - (isBound?0.5:0.0),
                                  floorf(window_point.y)+0.5 -2.0 - (isBound?0.5:0.0),
                                  4.0 + (isBound?1.0:0.0),
                                  4.0 + (isBound?1.0:0.0));
-    return [_pdfView convertRect:knobRect toPage:_page];
+    return [_docView convertRect:knobRect toPage:_page];
 }
 
 - (void)drawKnobs
@@ -314,7 +316,7 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
         if (_knobMask & (1 << i)) {
             NSBezierPath *knobPDFRectPath = [NSBezierPath bezierPathWithRect:[self pageRectForKnob:(1 << i)
                                                                                        isBoundRect:NO]];
-            [knobPDFRectPath setLineWidth:(1.0/[_pdfView scaleFactor])];
+            [knobPDFRectPath setLineWidth:(1.0/[_docView scaleFactor])];
             [[NSColor whiteColor] set];
             [knobPDFRectPath fill];
             [[NSColor blackColor] set];
@@ -326,7 +328,7 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
 - (int)knobForEvent:(NSEvent *)theEvent
 {
     int i;
-    NSPoint p = [_pdfView convertPagePointFromEvent:theEvent page:_page];
+    NSPoint p = [_docView pagePointForPointFromEvent:theEvent page:_page];
     for (i = 0; i <= 7; i++) {
         if (_knobMask & (1 << i)) {
             NSRect knobBounds = [self pageRectForKnob:(1 << i)
@@ -338,7 +340,7 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
     return NoKnob;
 }
 
-- (PDFPage*)page
+- (unsigned int)page
 {
     return _page;
 }

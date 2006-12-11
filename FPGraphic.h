@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "FPDocumentView.h"
 
 @class MyPDFView;
 @class PDFPage;
@@ -38,18 +39,19 @@ enum {
     NSColor *_strokeColor;
     int _knobMask;
     
-    MyPDFView *_pdfView;
-    PDFPage *_page;
+    FPDocumentView *_docView;
+    BOOL _hasPage;
+    unsigned int _page;
 }
 
-+ (FPGraphic *)graphicInPDFView:(MyPDFView *)pdfView;
-- (id)initInPDFView:(MyPDFView *)pdfView;
++ (FPGraphic *)graphicInDocumentView:(FPDocumentView *)docView;
+- (id)initInDocumentView:(FPDocumentView *)docView;
 
 - (BOOL)placeWithEvent:(NSEvent *)theEvent;
 - (void)resizeWithEvent:(NSEvent *)theEvent byKnob:(int)knob;
 - (void)moveGraphicByX:(float)x byY:(float)y;
 
-- (PDFPage *)page;
+- (unsigned int)page;
 
 - (void)draw;
 - (void)drawKnobs;
