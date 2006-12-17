@@ -51,6 +51,8 @@ enum {
 - (void)resizeWithEvent:(NSEvent *)theEvent byKnob:(int)knob;
 - (void)moveGraphicByX:(float)x byY:(float)y;
 
+- (void)documentDidZoom;
+
 - (unsigned int)page;
 
 - (void)draw;

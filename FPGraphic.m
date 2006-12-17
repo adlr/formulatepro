@@ -26,6 +26,7 @@
         _docView = docView;
         _lineWidth = 1.0;
         _knobMask = 0xff; // all knobs
+        _gFlags.drawsStroke = YES;
     }
     return self;
 }
@@ -218,6 +219,8 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
     }
     [_docView discardCursorRects];
 }
+
+- (void)documentDidZoom { }
 
 - (void)moveGraphicByX:(float)x byY:(float)y
 {

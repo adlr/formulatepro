@@ -13,6 +13,7 @@
 		8D15AC310486D014006FF6A4 /* MyDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
+		C43B61D30B2FD56D00C1B850 /* FPTextAreaB.m in Sources */ = {isa = PBXBuildFile; fileRef = C43B61D20B2FD56D00C1B850 /* FPTextAreaB.m */; };
 		C449817A0A922A890084F508 /* AOSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = C44981790A922A890084F508 /* AOSegmentedControl.m */; };
 		C44988D10AA7B0F80084F508 /* FPInspectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = C44988CF0AA7B0F80084F508 /* FPInspectorController.m */; };
 		C4A904480B2C86E00015511A /* FPDocumentView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A904470B2C86E00015511A /* FPDocumentView.m */; };
@@ -39,7 +40,23 @@
 		C4DC0DA60A82D35500DB476E /* next.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DA40A82D35500DB476E /* next.png */; };
 		C4DC0DA70A82D35500DB476E /* previous.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DA50A82D35500DB476E /* previous.png */; };
 		C4DC0DB70A82D99700DB476E /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DB60A82D99700DB476E /* LICENSE.txt */; };
+		C4F40AD50B35D6F1008063B4 /* FPDocumentWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F40AD40B35D6F1008063B4 /* FPDocumentWindow.m */; };
+		C4F40BA90B35FBFD008063B4 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4F40BA80B35FBFD008063B4 /* Sparkle.framework */; };
+		C4F40BC60B35FC65008063B4 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C4F40BA80B35FBFD008063B4 /* Sparkle.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C4F40BBD0B35FC0F008063B4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C4F40BC60B35FC65008063B4 /* Sparkle.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -55,6 +72,8 @@
 		32DBCF750370BD2300C91783 /* FormulatePro_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormulatePro_Prefix.pch; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* FormulatePro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FormulatePro.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C43B61D10B2FD56D00C1B850 /* FPTextAreaB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPTextAreaB.h; sourceTree = "<group>"; };
+		C43B61D20B2FD56D00C1B850 /* FPTextAreaB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPTextAreaB.m; sourceTree = "<group>"; };
 		C44981780A922A890084F508 /* AOSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOSegmentedControl.h; sourceTree = "<group>"; };
 		C44981790A922A890084F508 /* AOSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOSegmentedControl.m; sourceTree = "<group>"; };
 		C44988CF0AA7B0F80084F508 /* FPInspectorController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FPInspectorController.m; sourceTree = "<group>"; };
@@ -92,6 +111,9 @@
 		C4DC0E710A85925A00DB476E /* FPEllipse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPEllipse.m; sourceTree = "<group>"; };
 		C4DC0FEE0A85C4BA00DB476E /* FPSquiggle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPSquiggle.h; sourceTree = "<group>"; };
 		C4DC0FEF0A85C4BA00DB476E /* FPSquiggle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPSquiggle.m; sourceTree = "<group>"; };
+		C4F40AD30B35D6F1008063B4 /* FPDocumentWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPDocumentWindow.h; sourceTree = "<group>"; };
+		C4F40AD40B35D6F1008063B4 /* FPDocumentWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPDocumentWindow.m; sourceTree = "<group>"; };
+		C4F40BA80B35FBFD008063B4 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = third_party/Sparkle.framework; sourceTree = "<group>"; };
 		C4FDF1610A8BEB1800032EF5 /* FPTextArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPTextArea.h; sourceTree = "<group>"; };
 		C4FDF1620A8BEB1800032EF5 /* FPTextArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPTextArea.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,6 +125,7 @@
 			files = (
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
 				C4AB3EE90A5B010000EE29B2 /* PDFKit.framework in Frameworks */,
+				C4F40BA90B35FBFD008063B4 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +135,7 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C4F40BA80B35FBFD008063B4 /* Sparkle.framework */,
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
 			);
 			name = "Linked Frameworks";
@@ -152,6 +176,8 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C4F40AD30B35D6F1008063B4 /* FPDocumentWindow.h */,
+				C4F40AD40B35D6F1008063B4 /* FPDocumentWindow.m */,
 				C4AB40360A5BB5D200EE29B2 /* AppDelegate.h */,
 				C4AB40370A5BB5D200EE29B2 /* AppDelegate.m */,
 				C4AB3FBB0A5B06B200EE29B2 /* MyPDFView.h */,
@@ -228,6 +254,8 @@
 				C4DC0FEF0A85C4BA00DB476E /* FPSquiggle.m */,
 				C4FDF1610A8BEB1800032EF5 /* FPTextArea.h */,
 				C4FDF1620A8BEB1800032EF5 /* FPTextArea.m */,
+				C43B61D10B2FD56D00C1B850 /* FPTextAreaB.h */,
+				C43B61D20B2FD56D00C1B850 /* FPTextAreaB.m */,
 			);
 			name = "Overlay Graphics";
 			sourceTree = "<group>";
@@ -242,6 +270,7 @@
 				8D15AC2B0486D014006FF6A4 /* Resources */,
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
+				C4F40BBD0B35FC0F008063B4 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -313,6 +342,8 @@
 				C4A906010B2CBF910015511A /* FPGraphic.m in Sources */,
 				C4A906020B2CBF920015511A /* FPRectangle.m in Sources */,
 				C4A906030B2CBF920015511A /* FPSquiggle.m in Sources */,
+				C43B61D30B2FD56D00C1B850 /* FPTextAreaB.m in Sources */,
+				C4F40AD50B35D6F1008063B4 /* FPDocumentWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,7 +389,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Quartz.framework/Versions/A/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_3)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Quartz.framework/Versions/A/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/third_party\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -380,7 +418,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Quartz.framework/Versions/A/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_3)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Quartz.framework/Versions/A/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/third_party\"";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -399,7 +444,14 @@
 		C4AB3E9E0A5AFE1100EE29B2 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Quartz.framework/Versions/A/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_3)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Quartz.framework/Versions/A/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/third_party\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = FormulatePro_Prefix.pch;

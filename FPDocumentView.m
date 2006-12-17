@@ -76,6 +76,8 @@ static const float ZoomScaleFactor = 1.3;
     _scale_factor *= ZoomScaleFactor;
     [self setFrame:[self frame]];
     [self setNeedsDisplay:YES];
+    if (_editingGraphic)
+        [_editingGraphic documentDidZoom];
 }
 
 - (void)zoomOut:(id)sender
@@ -83,11 +85,18 @@ static const float ZoomScaleFactor = 1.3;
     _scale_factor /= ZoomScaleFactor;
     [self setFrame:[self frame]];
     [self setNeedsDisplay:YES];
+    if (_editingGraphic)
+        [_editingGraphic documentDidZoom];
 }
 
 - (float)scaleFactor
 {
     return _scale_factor;
+}
+
+- (void)keyDown:(NSEvent *)theEvent
+{
+    NSLog(@"got keys: [%@]\n", [theEvent charactersIgnoringModifiers]);
 }
 
 - (void)drawRect:(NSRect)rect
@@ -284,10 +293,14 @@ static const float ZoomScaleFactor = 1.3;
     FPGraphic *graphic;
     BOOL keep;
     unsigned int tool = [[FPToolPaletteController sharedToolPaletteController] currentTool];
+    BOOL justStoppedEditing = NO;
 
     if (_editingGraphic) {
         [_editingGraphic stopEditing];
+        assert([_selectedGraphics count] == 0);
+        [_selectedGraphics addObject:_editingGraphic];
         _editingGraphic = nil;
+        justStoppedEditing = YES;
     }
     
     if (tool == FPToolArrow) {
@@ -325,7 +338,14 @@ static const float ZoomScaleFactor = 1.3;
                     else
                         [_selectedGraphics addObject:graphic];
                 } else {
-                    if (![_selectedGraphics containsObject:graphic]) {
+                    if ([theEvent clickCount] == 2) {
+                        if ([graphic isEditable]) {
+                            assert(nil == _editingGraphic);
+                            _editingGraphic = graphic;
+                            [_selectedGraphics removeAllObjects];
+                            [graphic startEditing];
+                        }
+                    } else if (![_selectedGraphics containsObject:graphic]) {
                         [_selectedGraphics removeAllObjects];
                         [_selectedGraphics addObject:graphic];
                     }
@@ -334,7 +354,9 @@ static const float ZoomScaleFactor = 1.3;
             }
         }
         if (i < 0) { // point didn't hit any shape
-            [_selectedGraphics removeAllObjects];
+            // if we just stopped editing a shape, keep that selected, otherwise, select none
+            if (justStoppedEditing == NO)
+                [_selectedGraphics removeAllObjects];
         }
         if ([_selectedGraphics count]) {
             [self setNeedsDisplay:YES];
@@ -353,8 +375,11 @@ static const float ZoomScaleFactor = 1.3;
         [_overlayGraphics removeLastObject];
     } else {
         if ([graphic isEditable]) {
+            [_selectedGraphics removeAllObjects];
+            assert(nil == _editingGraphic);
             _editingGraphic = graphic;
             [graphic startEditing];
+            [self setNeedsDisplay:YES];
         }
     }
 }

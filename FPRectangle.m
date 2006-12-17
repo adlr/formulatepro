@@ -35,7 +35,6 @@
     point = [_docView pagePointForPointFromEvent:theEvent page:_page];
     
     _bounds.origin = point;
-    point = [_docView pagePointForPointFromEvent:theEvent page:_page];
     _bounds.size = NSMakeSize(0.0,0.0);
     _naturalBounds.origin = point;
     _naturalBounds.size = NSMakeSize(1.0, 1.0);

@@ -15,15 +15,15 @@
 
 //static NSLayoutManager *sharedDrawingLayoutManager();
 
-+ (FPGraphic *)graphicInDocumentView:(FPDocumentView *)pdfView
++ (FPGraphic *)graphicInDocumentView:(FPDocumentView *)docView
 {
-    FPGraphic *ret = [[FPTextArea alloc] initInDocumentView:pdfView];
+    FPGraphic *ret = [[FPTextArea alloc] initInDocumentView:docView];
     return [ret autorelease];
 }
 
-- (id)initInDocumentView:(FPDocumentView *)pdfView
+- (id)initInDocumentView:(FPDocumentView *)docView
 {
-    self = [super initInDocumentView:pdfView];
+    self = [super initInDocumentView:docView];
     if (self) {
         _contents = [[NSTextStorage alloc] init];
         _editor = nil;

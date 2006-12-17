@@ -3,7 +3,7 @@
 #import "FPRectangle.h"
 #import "FPEllipse.h"
 #import "FPSquiggle.h"
-#import "FPTextArea.h"
+#import "FPTextAreaB.h"
 
 @implementation FPToolPaletteController
 
@@ -61,7 +61,7 @@ static FPToolPaletteController *_sharedController;
         case FPToolEllipse: NSLog(@"ellispe\n"); return [FPEllipse class];
         case FPToolRectangle: NSLog(@"rect\n"); return [FPRectangle class];
         case FPToolSquiggle: NSLog(@"squiggle\n"); return [FPSquiggle class];
-        case FPToolTextArea: NSLog(@"text area\n"); return [FPTextArea class];
+        case FPToolTextArea: NSLog(@"text area\n"); return [FPTextAreaB class];
         //case FPToolTextField: NSLog(@"text field\n"); return [FPTextField class];
     }
     return [FPRectangle class];
