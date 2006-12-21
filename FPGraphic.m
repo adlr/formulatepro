@@ -230,6 +230,12 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
     [self setBounds:bounds];
 }
 
+- (void)reassignToPage:(unsigned int)page
+{
+    [self setBounds:[_docView convertRect:[_docView convertRect:[self bounds] fromPage:_page] toPage:page]];
+    _page = page;
+}
+
 - (void)draw
 {
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:_bounds];

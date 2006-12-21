@@ -119,11 +119,15 @@ static const float ZoomScaleFactor = 1.3;
         NSSize sz = [self sizeForPage:i];
         NSRect page_rect = NSMakeRect(PageBorderSize, how_far_down,
                                       sz.width, sz.height);
-        [theContext saveGraphicsState];
+        [theContext saveGraphicsState]; // for the shadow
         [shadow set];
         [[NSColor whiteColor] set];
         NSRectFill(page_rect);
         [theContext restoreGraphicsState];
+        
+        [NSGraphicsContext saveGraphicsState]; // for the clipping rect
+        NSRectClip(page_rect);
+        
         NSAffineTransform *at = [self transformForPage:i];
 //        NSAffineTransform *at = [NSAffineTransform transform];
 //        [at scaleXBy:1.0 yBy:(-1.0)];
@@ -147,6 +151,7 @@ static const float ZoomScaleFactor = 1.3;
 
         [at invert];
         [at concat];
+        [NSGraphicsContext restoreGraphicsState]; // undo page clipping rect
 
         how_far_down += NSHeight(page_rect) + PageBorderSize;
     }
@@ -255,13 +260,14 @@ static const float ZoomScaleFactor = 1.3;
     NSPoint oldPoint;
     NSPoint newPoint;
     float deltaX, deltaY;
-    unsigned int page;
+    unsigned int oldPage;
+    unsigned int newPage;
     int i;
     
     NSArray *selectedGraphics = [_selectedGraphics allObjects];
     
-    page = [self pageForPointFromEvent:theEvent];
-    oldPoint = [self pagePointForPointFromEvent:theEvent page:page];
+    oldPage = [self pageForPointFromEvent:theEvent];
+    oldPoint = [self pagePointForPointFromEvent:theEvent page:oldPage];
     
     for (;;) {
         // get ready for next iteration of the loop, or break out of loop
@@ -270,8 +276,21 @@ static const float ZoomScaleFactor = 1.3;
             break;
         
         // main loop body
+        newPage = [self pageForPointFromEvent:theEvent];
+        if (newPage != oldPage) {
+            for (i = 0; i < [selectedGraphics count]; i++) {
+                FPGraphic *g = [selectedGraphics objectAtIndex:i];
+                [self setNeedsDisplayInRect:[self convertRect:[g boundsWithKnobs] fromPage:[g page]]];
+                [g reassignToPage:newPage];
+                [self setNeedsDisplayInRect:[self convertRect:[g boundsWithKnobs] fromPage:[g page]]];
+            }
+            // reassign oldPoint to the newPage
+            oldPoint = [self convertPoint:[self convertPoint:oldPoint fromPage:oldPage] toPage:newPage];
+            oldPage = newPage;
+        }
+
         newPoint = [self pagePointForPointFromEvent:theEvent
-                                               page:page];
+                                               page:oldPage];
         
         deltaX = newPoint.x - oldPoint.x;
         deltaY = newPoint.y - oldPoint.y;
