@@ -35,15 +35,42 @@ static const float ZoomScaleFactor = 1.3;
     return ret;
 }
 
+- (FPDocumentView *)printableCopy
+{
+    FPDocumentView *ret = [[FPDocumentView alloc] initWithFrame:[self frame]];
+    ret->_pdf_document = nil;
+    ret->_box = _box;
+    ret->_scale_factor = _scale_factor;
+    ret->_draws_shadow = NO;
+    ret->_overlayGraphics = [_overlayGraphics retain];
+    ret->_selectedGraphics = [[NSMutableSet alloc] initWithCapacity:0];
+    if (_editingGraphic) {
+        [_editingGraphic stopEditing];
+        _editingGraphic = nil;
+    }
+    ret->_editingGraphic = nil;
+    [ret setPDFDocument:_pdf_document];
+    return ret;
+}
+
 - (void)initMemberVariables
 {
     _pdf_document = nil;
-    _box = kPDFDisplayBoxCropBox;
+    _box = //kPDFDisplayBoxCropBox;
+    _box = kPDFDisplayBoxMediaBox;
     _scale_factor = 1.0;
+    _draws_shadow = YES;
 
     _overlayGraphics = [[NSMutableArray alloc] initWithCapacity:1];
     _selectedGraphics = [[NSMutableSet alloc] initWithCapacity:1];
     _editingGraphic = nil;
+}
+
+- (void)dealloc {
+    [_pdf_document release];
+    [_selectedGraphics release];
+    [_overlayGraphics release];
+    [super dealloc];
 }
 
 - (id)initWithFrame:(NSRect)frameRect
@@ -65,7 +92,7 @@ static const float ZoomScaleFactor = 1.3;
 - (void)setPDFDocument:(PDFDocument *)pdf_document
 {
     [_pdf_document release];
-    _pdf_document = pdf_document;
+    _pdf_document = [pdf_document retain];
     NSLog(@"set pdf doc\n");
     [self setFrame:[self frame]];
     [self setNeedsDisplay:YES];
@@ -119,11 +146,15 @@ static const float ZoomScaleFactor = 1.3;
         NSSize sz = [self sizeForPage:i];
         NSRect page_rect = NSMakeRect(PageBorderSize, how_far_down,
                                       sz.width, sz.height);
-        [theContext saveGraphicsState]; // for the shadow
-        [shadow set];
+        if (!NSIntersectsRect(rect, page_rect)) goto loop_end;
+        if (_draws_shadow) {
+            [theContext saveGraphicsState]; // for the shadow
+            [shadow set];
+        }
         [[NSColor whiteColor] set];
         NSRectFill(page_rect);
-        [theContext restoreGraphicsState];
+        if (_draws_shadow)
+            [theContext restoreGraphicsState];
         
         [NSGraphicsContext saveGraphicsState]; // for the clipping rect
         NSRectClip(page_rect);
@@ -152,7 +183,7 @@ static const float ZoomScaleFactor = 1.3;
         [at invert];
         [at concat];
         [NSGraphicsContext restoreGraphicsState]; // undo page clipping rect
-
+      loop_end:
         how_far_down += NSHeight(page_rect) + PageBorderSize;
     }
 }
@@ -469,5 +500,62 @@ static NSTextView *newEditor() {
     }
 }
 */
+
+#pragma mark -
+#pragma mark Printing Methods
+
+- (BOOL)knowsPageRange:(NSRangePointer)range
+{
+    range->location = 1;
+    range->length = [_pdf_document pageCount];
+    NSLog(@"page range: %d,%d\n", range->location, range->length);
+    return YES;
+}
+
+// indexed from 1, not 0
+- (NSRect)rectForPage:(int)page
+{
+    assert(page >= 1);
+    assert(page <= [_pdf_document pageCount]);
+    page--; // now indexed from 0
+    // PageBorderSize
+    NSRect ret;
+    ret.size = [self sizeForPage:page];
+    ret.origin.x = PageBorderSize;
+    ret.origin.y = PageBorderSize;
+    for (int i = 0; i < page; i++) {
+        ret.origin.y += [self sizeForPage:i].height + PageBorderSize;
+    }
+    return ret;
+}
+
+// for now, we'll scale the document as a whole such that each page will fit in the printer
+// sized page, and we'll scale up as much as possible
+
+#define MINF(a, b) (((a) < (b)) ? (a) : (b))
+
+- (void)beginDocument
+{
+    // first calculate the max page size in the PDF w/o using the scaling factor
+    NSSize maxPageSize = NSMakeSize(0.0, 0.0);
+    for (unsigned int i = 0; i < [_pdf_document pageCount]; i++) {
+        PDFPage *pg = [_pdf_document pageAtIndex:i];
+        NSSize sz = [pg boundsForBox:_box].size;
+        if (sz.width > maxPageSize.width)
+            maxPageSize.width = sz.width;
+        if (sz.height > maxPageSize.height)
+            maxPageSize.height = sz.height;
+    }
+    // now, how big is the printed page?
+    NSSize printSize = [[NSPrintInfo sharedPrintInfo] paperSize];
+    NSLog(@"printSize: %@\nmaxPageSize: %@\n", NSStringFromSize(printSize), NSStringFromSize(maxPageSize));
+    // printed page is how many times as big as the pdf?
+    float heightRatio =  printSize.height / maxPageSize.height;
+    float widthRatio =  printSize.width / maxPageSize.width;
+    float maxRatio = MINF(heightRatio, widthRatio);
+    _scale_factor = maxRatio;
+    [self setFrame:[self frame]];
+    [super beginDocument];
+}
 
 @end

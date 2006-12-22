@@ -387,5 +387,40 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
         nil];
 }
 
+#pragma mark -
+#pragma mark Printing Methods
+
+// This method will only be invoked on Mac 10.4 and later. If you're writing an application that has to run on 10.3.x and earlier you should override -printShowingPrintPanel: instead.
+- (NSPrintOperation *)printOperationWithSettings:(NSDictionary *)printSettings error:(NSError **)outError {
+    NSLog(@"print operations\n");
+    // Create a view that will be used just for printing.
+    //NSSize documentSize = [self documentSize];
+    //SKTRenderingView *renderingView = [[SKTRenderingView alloc] initWithFrame:NSMakeRect(0.0, 0.0, documentSize.width, documentSize.height) graphics:[self graphics]];
+    FPDocumentView *printView = [_document_view printableCopy];
+    
+    // Create a print operation.
+    NSPrintOperation *printOperation = [NSPrintOperation printOperationWithView:printView printInfo:[self printInfo]];
+    [printView release];
+    
+    // Specify that the print operation can run in a separate thread. This will cause the print progress panel to appear as a sheet on the document window.
+    [printOperation setCanSpawnSeparateThread:YES];
+    
+    // Set any print settings that might have been specified in a Print Document Apple event. We do it this way because we shouldn't be mutating the result of [self printInfo] here, and using the result of [printOperation printInfo], a copy of the original print info, means we don't have to make yet another temporary copy of [self printInfo].
+    [[[printOperation printInfo] dictionary] addEntriesFromDictionary:printSettings];
+    //[[[printOperation printInfo] dictionary] setValue:[NSNumber numberWithInt:[_pdf_document pageCount]] forKey:@"NSPagesAcross"];
+    [[[printOperation printInfo] dictionary] setValue:[NSNumber numberWithInt:[_pdf_document pageCount]] forKey:@"NSLastPage"];
+    NSLog(@"print operation dict: %@\n", [[printOperation printInfo] dictionary]);
+    
+    // We don't have to autorelease the print operation because +[NSPrintOperation printOperationWithView:printInfo:] of course already autoreleased it. Nothing in this method can fail, so we never return nil, so we don't have to worry about setting *outError.
+    return printOperation;
+    
+}
+
+- (void)setPrintInfo:(NSPrintInfo *)printInfo
+{
+    NSLog(@"setPrintInfo\n");
+    NSLog(@"print info dict: %@\n", [printInfo dictionary]);
+    [super setPrintInfo:printInfo];
+}
 
 @end
