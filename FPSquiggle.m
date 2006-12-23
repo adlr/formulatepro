@@ -3,20 +3,12 @@
 //  FormulatePro
 //
 //  Created by Andrew de los Reyes on 8/5/06.
-//  Copyright 2006 __MyCompanyName__. All rights reserved.
+//  Copyright 2006 Andrew de los Reyes. All rights reserved.
 //
 
 #import "FPSquiggle.h"
 
-#import "MyPDFView.h"
-
 @implementation FPSquiggle
-
-+ (FPGraphic *)graphicInDocumentView:(FPDocumentView *)docView
-{
-    FPGraphic *ret = [[FPSquiggle alloc] initInDocumentView:docView];
-    return [ret autorelease];
-}
 
 - (id)initInDocumentView:(FPDocumentView *)docView
 {

@@ -11,6 +11,7 @@
     PDFDisplayBox _box;
     float _scale_factor;
     BOOL _draws_shadow;
+    BOOL _inQuickMove;
 
     NSMutableArray *_overlayGraphics;
     NSMutableSet *_selectedGraphics;
@@ -23,6 +24,12 @@
 - (void)zoomOut:(id)sender;
 
 - (float)scaleFactor;
+
+- (BOOL)shouldEnterQuickMove;
+- (void)beginQuickMove:(id)unused;
+- (void)endQuickMove:(id)unused;
+
+- (void)deleteKeyPressed;
 
 // coordinate transforms
 - (unsigned int)pageForPointFromEvent:(NSEvent *)theEvent;

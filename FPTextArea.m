@@ -3,7 +3,7 @@
 //  FormulatePro
 //
 //  Created by Andrew de los Reyes on 8/10/06.
-//  Copyright 2006 __MyCompanyName__. All rights reserved.
+//  Copyright 2006 Andrew de los Reyes. All rights reserved.
 //
 
 #import "FPTextArea.h"
@@ -14,12 +14,6 @@
 @implementation FPTextArea
 
 //static NSLayoutManager *sharedDrawingLayoutManager();
-
-+ (FPGraphic *)graphicInDocumentView:(FPDocumentView *)docView
-{
-    FPGraphic *ret = [[FPTextArea alloc] initInDocumentView:docView];
-    return [ret autorelease];
-}
 
 - (id)initInDocumentView:(FPDocumentView *)docView
 {

@@ -13,7 +13,7 @@
 
 + (FPGraphic *)graphicInDocumentView:(FPDocumentView *)docView
 {
-    FPGraphic *ret = [[FPGraphic alloc] initInDocumentView:docView];
+    FPGraphic *ret = [[[self class] alloc] initInDocumentView:docView];
     return [ret autorelease];
 }
 

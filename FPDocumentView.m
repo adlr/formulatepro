@@ -1,4 +1,6 @@
+#import "NSMutableSetAdditions.h"
 #import "FPDocumentView.h"
+#import "FPDocumentWindow.h"
 #import "FPToolPaletteController.h"
 #import "FPGraphic.h"
 
@@ -42,6 +44,7 @@ static const float ZoomScaleFactor = 1.3;
     ret->_box = _box;
     ret->_scale_factor = _scale_factor;
     ret->_draws_shadow = NO;
+    ret->_inQuickMove = NO;
     ret->_overlayGraphics = [_overlayGraphics retain];
     ret->_selectedGraphics = [[NSMutableSet alloc] initWithCapacity:0];
     if (_editingGraphic) {
@@ -60,6 +63,7 @@ static const float ZoomScaleFactor = 1.3;
     _box = kPDFDisplayBoxMediaBox;
     _scale_factor = 1.0;
     _draws_shadow = YES;
+    _inQuickMove = NO;
 
     _overlayGraphics = [[NSMutableArray alloc] initWithCapacity:1];
     _selectedGraphics = [[NSMutableSet alloc] initWithCapacity:1];
@@ -67,6 +71,7 @@ static const float ZoomScaleFactor = 1.3;
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_pdf_document release];
     [_selectedGraphics release];
     [_overlayGraphics release];
@@ -87,6 +92,15 @@ static const float ZoomScaleFactor = 1.3;
 - (void)awakeFromNib
 {
     [self initMemberVariables];
+    [[NSNotificationCenter defaultCenter]
+        addObserver:self selector:@selector(beginQuickMove:)
+        name:FPBeginQuickMove object:nil];
+    [[NSNotificationCenter defaultCenter]
+        addObserver:self selector:@selector(abortQuickMove:)
+        name:FPAbortQuickMove object:nil];
+    [[NSNotificationCenter defaultCenter]
+        addObserver:self selector:@selector(endQuickMove:)
+        name:FPEndQuickMove object:nil];
 }
 
 - (void)setPDFDocument:(PDFDocument *)pdf_document
@@ -121,9 +135,10 @@ static const float ZoomScaleFactor = 1.3;
     return _scale_factor;
 }
 
-- (void)keyDown:(NSEvent *)theEvent
+- (void)deleteKeyPressed
 {
-    NSLog(@"got keys: [%@]\n", [theEvent charactersIgnoringModifiers]);
+    [_overlayGraphics removeObjectsInArray:[_selectedGraphics allObjects]];
+    [self setNeedsDisplay:YES];
 }
 
 - (void)drawRect:(NSRect)rect
@@ -160,10 +175,6 @@ static const float ZoomScaleFactor = 1.3;
         NSRectClip(page_rect);
         
         NSAffineTransform *at = [self transformForPage:i];
-//        NSAffineTransform *at = [NSAffineTransform transform];
-//        [at scaleXBy:1.0 yBy:(-1.0)];
-//        [at translateXBy:PageBorderSize yBy:(-1.0*(how_far_down + NSHeight(page_rect)))];
-//        [at scaleXBy:_scale_factor yBy:_scale_factor];
         [at concat];
         [[_pdf_document pageAtIndex:i] drawWithBox:_box];
 
@@ -193,7 +204,8 @@ static const float ZoomScaleFactor = 1.3;
     NSPoint loc_in_window = [theEvent locationInWindow];
     loc_in_window.x += 0.5;
     loc_in_window.y -= 0.5; // correct for coordinates being between pixels
-    NSPoint loc_in_view = [[[self window] contentView] convertPoint:loc_in_window toView:self];
+    NSPoint loc_in_view =
+        [[[self window] contentView] convertPoint:loc_in_window toView:self];
 
     if (nil == _pdf_document) return 0;
     float bottom_border = PageBorderSize / 2.0;
@@ -247,7 +259,8 @@ static const float ZoomScaleFactor = 1.3;
     NSPoint newUpperRight = [self convertPoint:upperRight toPage:page];
     NSRect ret;
     ret.origin = newBottomLeft;
-    ret.size = NSMakeSize(newUpperRight.x - newBottomLeft.x, newUpperRight.y - newBottomLeft.y);
+    ret.size = NSMakeSize(newUpperRight.x - newBottomLeft.x,
+                          newUpperRight.y - newBottomLeft.y);
     assert(ret.size.width >= 0.0);
     assert(ret.size.height >= 0.0);
     return ret;
@@ -271,12 +284,14 @@ static const float ZoomScaleFactor = 1.3;
     return ret;
 }
 
-- (NSPoint)pagePointForPointFromEvent:(NSEvent *)theEvent page:(unsigned int)page
+- (NSPoint)pagePointForPointFromEvent:(NSEvent *)theEvent
+                                 page:(unsigned int)page
 {
     NSPoint loc_in_window = [theEvent locationInWindow];
     loc_in_window.x += 0.5;
     loc_in_window.y -= 0.5; // correct for coordinates being between pixels
-    NSPoint loc_in_view = [[[self window] contentView] convertPoint:loc_in_window toView:self];
+    NSPoint loc_in_view =
+        [[[self window] contentView] convertPoint:loc_in_window toView:self];
     NSPoint loc_in_page = [self convertPoint:loc_in_view toPage:page];
     return loc_in_page;
 }
@@ -302,7 +317,9 @@ static const float ZoomScaleFactor = 1.3;
     
     for (;;) {
         // get ready for next iteration of the loop, or break out of loop
-        theEvent = [[self window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
+        theEvent =
+            [[self window] nextEventMatchingMask:(NSLeftMouseDraggedMask |
+                                                  NSLeftMouseUpMask)];
         if ([theEvent type] == NSLeftMouseUp)
             break;
         
@@ -311,12 +328,16 @@ static const float ZoomScaleFactor = 1.3;
         if (newPage != oldPage) {
             for (i = 0; i < [selectedGraphics count]; i++) {
                 FPGraphic *g = [selectedGraphics objectAtIndex:i];
-                [self setNeedsDisplayInRect:[self convertRect:[g boundsWithKnobs] fromPage:[g page]]];
+                [self setNeedsDisplayInRect:
+                    [self convertRect:[g boundsWithKnobs] fromPage:[g page]]];
                 [g reassignToPage:newPage];
-                [self setNeedsDisplayInRect:[self convertRect:[g boundsWithKnobs] fromPage:[g page]]];
+                [self setNeedsDisplayInRect:
+                    [self convertRect:[g boundsWithKnobs] fromPage:[g page]]];
             }
             // reassign oldPoint to the newPage
-            oldPoint = [self convertPoint:[self convertPoint:oldPoint fromPage:oldPage] toPage:newPage];
+            oldPoint = [self convertPoint:[self convertPoint:oldPoint
+                                                    fromPage:oldPage]
+                                   toPage:newPage];
             oldPage = newPage;
         }
 
@@ -329,22 +350,36 @@ static const float ZoomScaleFactor = 1.3;
         // move the graphics. invalide view for before and after positions
         for (i = 0; i < [selectedGraphics count]; i++) {
             FPGraphic *g = [selectedGraphics objectAtIndex:i];
-            [self setNeedsDisplayInRect:[self convertRect:[g boundsWithKnobs] fromPage:[g page]]];
+            [self setNeedsDisplayInRect:
+                [self convertRect:[g boundsWithKnobs] fromPage:[g page]]];
             [g moveGraphicByX:deltaX byY:deltaY];
-            [self setNeedsDisplayInRect:[self convertRect:[g boundsWithKnobs] fromPage:[g page]]];
+            [self setNeedsDisplayInRect:
+                [self convertRect:[g boundsWithKnobs] fromPage:[g page]]];
         }
         
         oldPoint = newPoint;
     }
 }
 
+- (void)sendAbortQuickMove
+{
+    if (_inQuickMove)
+        [[NSNotificationCenter defaultCenter] postNotification:
+         [NSNotification notificationWithName:FPAbortQuickMove
+                                       object:self]];
+}
+
+// this is possibly the harriest method in the whole program. This receives
+// all mouse clicks in the view, except clicks inside an editing view. We
+// must handle both clicks in a double click, and when we get the first click
+// of the double click, we don't even know if a second click will come yet
+//
+// One invariant is that if you are in a QuickMove, only one piece can be
+// selected, and that has to be the one piece that was being edited before
+// the QuickMove.
 - (void)mouseDown:(NSEvent *)theEvent
 {
-    FPGraphic *graphic;
-    BOOL keep;
-    unsigned int tool = [[FPToolPaletteController sharedToolPaletteController] currentTool];
     BOOL justStoppedEditing = NO;
-
     if (_editingGraphic) {
         [_editingGraphic stopEditing];
         assert([_selectedGraphics count] == 0);
@@ -353,14 +388,38 @@ static const float ZoomScaleFactor = 1.3;
         justStoppedEditing = YES;
     }
     
-    if (tool == FPToolArrow) {
-        int i;
-        NSPoint point;
+    unsigned int tool =
+        [[FPToolPaletteController sharedToolPaletteController] currentTool];
+
+    if (_inQuickMove) {
+        assert(1 == [_selectedGraphics count]);
+        // see if we hit a selected graphic's knob
+        FPGraphic *graphic = [_selectedGraphics anyObject];
+        int knob = [graphic knobForEvent:theEvent];
+        if (NoKnob != knob) { // hit a knob
+            [graphic resizeWithEvent:theEvent byKnob:knob];
+            return;
+        }
         
+        // see if we hit the shape
+        unsigned int page = [self pageForPointFromEvent:theEvent];
+        if ([graphic page] == page) {
+            NSPoint pagePoint =
+                [self pagePointForPointFromEvent:theEvent page:page];
+            if (NSPointInRect(pagePoint, [graphic safeBounds])) {
+                [self moveSelectionWithEvent:theEvent];
+                return;
+            }
+        }
+        // let's get out of quick move mode
+        [self sendAbortQuickMove];
+    }
+
+    if (tool == FPToolArrow) {
         // if we hit a knob, resize that shape by its knob
         if ([_selectedGraphics count]) {
-            for (i = [_overlayGraphics count] - 1; i >= 0; i--) {
-                graphic = [_overlayGraphics objectAtIndex:i];
+            for (int i = [_overlayGraphics count] - 1; i >= 0; i--) {
+                FPGraphic *graphic = [_overlayGraphics objectAtIndex:i];
                 if (![_selectedGraphics containsObject:graphic]) continue;
                 int knob = [graphic knobForEvent:theEvent];
                 if (knob != NoKnob) {
@@ -378,15 +437,20 @@ static const float ZoomScaleFactor = 1.3;
         // if not holding shift:
         //   if shape is selected, do nothing
         //   else make shape the only selected shape
+        unsigned int page = [self pageForPointFromEvent:theEvent];
+        NSPoint pagePoint =
+            [self pagePointForPointFromEvent:theEvent page:page];
+        
+        int i;
         for (i = [_overlayGraphics count] - 1; i >= 0; i--) {
-            graphic = [_overlayGraphics objectAtIndex:i];
-            point = [self pagePointForPointFromEvent:theEvent page:[graphic page]];
-            if (NSPointInRect(point, [graphic safeBounds])) {
+            FPGraphic *graphic = [_overlayGraphics objectAtIndex:i];
+            if (([graphic page] == page) &&
+                NSPointInRect(pagePoint, [graphic safeBounds])) {
+                // we hit 'graphic'
                 if ([theEvent modifierFlags] & NSShiftKeyMask) {
-                    if ([_selectedGraphics containsObject:graphic])
-                        [_selectedGraphics removeObject:graphic];
-                    else
-                        [_selectedGraphics addObject:graphic];
+                    [_selectedGraphics invertMembershipForObject:graphic];
+                    [self setNeedsDisplay:YES];
+                    return;
                 } else {
                     if ([theEvent clickCount] == 2) {
                         if ([graphic isEditable]) {
@@ -394,6 +458,8 @@ static const float ZoomScaleFactor = 1.3;
                             _editingGraphic = graphic;
                             [_selectedGraphics removeAllObjects];
                             [graphic startEditing];
+                            [self setNeedsDisplay:YES];
+                            return;
                         }
                     } else if (![_selectedGraphics containsObject:graphic]) {
                         [_selectedGraphics removeAllObjects];
@@ -404,23 +470,28 @@ static const float ZoomScaleFactor = 1.3;
             }
         }
         if (i < 0) { // point didn't hit any shape
-            // if we just stopped editing a shape, keep that selected, otherwise, select none
+            // if we just stopped editing a shape, keep that selected,
+            // otherwise, select none
             if (justStoppedEditing == NO)
                 [_selectedGraphics removeAllObjects];
+        } else {
+            if ([_selectedGraphics count]) {
+                [self setNeedsDisplay:YES];
+                [self moveSelectionWithEvent:theEvent];
+            }
         }
-        if ([_selectedGraphics count]) {
-            [self setNeedsDisplay:YES];
-            [self moveSelectionWithEvent:theEvent];
-        }
-        //[self setNeedsDisplayInRect:[graphic knobBounds]];
         [self setNeedsDisplay:YES];
         return;
     }
     
-    graphic = [[[FPToolPaletteController sharedToolPaletteController] classForCurrentTool] graphicInDocumentView:self];
+    // we aren't the arrow tool. so just make a new graphic and get it up
+    // and running
+    FPGraphic *graphic =
+        [[[FPToolPaletteController sharedToolPaletteController] 
+            classForCurrentTool] graphicInDocumentView:self];
     assert(graphic);
     [_overlayGraphics addObject:graphic];
-    keep = [graphic placeWithEvent:theEvent];
+    BOOL keep = [graphic placeWithEvent:theEvent];
     if (keep == NO) {
         [_overlayGraphics removeLastObject];
     } else {
@@ -434,72 +505,43 @@ static const float ZoomScaleFactor = 1.3;
     }
 }
 
-/*
-static NSTextView *newEditor() {
-    // This method returns an NSTextView whose NSLayoutManager has a refcount of 1.  It is the caller's responsibility to release the NSLayoutManager.  This function is only for the use of the following method.
-    NSLayoutManager *lm = [[NSLayoutManager allocWithZone:NULL] init];
-    NSTextContainer *tc = [[NSTextContainer allocWithZone:NULL] initWithContainerSize:NSMakeSize(1.0e6, 1.0e6)];
-    NSTextView *tv = [[NSTextView allocWithZone:NULL] initWithFrame:NSMakeRect(0.0, 0.0, 100.0, 100.0) textContainer:nil];
-
-    [lm addTextContainer:tc];
-    [tc release];
-
-    [tv setTextContainerInset:NSMakeSize(0.0, 0.0)];
-    [tv setDrawsBackground:NO];
-    [tv setAllowsUndo:YES];
-    [tc setTextView:tv];
-    [tv release];
-
-    return tv;
-}
-
-- (void)mouseDown:(NSEvent *)theEvent
+- (BOOL)shouldEnterQuickMove
 {
-    static NSTextView *_editor = nil;
-    NSTextStorage *contents = [[NSTextStorage allocWithZone:[self zone]] init];
-    NSLog(@"mouse down\n");
-    if (_editor == nil) {
-        NSLog(@"allocating\n");
-        //_editor = [[NSTextView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 40.0, 40.0)];
-		//[[_editor textContainer] setLineFragmentPadding:1.0];
-        _editor = newEditor();
-        assert(_editor);
-	}
-    [[_editor textContainer] setWidthTracksTextView:NO];
-    [[_editor textContainer] setContainerSize:NSMakeSize(300.0, 300.0)];
-    [_editor setHorizontallyResizable:YES]; //x
-    [_editor setMinSize:NSMakeSize(10.0, 15.0)];
-    [_editor setMaxSize:NSMakeSize(1.0e6, 1.0e6)];
-
-    [[_editor textContainer] setHeightTracksTextView:NO];
-    [_editor setVerticallyResizable:YES]; //x
-	
-	//if (_isAutoSized) {
-		//[[_editor textContainer] setContainerSize:NSMakeSize(300.0, 300.0)];
-	//} else {
-	//	[[_editor textContainer] setContainerSize:_bounds.size];
-	//}
-    [_editor setFrame:NSMakeRect(30,100,10,15)];
-    [contents addLayoutManager:[_editor layoutManager]];
-    [self addSubview:_editor];
-    //[_editor setDelegate:self];
-    [[self window] makeFirstResponder:_editor];
+    return (nil != _editingGraphic);
 }
 
-- (void)textDidChange:(NSNotification *)notification {
-    NSSize textSize;
-    NSRect myBounds = NSMakeRect(30, 100, 0, 0);
-    BOOL fixedWidth = ([[notification object] isHorizontallyResizable] ? NO : YES);
-    
-    //textSize = [self requiredSize:(fixedWidth ? NSWidth(myBounds) : 1.0e6)];
-    textSize = NSMakeSize(800,1000);
-    
-    if ((textSize.width > myBounds.size.width) || (textSize.height > myBounds.size.height)) {
-        [self setBounds:NSMakeRect(myBounds.origin.x, myBounds.origin.y, ((!fixedWidth && (textSize.width > myBounds.size.width)) ? textSize.width : myBounds.size.width), ((textSize.height > myBounds.size.height) ? textSize.height : myBounds.size.height))];
-        // MF: For multiple editors we must fix up the others...  but we don't support multiple views of a document yet, and that's the only way we'd ever have the potential for multiple editors.
+- (void)beginQuickMove:(id)unused
+{
+    NSLog(@"beginQuickMove\n");
+    [_selectedGraphics removeAllObjects];
+    if (_editingGraphic) {
+        [_editingGraphic stopEditing];
+        [_selectedGraphics addObject:_editingGraphic];
+        _editingGraphic = nil;
     }
+    [self setNeedsDisplay:YES];
+    _inQuickMove = YES;
 }
-*/
+
+- (void)abortQuickMove:(id)unused
+{
+    _inQuickMove = NO;
+    [_selectedGraphics removeAllObjects];
+    _editingGraphic = nil;
+    [self setNeedsDisplay:YES];
+}
+
+- (void)endQuickMove:(id)unused
+{
+    if (NO == _inQuickMove) return;
+    NSLog(@"endQuickMove\n");
+    _inQuickMove = NO;
+
+    _editingGraphic = [_selectedGraphics anyObject];
+    [_selectedGraphics removeAllObjects];
+    [self setNeedsDisplay:YES];
+    [_editingGraphic startEditing];
+}
 
 #pragma mark -
 #pragma mark Printing Methods
@@ -529,14 +571,15 @@ static NSTextView *newEditor() {
     return ret;
 }
 
-// for now, we'll scale the document as a whole such that each page will fit in the printer
-// sized page, and we'll scale up as much as possible
+// for now, we'll scale the document as a whole such that each page will fit
+// in the printer sized page, and we'll scale up as much as possible
 
 #define MINF(a, b) (((a) < (b)) ? (a) : (b))
 
 - (void)beginDocument
 {
-    // first calculate the max page size in the PDF w/o using the scaling factor
+    // first calculate the max page size in the PDF w/o using the scaling
+    // factor
     NSSize maxPageSize = NSMakeSize(0.0, 0.0);
     for (unsigned int i = 0; i < [_pdf_document pageCount]; i++) {
         PDFPage *pg = [_pdf_document pageAtIndex:i];
@@ -548,7 +591,6 @@ static NSTextView *newEditor() {
     }
     // now, how big is the printed page?
     NSSize printSize = [[NSPrintInfo sharedPrintInfo] paperSize];
-    NSLog(@"printSize: %@\nmaxPageSize: %@\n", NSStringFromSize(printSize), NSStringFromSize(maxPageSize));
     // printed page is how many times as big as the pdf?
     float heightRatio =  printSize.height / maxPageSize.height;
     float widthRatio =  printSize.width / maxPageSize.width;

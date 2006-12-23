@@ -11,12 +11,6 @@
 
 @implementation FPEllipse
 
-+ (FPGraphic *)graphicInDocumentView:(FPDocumentView *)docView
-{
-    FPGraphic *ret = [[FPEllipse alloc] initInDocumentView:docView];
-    return [ret autorelease];
-}
-
 - (void)draw
 {
     NSBezierPath *path = [NSBezierPath bezierPathWithOvalInRect:[self bounds]];

@@ -3,18 +3,13 @@
 //  FormulatePro
 //
 //  Created by Andrew de los Reyes on 12/12/06.
-//  Copyright 2006 __MyCompanyName__. All rights reserved.
+//  Copyright 2006 Andrew de los Reyes. All rights reserved.
 //
 
 #import "FPTextAreaB.h"
 
 
 @implementation FPTextAreaB
-+ (FPGraphic *)graphicInDocumentView:(FPDocumentView *)docView
-{
-    FPGraphic *ret = [[FPTextAreaB alloc] initInDocumentView:docView];
-    return [ret autorelease];
-}
 
 - (id)initInDocumentView:(FPDocumentView *)docView
 {

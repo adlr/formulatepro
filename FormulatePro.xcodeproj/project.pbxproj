@@ -16,6 +16,11 @@
 		C43B61D30B2FD56D00C1B850 /* FPTextAreaB.m in Sources */ = {isa = PBXBuildFile; fileRef = C43B61D20B2FD56D00C1B850 /* FPTextAreaB.m */; };
 		C449817A0A922A890084F508 /* AOSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = C44981790A922A890084F508 /* AOSegmentedControl.m */; };
 		C44988D10AA7B0F80084F508 /* FPInspectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = C44988CF0AA7B0F80084F508 /* FPInspectorController.m */; };
+		C45E44A80B3C8C2700D41543 /* FormulatePro.icns in Resources */ = {isa = PBXBuildFile; fileRef = C45E44A70B3C8C2700D41543 /* FormulatePro.icns */; };
+		C45E46060B3CEDDB00D41543 /* NSMutableSetAdditions.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C45E46040B3CEDDB00D41543 /* NSMutableSetAdditions.h */; };
+		C45E46070B3CEDDB00D41543 /* NSMutableSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C45E46050B3CEDDB00D41543 /* NSMutableSetAdditions.m */; };
+		C45E46B50B3CF55B00D41543 /* FPCheckmark.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C45E46B30B3CF55B00D41543 /* FPCheckmark.h */; };
+		C45E46B60B3CF55B00D41543 /* FPCheckmark.m in Sources */ = {isa = PBXBuildFile; fileRef = C45E46B40B3CF55B00D41543 /* FPCheckmark.m */; };
 		C4A904480B2C86E00015511A /* FPDocumentView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A904470B2C86E00015511A /* FPDocumentView.m */; };
 		C4A906000B2CBF900015511A /* FPEllipse.m in Sources */ = {isa = PBXBuildFile; fileRef = C4DC0E710A85925A00DB476E /* FPEllipse.m */; };
 		C4A906010B2CBF910015511A /* FPGraphic.m in Sources */ = {isa = PBXBuildFile; fileRef = C4AB40E40A5BDC7D00EE29B2 /* FPGraphic.m */; };
@@ -53,6 +58,8 @@
 			dstSubfolderSpec = 10;
 			files = (
 				C4F40BC60B35FC65008063B4 /* Sparkle.framework in CopyFiles */,
+				C45E46060B3CEDDB00D41543 /* NSMutableSetAdditions.h in CopyFiles */,
+				C45E46B50B3CF55B00D41543 /* FPCheckmark.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,11 +85,14 @@
 		C44981790A922A890084F508 /* AOSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOSegmentedControl.m; sourceTree = "<group>"; };
 		C44988CF0AA7B0F80084F508 /* FPInspectorController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FPInspectorController.m; sourceTree = "<group>"; };
 		C44988D00AA7B0F80084F508 /* FPInspectorController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FPInspectorController.h; sourceTree = "<group>"; };
+		C45E44A70B3C8C2700D41543 /* FormulatePro.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = FormulatePro.icns; sourceTree = SOURCE_ROOT; };
+		C45E46040B3CEDDB00D41543 /* NSMutableSetAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableSetAdditions.h; sourceTree = "<group>"; };
+		C45E46050B3CEDDB00D41543 /* NSMutableSetAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMutableSetAdditions.m; sourceTree = "<group>"; };
+		C45E46B30B3CF55B00D41543 /* FPCheckmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPCheckmark.h; sourceTree = "<group>"; };
+		C45E46B40B3CF55B00D41543 /* FPCheckmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPCheckmark.m; sourceTree = "<group>"; };
 		C4A904460B2C86E00015511A /* FPDocumentView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FPDocumentView.h; sourceTree = "<group>"; };
 		C4A904470B2C86E00015511A /* FPDocumentView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FPDocumentView.m; sourceTree = "<group>"; };
 		C4AB3EE80A5B010000EE29B2 /* PDFKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PDFKit.framework; path = /System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/PDFKit.framework; sourceTree = "<absolute>"; };
-		C4AB3FBB0A5B06B200EE29B2 /* MyPDFView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPDFView.h; sourceTree = "<group>"; };
-		C4AB3FBC0A5B06B200EE29B2 /* MyPDFView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPDFView.m; sourceTree = "<group>"; };
 		C4AB40360A5BB5D200EE29B2 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C4AB40370A5BB5D200EE29B2 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		C4AB40E30A5BDC7D00EE29B2 /* FPGraphic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPGraphic.h; sourceTree = "<group>"; };
@@ -176,12 +186,12 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C45E46040B3CEDDB00D41543 /* NSMutableSetAdditions.h */,
+				C45E46050B3CEDDB00D41543 /* NSMutableSetAdditions.m */,
 				C4F40AD30B35D6F1008063B4 /* FPDocumentWindow.h */,
 				C4F40AD40B35D6F1008063B4 /* FPDocumentWindow.m */,
 				C4AB40360A5BB5D200EE29B2 /* AppDelegate.h */,
 				C4AB40370A5BB5D200EE29B2 /* AppDelegate.m */,
-				C4AB3FBB0A5B06B200EE29B2 /* MyPDFView.h */,
-				C4AB3FBC0A5B06B200EE29B2 /* MyPDFView.m */,
 				2A37F4AEFDCFA73011CA2CEA /* MyDocument.h */,
 				2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */,
 				C4AB42800A623A6800EE29B2 /* FPToolPaletteController.h */,
@@ -228,6 +238,7 @@
 				C4DC0D970A82D28800DB476E /* viewmag+.png */,
 				C4DC0DA40A82D35500DB476E /* next.png */,
 				C4DC0DA50A82D35500DB476E /* previous.png */,
+				C45E44A70B3C8C2700D41543 /* FormulatePro.icns */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -252,6 +263,8 @@
 				C4DC0E710A85925A00DB476E /* FPEllipse.m */,
 				C4DC0FEE0A85C4BA00DB476E /* FPSquiggle.h */,
 				C4DC0FEF0A85C4BA00DB476E /* FPSquiggle.m */,
+				C45E46B30B3CF55B00D41543 /* FPCheckmark.h */,
+				C45E46B40B3CF55B00D41543 /* FPCheckmark.m */,
 				C4FDF1610A8BEB1800032EF5 /* FPTextArea.h */,
 				C4FDF1620A8BEB1800032EF5 /* FPTextArea.m */,
 				C43B61D10B2FD56D00C1B850 /* FPTextAreaB.h */,
@@ -321,6 +334,7 @@
 				C4DC0DA60A82D35500DB476E /* next.png in Resources */,
 				C4DC0DA70A82D35500DB476E /* previous.png in Resources */,
 				C4DC0DB70A82D99700DB476E /* LICENSE.txt in Resources */,
+				C45E44A80B3C8C2700D41543 /* FormulatePro.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,6 +358,8 @@
 				C4A906030B2CBF920015511A /* FPSquiggle.m in Sources */,
 				C43B61D30B2FD56D00C1B850 /* FPTextAreaB.m in Sources */,
 				C4F40AD50B35D6F1008063B4 /* FPDocumentWindow.m in Sources */,
+				C45E46070B3CEDDB00D41543 /* NSMutableSetAdditions.m in Sources */,
+				C45E46B60B3CF55B00D41543 /* FPCheckmark.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,6 +514,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;

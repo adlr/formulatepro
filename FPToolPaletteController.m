@@ -1,9 +1,11 @@
 #import "FPToolPaletteController.h"
+#import "FPDocumentWindow.h"
 
 #import "FPRectangle.h"
 #import "FPEllipse.h"
 #import "FPSquiggle.h"
 #import "FPTextAreaB.h"
+#import "FPCheckmark.h"
 
 @implementation FPToolPaletteController
 
@@ -11,12 +13,17 @@ static FPToolPaletteController *_sharedController;
 
 - (void)windowDidLoad {
     [super windowDidLoad];
-    [arrowToolButton setRefusesFirstResponder:YES];
-    [ellipseToolButton setRefusesFirstResponder:YES];
-    [rectangleToolButton setRefusesFirstResponder:YES];
-    [squiggleToolButton setRefusesFirstResponder:YES];
-    [textAreaToolButton setRefusesFirstResponder:YES];
-    [(NSPanel *)[self window] setFloatingPanel:YES];
+    
+    [_buttonArray
+        makeObjectsPerformSelector:@selector(setRefusesFirstResponder:)
+                        withObject:(id)YES];
+    
+//    [arrowToolButton setRefusesFirstResponder:YES];
+//    [ellipseToolButton setRefusesFirstResponder:YES];
+//    [rectangleToolButton setRefusesFirstResponder:YES];
+//    [squiggleToolButton setRefusesFirstResponder:YES];
+//    [textAreaToolButton setRefusesFirstResponder:YES];
+//    [(NSPanel *)[self window] setFloatingPanel:YES];
     [(NSPanel *)[self window] setBecomesKeyOnlyIfNeeded:YES];
 }
 
@@ -24,7 +31,29 @@ static FPToolPaletteController *_sharedController;
 {
     [(NSPanel *)[self window] setFloatingPanel:YES];
     [(NSPanel *)[self window] setBecomesKeyOnlyIfNeeded:YES];
+    _buttonArray = [NSArray arrayWithObjects:arrowToolButton,
+                                             ellipseToolButton,
+                                             rectangleToolButton,
+                                             squiggleToolButton,
+                                             textAreaToolButton,
+                                             textFieldToolButton,
+                                             checkmarkToolButton,
+                                             stampToolButton,
+                                             nil];
+    [_buttonArray retain];
+    assert([_buttonArray count] > 0);
     _sharedController = self;
+    _inQuickMove = NO;
+    _toolBeforeQuickMove = 0;
+    [[NSNotificationCenter defaultCenter]
+        addObserver:self selector:@selector(beginQuickMove:)
+        name:FPBeginQuickMove object:nil];
+    [[NSNotificationCenter defaultCenter]
+        addObserver:self selector:@selector(abortQuickMove:)
+        name:FPAbortQuickMove object:nil];
+    [[NSNotificationCenter defaultCenter]
+        addObserver:self selector:@selector(endQuickMove:)
+        name:FPEndQuickMove object:nil];
 }
 
 + (FPToolPaletteController *)sharedToolPaletteController
@@ -34,24 +63,20 @@ static FPToolPaletteController *_sharedController;
 
 - (IBAction)chooseTool:(id)sender
 {
-    [arrowToolButton setState:NSOffState];
-    [ellipseToolButton setState:NSOffState];
-    [rectangleToolButton setState:NSOffState];
-    [squiggleToolButton setState:NSOffState];
-    [textAreaToolButton setState:NSOffState];
-    [textFieldToolButton setState:NSOffState];
-    [checkmarkToolButton setState:NSOffState];
-    [stampToolButton setState:NSOffState];
+    [_buttonArray makeObjectsPerformSelector:@selector(setState:)
+                                  withObject:(id)NSOffState];
     [sender setState:NSOnState];
 }
 
 - (unsigned int)currentTool
 {
-    if ([arrowToolButton state] == NSOnState) return FPToolArrow;
-    if ([ellipseToolButton state] == NSOnState) return FPToolEllipse;
-    if ([squiggleToolButton state] == NSOnState) return FPToolSquiggle;
-    if ([textAreaToolButton state] == NSOnState) return FPToolTextArea;
-    if ([textFieldToolButton state] == NSOnState) return FPToolTextField;
+    for (unsigned int i = 0; i < [_buttonArray count]; i++) {
+        NSButton *b = [_buttonArray objectAtIndex:i];
+        NSLog(@"button = 0x%08x\n", (unsigned)b);
+        if ([[_buttonArray objectAtIndex:i] state] == NSOnState)
+            return i;
+    }
+    assert(0);
     return FPToolRectangle;
 }
 
@@ -62,9 +87,33 @@ static FPToolPaletteController *_sharedController;
         case FPToolRectangle: NSLog(@"rect\n"); return [FPRectangle class];
         case FPToolSquiggle: NSLog(@"squiggle\n"); return [FPSquiggle class];
         case FPToolTextArea: NSLog(@"text area\n"); return [FPTextAreaB class];
+        case FPToolCheckmark: NSLog(@"checkmark\n"); return [FPCheckmark class];
         //case FPToolTextField: NSLog(@"text field\n"); return [FPTextField class];
     }
     return [FPRectangle class];
+}
+
+- (void)beginQuickMove:(id)unused
+{
+    _toolBeforeQuickMove = [self currentTool];
+    [_buttonArray makeObjectsPerformSelector:@selector(setEnabled:) withObject:(id)NO];
+    [arrowToolButton setEnabled:YES];
+    [self chooseTool:arrowToolButton];
+    _inQuickMove = YES;
+}
+
+- (void)abortQuickMove:(id)unused
+{
+    [_buttonArray makeObjectsPerformSelector:@selector(setEnabled:) withObject:(id)YES];
+    [self chooseTool:[_buttonArray objectAtIndex:FPToolArrow]];
+    _inQuickMove = NO;
+}
+
+- (void)endQuickMove:(id)unused
+{
+    if (NO == _inQuickMove) return;
+    [_buttonArray makeObjectsPerformSelector:@selector(setEnabled:) withObject:(id)YES];
+    [self chooseTool:[_buttonArray objectAtIndex:_toolBeforeQuickMove]];
 }
 
 @end

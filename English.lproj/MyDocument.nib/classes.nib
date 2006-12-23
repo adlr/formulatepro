@@ -6,7 +6,12 @@
             SUPERCLASS = NSSegmentedControl; 
         }, 
         {CLASS = FPDocumentView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
-        {CLASS = FPDocumentWindow; LANGUAGE = ObjC; SUPERCLASS = NSWindow; }, 
+        {
+            CLASS = FPDocumentWindow; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_docView" = FPDocumentView; }; 
+            SUPERCLASS = NSWindow; 
+        }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {

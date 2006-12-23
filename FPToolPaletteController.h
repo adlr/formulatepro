@@ -23,9 +23,17 @@ enum {
 	IBOutlet NSButton *textFieldToolButton;
     IBOutlet NSButton *checkmarkToolButton;
     IBOutlet NSButton *stampToolButton;
+    
+    NSArray *_buttonArray;
+    BOOL _inQuickMove;
+    unsigned int _toolBeforeQuickMove;
 }
 + (FPToolPaletteController*)sharedToolPaletteController;
 - (IBAction)chooseTool:(id)sender;
 - (unsigned int)currentTool;
 - (Class)classForCurrentTool;
+
+- (void)beginQuickMove:(id)unused;
+- (void)endQuickMove:(id)unused;
+
 @end

@@ -7,15 +7,8 @@
 //
 
 #import "FPRectangle.h"
-#import "MyPDFView.h"
 
 @implementation FPRectangle
-
-+ (FPGraphic *)graphicInDocumentView:(FPDocumentView *)docView
-{
-    FPGraphic *ret = [[FPRectangle alloc] initInDocumentView:docView];
-    return [ret autorelease];
-}
 
 - (void)draw
 {
