@@ -3,6 +3,7 @@
 #import "FPDocumentWindow.h"
 #import "FPToolPaletteController.h"
 #import "FPGraphic.h"
+#import "FPImage.h"
 
 @implementation FPDocumentView
 
@@ -425,7 +426,8 @@ static const float ZoomScaleFactor = 1.3;
                 if (knob != NoKnob) {
                     [_selectedGraphics removeAllObjects];
                     [_selectedGraphics addObject:graphic];
-                    [self setNeedsDisplay:YES]; // to fix which knobs are showing
+                    [self setNeedsDisplay:YES]; // to fix which knobs are
+                                                // showing
                     [graphic resizeWithEvent:theEvent byKnob:knob];
                     return;
                 }
@@ -541,6 +543,35 @@ static const float ZoomScaleFactor = 1.3;
     [_selectedGraphics removeAllObjects];
     [self setNeedsDisplay:YES];
     [_editingGraphic startEditing];
+}
+
+- (void)placeImage:(id)sender
+{
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    [panel setAllowsMultipleSelection:NO];
+    [panel beginSheetForDirectory:nil
+                             file:nil
+                            types:nil
+                   modalForWindow:[self window]
+                    modalDelegate:self
+                   didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:)
+                      contextInfo:nil];
+}
+
+- (void)openPanelDidEnd:(NSOpenPanel *)panel
+             returnCode:(int)returnCode
+            contextInfo:(void *)contextInfo
+{
+    if (NSOKButton != returnCode) return;
+
+    NSImage *image = [[NSImage alloc]
+                      initWithContentsOfFile:[panel filename]];
+
+    FPImage *img = [[FPImage alloc] initInDocumentView:self
+                                             withImage:image];
+
+    [_overlayGraphics addObject:img];
+    [self setNeedsDisplay:YES];
 }
 
 #pragma mark -

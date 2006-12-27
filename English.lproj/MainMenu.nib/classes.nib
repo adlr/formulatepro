@@ -1,10 +1,14 @@
 {
     IBClasses = (
         {
-            ACTIONS = {provideFeedback = id; showLicense = id; }; 
+            ACTIONS = {placeImage = id; provideFeedback = id; showLicense = id; }; 
             CLASS = AppDelegate; 
             LANGUAGE = ObjC; 
-            OUTLETS = {"_inspectorWindow" = NSPanel; "_renderWindow" = NSWindow; }; 
+            OUTLETS = {
+                "_inspectorWindow" = NSPanel; 
+                "_placeImageMenuItem" = NSMenuItem; 
+                "_renderWindow" = NSWindow; 
+            }; 
             SUPERCLASS = NSObject; 
         }, 
         {

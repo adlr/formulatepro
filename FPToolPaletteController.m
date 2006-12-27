@@ -96,7 +96,8 @@ static FPToolPaletteController *_sharedController;
 - (void)beginQuickMove:(id)unused
 {
     _toolBeforeQuickMove = [self currentTool];
-    [_buttonArray makeObjectsPerformSelector:@selector(setEnabled:) withObject:(id)NO];
+    [_buttonArray makeObjectsPerformSelector:@selector(setEnabled:)
+                                  withObject:(id)NO];
     [arrowToolButton setEnabled:YES];
     [self chooseTool:arrowToolButton];
     _inQuickMove = YES;
@@ -104,7 +105,8 @@ static FPToolPaletteController *_sharedController;
 
 - (void)abortQuickMove:(id)unused
 {
-    [_buttonArray makeObjectsPerformSelector:@selector(setEnabled:) withObject:(id)YES];
+    [_buttonArray makeObjectsPerformSelector:@selector(setEnabled:)
+                                  withObject:(id)YES];
     [self chooseTool:[_buttonArray objectAtIndex:FPToolArrow]];
     _inQuickMove = NO;
 }
@@ -112,7 +114,8 @@ static FPToolPaletteController *_sharedController;
 - (void)endQuickMove:(id)unused
 {
     if (NO == _inQuickMove) return;
-    [_buttonArray makeObjectsPerformSelector:@selector(setEnabled:) withObject:(id)YES];
+    [_buttonArray makeObjectsPerformSelector:@selector(setEnabled:)
+                                  withObject:(id)YES];
     [self chooseTool:[_buttonArray objectAtIndex:_toolBeforeQuickMove]];
 }
 

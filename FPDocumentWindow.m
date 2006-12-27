@@ -25,7 +25,8 @@ enum {FPDeleteKey = 0x7f};
 {
     //if ([theEvent modifierFlags]) return;
     //[theEvent keyCode]
-    NSLog(@"fp doc window got keys: [%@][%x][%x]\n", [theEvent charactersIgnoringModifiers],
+    NSLog(@"fp doc window got keys: [%@][%x][%x]\n",
+          [theEvent charactersIgnoringModifiers],
     (unsigned)[[theEvent charactersIgnoringModifiers] characterAtIndex:0],
     (unsigned)NSDeleteFunctionKey);
     if (FPDeleteKey ==
@@ -42,11 +43,14 @@ enum {FPDeleteKey = 0x7f};
         ([theEvent modifierFlags] & NSCommandKeyMask) &&
         ([_docView shouldEnterQuickMove])) {
         NSLog(@"got apple-option\n");
-        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:FPBeginQuickMove object:self]];
+        [[NSNotificationCenter defaultCenter] postNotification:
+            [NSNotification notificationWithName:FPBeginQuickMove
+                                          object:self]];
         _sentQuickMove = YES;
     } else if (YES == _sentQuickMove) {
         NSLog(@"don't got apple-option\n");
-        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:FPEndQuickMove object:self]];
+        [[NSNotificationCenter defaultCenter] postNotification:
+            [NSNotification notificationWithName:FPEndQuickMove object:self]];
         _sentQuickMove = NO;
     }
 }

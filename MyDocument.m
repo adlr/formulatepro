@@ -387,6 +387,11 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
         nil];
 }
 
+- (void)placeImage:(id)sender;
+{
+    [_document_view placeImage:sender];
+}
+
 #pragma mark -
 #pragma mark Printing Methods
 

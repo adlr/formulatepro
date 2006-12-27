@@ -11,7 +11,6 @@
 #import <Quartz/Quartz.h>
 #import <PDFKit/PDFDocument.h>
 
-#import "MyPDFView.h"
 #import "FPDocumentView.h"
 
 @interface MyDocument : NSDocument
@@ -29,5 +28,6 @@
 - (IBAction)zoomOut:(id)sender;
 - (IBAction)toggleOneUpTwoUpBookMode:(id)sender;
 - (IBAction)toggleContinuous:(id)sender;
+- (void)placeImage:(id)sender;
 
 @end

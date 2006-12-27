@@ -31,9 +31,13 @@
 
 - (void)deleteKeyPressed;
 
+// place image
+- (void)placeImage:(id)sender;
+
 // coordinate transforms
 - (unsigned int)pageForPointFromEvent:(NSEvent *)theEvent;
-- (NSPoint)pagePointForPointFromEvent:(NSEvent *)theEvent page:(unsigned int)page;
+- (NSPoint)pagePointForPointFromEvent:(NSEvent *)theEvent
+                                 page:(unsigned int)page;
 - (NSRect)convertRect:(NSRect)rect toPage:(unsigned int)page;
 - (NSRect)convertRect:(NSRect)rect fromPage:(unsigned int)page;
 - (NSPoint)convertPoint:(NSPoint)point toPage:(unsigned int)page;
