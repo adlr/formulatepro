@@ -3,7 +3,7 @@
 //  FormulatePro
 //
 //  Created by Andrew de los Reyes on 12/27/06.
-//  Copyright 2006 __MyCompanyName__. All rights reserved.
+//  Copyright 2006 Andrew de los Reyes. All rights reserved.
 //
 
 #import "FPImage.h"
@@ -16,10 +16,13 @@
 {
     self = [super initInDocumentView:docView];
     if (self) {
-        _image = image;
+        _image = [image retain];
         [_image setCacheMode:NSImageCacheNever];
         _page = 0;
-        [self setBounds:NSMakeRect(10.0,10.0,10.0,10.0)];
+
+        _bounds.size = [_image size];
+        _bounds.origin = NSMakePoint(50.0, 50.0);
+        _naturalBounds = _bounds;
     }
     return self;
 }

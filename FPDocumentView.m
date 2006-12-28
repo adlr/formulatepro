@@ -564,9 +564,14 @@ static const float ZoomScaleFactor = 1.3;
 {
     if (NSOKButton != returnCode) return;
 
-    NSImage *image = [[NSImage alloc]
-                      initWithContentsOfFile:[panel filename]];
+    NSImage *image = [[[NSImage alloc]
+                       initWithContentsOfFile:[panel filename]] autorelease];
 
+    if (nil == image) {
+        // failed to open
+        // TODO(adlr): notify user that open failed
+        return;
+    }
     FPImage *img = [[FPImage alloc] initInDocumentView:self
                                              withImage:image];
 

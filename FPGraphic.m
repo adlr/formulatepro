@@ -142,7 +142,8 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
         
         NSPoint docPoint = [_docView pagePointForPointFromEvent:theEvent
                                                            page:_page];
-        [_docView setNeedsDisplayInRect:[_docView convertRect:[self boundsWithKnobs] fromPage:_page]];
+        [_docView setNeedsDisplayInRect:
+            [_docView convertRect:[self boundsWithKnobs] fromPage:_page]];
         
         if (knob == UpperLeftKnob ||
             knob == UpperMiddleKnob ||
@@ -188,24 +189,24 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
         if ([theEvent modifierFlags] & NSShiftKeyMask) {
             BOOL didFlip;
             switch (knob) {
+                case UpperRightKnob:
                 case LowerRightKnob:
                     didFlip = FPRectSetRightAbs(&_bounds,
-                                                _bounds.origin.x + _bounds.size.height);
-                    break;
-                case UpperLeftKnob:
-                    didFlip = FPRectSetLeftAbs(&_bounds,
-                                               _bounds.origin.x + _bounds.size.width - _bounds.size.height);
-                    break;
-                case UpperRightKnob:
-                    didFlip = NO;
-                    _bounds.size.width = _bounds.size.height;
+                                                _bounds.origin.x +
+                                                (_bounds.size.height /
+                                                 shiftSlope));
                     break;
                 case LowerLeftKnob:
+                case UpperLeftKnob:
                     didFlip = FPRectSetLeftAbs(&_bounds,
-                                               _bounds.origin.x + _bounds.size.width - _bounds.size.height);
+                                               _bounds.origin.x +
+                                               _bounds.size.width -
+                                               (_bounds.size.height /
+                                                shiftSlope));
                     break;
                 default:
-                    assert(0); // XXX need to support shift on middle knobs
+                    assert(0); // TODO(adlr): need to support shift on middle
+                               // knobs
             }
             assert(didFlip == NO);
         }
@@ -269,6 +270,8 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
 
 #define FPAvgY(a) (AVG((a).origin.y, (a).origin.y + (a).size.height))
 
+const float knobSize = 6.0;
+
 // returns rect for a knob in page coordinates. remember that there is a 1 screen-pixel thick border
 // if isBound is set, returns a bounds rectangle in page coordinates that includes 1 screen-pixel thick border
 - (NSRect)pageRectForKnob:(int)knob isBoundRect:(BOOL)isBound
@@ -311,10 +314,10 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
             assert(0); // bad knob
     }
     NSPoint window_point = [_docView convertPoint:p fromPage:_page];
-    NSRect knobRect = NSMakeRect(floorf(window_point.x)+0.5 -2.0 - (isBound?0.5:0.0),
-                                 floorf(window_point.y)+0.5 -2.0 - (isBound?0.5:0.0),
-                                 4.0 + (isBound?1.0:0.0),
-                                 4.0 + (isBound?1.0:0.0));
+    NSRect knobRect = NSMakeRect(floorf(window_point.x)+0.5 -(knobSize/2.0) - (isBound?0.5:0.0),
+                                 floorf(window_point.y)+0.5 -(knobSize/2.0) - (isBound?0.5:0.0),
+                                 knobSize + (isBound?1.0:0.0),
+                                 knobSize + (isBound?1.0:0.0));
     return [_docView convertRect:knobRect toPage:_page];
 }
 
