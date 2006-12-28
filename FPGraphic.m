@@ -37,7 +37,8 @@
         NSPoint point;
         
         if (_hasPage) { // invalidate where the shape used to be, if anywhere
-            [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds] fromPage:_page]];
+            [_docView setNeedsDisplayInRect:
+                [_docView convertRect:[self safeBounds] fromPage:_page]];
         }
 
         _page = [_docView pageForPointFromEvent:theEvent];
@@ -47,10 +48,12 @@
         _bounds.size = NSMakeSize(1.0,1.0);
         
         // invalidate where the shape is now
-        [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds] fromPage:_page]];
+        [_docView setNeedsDisplayInRect:
+            [_docView convertRect:[self safeBounds] fromPage:_page]];
         
         // get ready for next iteration of the loop, or break out of loop
-        theEvent = [[_docView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
+        theEvent = [[_docView window] nextEventMatchingMask:
+                    (NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
         if ([theEvent type] == NSLeftMouseUp)
             break;
     }
@@ -211,10 +214,12 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
             assert(didFlip == NO);
         }
         
-        [_docView setNeedsDisplayInRect:[_docView convertRect:[self boundsWithKnobs] fromPage:_page]];
+        [_docView setNeedsDisplayInRect:
+            [_docView convertRect:[self boundsWithKnobs] fromPage:_page]];
 
         // get ready for next iteration of the loop, or break out of loop
-        theEvent = [[_docView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
+        theEvent = [[_docView window] nextEventMatchingMask:
+                    (NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
         if ([theEvent type] == NSLeftMouseUp)
             break;
     }
@@ -233,7 +238,9 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
 
 - (void)reassignToPage:(unsigned int)page
 {
-    [self setBounds:[_docView convertRect:[_docView convertRect:[self bounds] fromPage:_page] toPage:page]];
+    [self setBounds:[_docView convertRect:[_docView convertRect:[self bounds]
+                                                       fromPage:_page]
+                                   toPage:page]];
     _page = page;
 }
 
@@ -246,8 +253,10 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
     [[NSColor blackColor] set];
     [path stroke];
 
-    NSPoint p = NSMakePoint(_bounds.origin.x + _bounds.size.width+_lineWidth/2.0,
-                            _bounds.origin.y + _bounds.size.height+_lineWidth/2.0);
+    NSPoint p = NSMakePoint(_bounds.origin.x + _bounds.size.width +
+                            _lineWidth/2.0,
+                            _bounds.origin.y + _bounds.size.height +
+                            _lineWidth/2.0);
     NSPoint q;
     NSRect rect;
     NSRect pdf_rect;
@@ -272,8 +281,9 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
 
 const float knobSize = 6.0;
 
-// returns rect for a knob in page coordinates. remember that there is a 1 screen-pixel thick border
-// if isBound is set, returns a bounds rectangle in page coordinates that includes 1 screen-pixel thick border
+// returns rect for a knob in page coordinates. remember that there is a 1
+// screen-pixel thick border if isBound is set, returns a bounds rectangle in
+// page coordinates that includes 1 screen-pixel thick border
 - (NSRect)pageRectForKnob:(int)knob isBoundRect:(BOOL)isBound
 {
     NSPoint p;
@@ -314,8 +324,10 @@ const float knobSize = 6.0;
             assert(0); // bad knob
     }
     NSPoint window_point = [_docView convertPoint:p fromPage:_page];
-    NSRect knobRect = NSMakeRect(floorf(window_point.x)+0.5 -(knobSize/2.0) - (isBound?0.5:0.0),
-                                 floorf(window_point.y)+0.5 -(knobSize/2.0) - (isBound?0.5:0.0),
+    NSRect knobRect = NSMakeRect(floorf(window_point.x)+0.5 -(knobSize/2.0)
+                                 -(isBound?0.5:0.0),
+                                 floorf(window_point.y)+0.5 -(knobSize/2.0) 
+                                 -(isBound?0.5:0.0),
                                  knobSize + (isBound?1.0:0.0),
                                  knobSize + (isBound?1.0:0.0));
     return [_docView convertRect:knobRect toPage:_page];
@@ -326,8 +338,9 @@ const float knobSize = 6.0;
     int i;
     for (i = 0; i <= 7; i++) {
         if (_knobMask & (1 << i)) {
-            NSBezierPath *knobPDFRectPath = [NSBezierPath bezierPathWithRect:[self pageRectForKnob:(1 << i)
-                                                                                       isBoundRect:NO]];
+            NSBezierPath *knobPDFRectPath = [NSBezierPath bezierPathWithRect:
+                                             [self pageRectForKnob:(1 << i)
+                                                       isBoundRect:NO]];
             [knobPDFRectPath setLineWidth:(1.0/[_docView scaleFactor])];
             [[NSColor whiteColor] set];
             [knobPDFRectPath fill];

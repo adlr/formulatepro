@@ -44,6 +44,6 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
-	<string>http://adlr.info/appcasts/millicalc.xml</string>
+	<string>http://adlr.info/appcasts/formulatepro.xml</string>
 </dict>
 </plist>
