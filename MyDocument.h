@@ -21,6 +21,9 @@
     IBOutlet NSSegmentedControl *_one_up_vs_two_up_vs_book;
     IBOutlet NSSegmentedControl *_single_vs_continuous;
     
+    NSData *_originalPDFData;
+    NSMutableArray *_tempOverlayGraphics;
+    
     PDFDocument *_pdf_document;
     
 }

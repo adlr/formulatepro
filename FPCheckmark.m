@@ -11,6 +11,11 @@
 
 @implementation FPCheckmark
 
++ (NSString *)archivalClassName;
+{
+    return @"Checkmark";
+}
+
 - (id)initInDocumentView:(FPDocumentView *)docView
 {
     self = [super initInDocumentView:docView];

@@ -9,6 +9,22 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>formulate</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>FormulatePro Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<true/>
+			<key>NSDocumentClass</key>
+			<string>MyDocument</string>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>XML</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>pdf</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
@@ -20,7 +36,7 @@
 				<string>????</string>
 			</array>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 			<key>NSDocumentClass</key>
 			<string>MyDocument</string>
 		</dict>

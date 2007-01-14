@@ -11,6 +11,11 @@
 
 @implementation FPEllipse
 
++ (NSString *)archivalClassName;
+{
+    return @"Ellipse";
+}
+
 - (void)draw
 {
     NSBezierPath *path = [NSBezierPath bezierPathWithOvalInRect:[self bounds]];

@@ -360,6 +360,7 @@ static const float ZoomScaleFactor = 1.3;
         
         oldPoint = newPoint;
     }
+    [_doc updateChangeCount:NSChangeDone];
 }
 
 - (void)sendAbortQuickMove
@@ -380,6 +381,7 @@ static const float ZoomScaleFactor = 1.3;
 // the QuickMove.
 - (void)mouseDown:(NSEvent *)theEvent
 {
+    [_doc updateChangeCount:NSChangeDone];
     BOOL justStoppedEditing = NO;
     if (_editingGraphic) {
         [_editingGraphic stopEditing];
@@ -634,6 +636,30 @@ static const float ZoomScaleFactor = 1.3;
     _scale_factor = maxRatio;
     [self setFrame:[self frame]];
     [super beginDocument];
+}
+
+
+#pragma mark -
+#pragma mark Opening and Saving Methods
+
+- (NSArray *)archivalOverlayGraphics
+{
+    NSMutableArray *arr = [NSMutableArray array];
+    for (unsigned int i = 0; i < [_overlayGraphics count]; i++) {
+        [arr
+         addObject:[[_overlayGraphics objectAtIndex:i] archivalDictionary]];
+    }
+    return arr;
+}
+
+- (void)setOverlayGraphicsFromArray:(NSArray *)arr
+{
+    [_overlayGraphics removeAllObjects];
+    for (unsigned int i = 0; i < [arr count]; i++) {
+        [_overlayGraphics addObject:
+            [FPGraphic graphicFromArchivalDictionary:[arr objectAtIndex:i]
+                                      inDocumentView:self]];
+    }
 }
 
 @end

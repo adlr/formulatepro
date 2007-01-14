@@ -7,9 +7,39 @@
 //
 
 #import "FPImage.h"
+#import "NSMutableDictionaryAdditions.h"
 
 
 @implementation FPImage
+
++ (NSString *)archivalClassName;
+{
+    return @"Image";
+}
+
+static NSString *imageArchiveKey = @"image";
+
+- (id)initWithArchivalDictionary:(NSDictionary *)dict
+                  inDocumentView:(FPDocumentView *)docView
+{
+    self = [super initWithArchivalDictionary:dict
+                              inDocumentView:docView];
+    if (self) {
+        _image = [[NSUnarchiver unarchiveObjectWithData:
+                   [dict objectForKey:imageArchiveKey]] retain];
+    }
+    return self;
+}
+
+- (NSDictionary *)archivalDictionary
+{
+    NSMutableDictionary *ret =
+        [NSMutableDictionary
+         dictionaryWithDictionary:[super archivalDictionary]];
+    [ret setObject:[NSArchiver archivedDataWithRootObject:_image]
+     forNonexistentKey:imageArchiveKey];
+    return ret;
+}
 
 - (id)initInDocumentView:(FPDocumentView *)docView
                withImage:(NSImage *)image;

@@ -10,6 +10,16 @@
 
 @implementation FPRectangle
 
++ (NSString *)archivalClassName;
+{
+    return @"Rectangle";
+}
+
+- (NSDictionary *)archivalDictionary
+{
+    return [super archivalDictionary];
+}
+
 - (void)draw
 {
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self bounds]];

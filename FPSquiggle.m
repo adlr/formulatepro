@@ -7,8 +7,59 @@
 //
 
 #import "FPSquiggle.h"
+#import "NSMutableDictionaryAdditions.h"
 
 @implementation FPSquiggle
+
++ (NSString *)archivalClassName;
+{
+    return @"Squiggle";
+}
+
+static NSString *pathArchiveKey = @"path";
+
+- (id)initWithArchivalDictionary:(NSDictionary *)dict
+                  inDocumentView:(FPDocumentView *)docView
+{
+    self = [super initWithArchivalDictionary:dict
+                              inDocumentView:docView];
+    if (self) {
+        NSBezierPath *path = [NSBezierPath bezierPath];
+        [path setLineWidth:1.0];
+        [path setLineJoinStyle:NSBevelLineJoinStyle];
+        NSArray *arr = [dict objectForKey:pathArchiveKey];
+        for (int i = 0; i < [arr count]; i++) {
+            NSPoint pt = NSPointFromString([arr objectAtIndex:i]);
+            if (0 == i)
+                [path moveToPoint:pt];
+            else
+                [path lineToPoint:pt];
+        }
+        _path = [path retain];
+        _bounds = [_path bounds];
+    }
+    return self;
+}
+
+- (NSDictionary *)archivalDictionary
+{
+    NSMutableArray *arr = [NSMutableArray array];
+    for (int i = 0; i < [_path elementCount]; i++) {
+        NSPoint p[3];
+        NSBezierPathElement t;
+        t = [_path elementAtIndex:i associatedPoints:p];
+        if (0 == i)
+            assert(NSMoveToBezierPathElement == t);
+        else
+            assert(NSLineToBezierPathElement == t);
+        [arr addObject:NSStringFromPoint(p[0])];
+    }
+    NSMutableDictionary *ret =
+        [NSMutableDictionary
+         dictionaryWithDictionary:[super archivalDictionary]];
+    [ret setObject:arr forNonexistentKey:pathArchiveKey];
+    return ret;
+}
 
 - (id)initInDocumentView:(FPDocumentView *)docView
 {
@@ -25,10 +76,11 @@
     NSAffineTransform *scaleTransform = [NSAffineTransform transform];
     NSAffineTransform *translateTransform = [NSAffineTransform transform];
     [scaleTransform scaleXBy:(_bounds.size.width/[tempPath bounds].size.width)
-                         yBy:(_bounds.size.height/[tempPath bounds].size.height)];
+     yBy:(_bounds.size.height/[tempPath bounds].size.height)];
     [tempPath transformUsingAffineTransform:scaleTransform];
-    [translateTransform translateXBy:(_bounds.origin.x - [tempPath bounds].origin.x)
-                                 yBy:(_bounds.origin.y - [tempPath bounds].origin.y)];
+    [translateTransform
+     translateXBy:(_bounds.origin.x - [tempPath bounds].origin.x)
+              yBy:(_bounds.origin.y - [tempPath bounds].origin.y)];
     [tempPath transformUsingAffineTransform:translateTransform];
     [[NSColor blackColor] set];
     [tempPath stroke];
@@ -45,9 +97,9 @@
 
 - (NSPoint)pageToWindowPoint:(NSPoint)pagePoint
 {
-    return [[[_docView window] contentView] convertPoint:[_docView convertPoint:pagePoint
-                                                                       fromPage:_page]
-                                                fromView:_docView];
+    return [[[_docView window] contentView]
+            convertPoint:[_docView convertPoint:pagePoint fromPage:_page]
+                fromView:_docView];
 }
 
 - (BOOL)placeWithEvent:(NSEvent *)theEvent
@@ -75,17 +127,20 @@
         
         new_point = [_docView pagePointForPointFromEvent:theEvent page:_page];
         [_path lineToPoint:new_point];
-        if (NSPointInRect([self pageToWindowPoint:point], [[[_docView window] contentView] frame]) &&
-            NSPointInRect([self pageToWindowPoint:new_point], [[[_docView window] contentView] frame])) {
+        if (NSPointInRect([self pageToWindowPoint:point],
+                          [[[_docView window] contentView] frame]) &&
+            NSPointInRect([self pageToWindowPoint:new_point],
+                          [[[_docView window] contentView] frame])) {
             [NSBezierPath strokeLineFromPoint:[self pageToWindowPoint:point]
-                                      toPoint:[self pageToWindowPoint:new_point]];
+             toPoint:[self pageToWindowPoint:new_point]];
             [gc flushGraphics];
         }
 
         // get ready for next iteration of the loop, or break out of loop
         point = new_point;
         
-        theEvent = [[_docView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
+        theEvent = [[_docView window] nextEventMatchingMask:
+                    (NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
         if ([theEvent type] == NSLeftMouseUp)
             break;
     }

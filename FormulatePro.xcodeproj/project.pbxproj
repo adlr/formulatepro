@@ -40,6 +40,11 @@
 		C4AB440B0A711A0D00EE29B2 /* twoUp.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB440A0A711A0C00EE29B2 /* twoUp.psd */; };
 		C4AB442E0A71200C00EE29B2 /* book.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB442D0A71200C00EE29B2 /* book.psd */; };
 		C4AB447F0A718D7600EE29B2 /* continuous.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB447E0A718D7600EE29B2 /* continuous.psd */; };
+		C4B25AAA0B431F8800DADA0F /* FPImage.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C4B25AA80B431F8800DADA0F /* FPImage.h */; };
+		C4B25AAB0B431F8800DADA0F /* FPImage.m in Sources */ = {isa = PBXBuildFile; fileRef = C4B25AA90B431F8800DADA0F /* FPImage.m */; };
+		C4B25D540B4AD7C900DADA0F /* FPArchiveExtras.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C4B25D530B4AD7C900DADA0F /* FPArchiveExtras.h */; };
+		C4B25D970B4ADF8100DADA0F /* NSMutableDictionaryAdditions.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C4B25D950B4ADF8100DADA0F /* NSMutableDictionaryAdditions.h */; };
+		C4B25D980B4ADF8100DADA0F /* NSMutableDictionaryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C4B25D960B4ADF8100DADA0F /* NSMutableDictionaryAdditions.m */; };
 		C4DC0D980A82D28800DB476E /* viewmag-.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0D960A82D28800DB476E /* viewmag-.png */; };
 		C4DC0D990A82D28800DB476E /* viewmag+.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0D970A82D28800DB476E /* viewmag+.png */; };
 		C4DC0DA60A82D35500DB476E /* next.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DA40A82D35500DB476E /* next.png */; };
@@ -60,6 +65,9 @@
 				C4F40BC60B35FC65008063B4 /* Sparkle.framework in CopyFiles */,
 				C45E46060B3CEDDB00D41543 /* NSMutableSetAdditions.h in CopyFiles */,
 				C45E46B50B3CF55B00D41543 /* FPCheckmark.h in CopyFiles */,
+				C4B25AAA0B431F8800DADA0F /* FPImage.h in CopyFiles */,
+				C4B25D540B4AD7C900DADA0F /* FPArchiveExtras.h in CopyFiles */,
+				C4B25D970B4ADF8100DADA0F /* NSMutableDictionaryAdditions.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,6 +118,11 @@
 		C4AB440A0A711A0C00EE29B2 /* twoUp.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = twoUp.psd; sourceTree = "<group>"; };
 		C4AB442D0A71200C00EE29B2 /* book.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = book.psd; sourceTree = "<group>"; };
 		C4AB447E0A718D7600EE29B2 /* continuous.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = continuous.psd; sourceTree = "<group>"; };
+		C4B25AA80B431F8800DADA0F /* FPImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPImage.h; sourceTree = "<group>"; };
+		C4B25AA90B431F8800DADA0F /* FPImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPImage.m; sourceTree = "<group>"; };
+		C4B25D530B4AD7C900DADA0F /* FPArchiveExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPArchiveExtras.h; sourceTree = "<group>"; };
+		C4B25D950B4ADF8100DADA0F /* NSMutableDictionaryAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableDictionaryAdditions.h; sourceTree = "<group>"; };
+		C4B25D960B4ADF8100DADA0F /* NSMutableDictionaryAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMutableDictionaryAdditions.m; sourceTree = "<group>"; };
 		C4DC0D960A82D28800DB476E /* viewmag-.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "viewmag-.png"; sourceTree = SOURCE_ROOT; };
 		C4DC0D970A82D28800DB476E /* viewmag+.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "viewmag+.png"; sourceTree = SOURCE_ROOT; };
 		C4DC0DA40A82D35500DB476E /* next.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = next.png; sourceTree = SOURCE_ROOT; };
@@ -188,6 +201,8 @@
 			children = (
 				C45E46040B3CEDDB00D41543 /* NSMutableSetAdditions.h */,
 				C45E46050B3CEDDB00D41543 /* NSMutableSetAdditions.m */,
+				C4B25D950B4ADF8100DADA0F /* NSMutableDictionaryAdditions.h */,
+				C4B25D960B4ADF8100DADA0F /* NSMutableDictionaryAdditions.m */,
 				C4F40AD30B35D6F1008063B4 /* FPDocumentWindow.h */,
 				C4F40AD40B35D6F1008063B4 /* FPDocumentWindow.m */,
 				C4AB40360A5BB5D200EE29B2 /* AppDelegate.h */,
@@ -255,6 +270,7 @@
 		C4AB40EA0A5BDCC900EE29B2 /* Overlay Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				C4B25D530B4AD7C900DADA0F /* FPArchiveExtras.h */,
 				C4AB40E30A5BDC7D00EE29B2 /* FPGraphic.h */,
 				C4AB40E40A5BDC7D00EE29B2 /* FPGraphic.m */,
 				C4DC0E630A85907800DB476E /* FPRectangle.h */,
@@ -265,6 +281,8 @@
 				C4DC0FEF0A85C4BA00DB476E /* FPSquiggle.m */,
 				C45E46B30B3CF55B00D41543 /* FPCheckmark.h */,
 				C45E46B40B3CF55B00D41543 /* FPCheckmark.m */,
+				C4B25AA80B431F8800DADA0F /* FPImage.h */,
+				C4B25AA90B431F8800DADA0F /* FPImage.m */,
 				C4FDF1610A8BEB1800032EF5 /* FPTextArea.h */,
 				C4FDF1620A8BEB1800032EF5 /* FPTextArea.m */,
 				C43B61D10B2FD56D00C1B850 /* FPTextAreaB.h */,
@@ -360,6 +378,8 @@
 				C4F40AD50B35D6F1008063B4 /* FPDocumentWindow.m in Sources */,
 				C45E46070B3CEDDB00D41543 /* NSMutableSetAdditions.m in Sources */,
 				C45E46B60B3CF55B00D41543 /* FPCheckmark.m in Sources */,
+				C4B25AAB0B431F8800DADA0F /* FPImage.m in Sources */,
+				C4B25D980B4ADF8100DADA0F /* NSMutableDictionaryAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,29 +477,6 @@
 			};
 			name = Release;
 		};
-		C4AB3E9E0A5AFE1100EE29B2 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_3)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Quartz.framework/Versions/A/Frameworks\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/third_party\"";
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = FormulatePro_Prefix.pch;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = FormulatePro;
-				WRAPPER_EXTENSION = app;
-			};
-			name = Default;
-		};
 		C4AB3EA00A5AFE1100EE29B2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -510,17 +507,6 @@
 			};
 			name = Release;
 		};
-		C4AB3EA20A5AFE1100EE29B2 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-			};
-			name = Default;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -529,20 +515,18 @@
 			buildConfigurations = (
 				C4AB3E9C0A5AFE1100EE29B2 /* Debug */,
 				C4AB3E9D0A5AFE1100EE29B2 /* Release */,
-				C4AB3E9E0A5AFE1100EE29B2 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Debug;
 		};
 		C4AB3E9F0A5AFE1100EE29B2 /* Build configuration list for PBXProject "FormulatePro" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C4AB3EA00A5AFE1100EE29B2 /* Debug */,
 				C4AB3EA10A5AFE1100EE29B2 /* Release */,
-				C4AB3EA20A5AFE1100EE29B2 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

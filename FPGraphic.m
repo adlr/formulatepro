@@ -8,8 +8,32 @@
 
 #import "FPGraphic.h"
 #import "FPDocumentView.h"
+#import "FPArchiveExtras.h"
+
+#import "FPRectangle.h"
+#import "FPEllipse.h"
+#import "FPSquiggle.h"
+#import "FPCheckmark.h"
+#import "FPImage.h"
+#import "FPTextAreaB.h"
 
 @implementation FPGraphic
+
+#pragma mark Initialization and Archival functions
+
+static const int graphicArchiveVersion = 1;
+
+static NSString *graphicClassArchiveKey = @"Graphic Class";
+static NSString *boundsArchiveKey = @"bounds";
+static NSString *naturalBoundsArchiveKey = @"naturalBounds";
+static NSString *drawsFillArchiveKey = @"drawsFill";
+static NSString *drawsStrokeArchiveKey = @"drawsStroke";
+static NSString *lineWidthArchiveKey = @"lineWidth";
+static NSString *fillColorArchiveKey = @"fillColor";
+static NSString *strokeColorArchiveKey = @"strokeColor";
+static NSString *knobMaskArchiveKey = @"knobMask";
+static NSString *pageArchiveKey = @"page";
+static NSString *versionArchiveKey = @"version";
 
 + (FPGraphic *)graphicInDocumentView:(FPDocumentView *)docView
 {
@@ -25,11 +49,119 @@
         _page = 0;
         _docView = docView;
         _lineWidth = 1.0;
+        _fillColor = [[NSColor redColor] retain];
+        _strokeColor = [[NSColor blackColor] retain];
         _knobMask = 0xff; // all knobs
         _gFlags.drawsStroke = YES;
     }
     return self;
 }
+
++ (FPGraphic *)graphicFromArchivalDictionary:(NSDictionary *)dict
+                              inDocumentView:(FPDocumentView *)docView
+{
+    Class graphicClasses[] = {[FPRectangle class],
+                              [FPEllipse class],
+                              [FPSquiggle class],
+                              [FPCheckmark class],
+                              [FPImage class],
+                              [FPTextAreaB class]};
+    const unsigned graphicClassesLen =
+        sizeof(graphicClasses) / sizeof(graphicClasses[0]);
+
+    Class c;
+    NSString *cstr = [dict objectForKey:@"Graphic Class"];
+    BOOL foundClass = NO;
+    
+    for (unsigned int i = 0; i < graphicClassesLen; i++) {
+        if ([[graphicClasses[i] archivalClassName] isEqualToString:cstr]) {
+            c = graphicClasses[i];
+            foundClass = YES;
+            break;
+        }
+    }
+    if (!foundClass) {
+        assert(0);
+        return nil;
+    }
+
+    return [[[c alloc] initWithArchivalDictionary:dict
+                                   inDocumentView:docView] autorelease];
+}
+
+- (id)initWithArchivalDictionary:(NSDictionary *)dict
+                  inDocumentView:(FPDocumentView *)docView
+{
+    self = [super init];
+    if (self) {
+        // for now, we only accept the current version. in the future,
+        // we'll convert old versions to the current version.
+        // TODO(adlr): convert this to user feedback
+        assert([[dict objectForKey:versionArchiveKey] intValue] ==
+               graphicArchiveVersion);
+
+        _hasPage = YES;
+        _docView = docView;
+
+        _bounds = rectFromArray([dict objectForKey:boundsArchiveKey]);
+        _naturalBounds =
+            rectFromArray([dict objectForKey:naturalBoundsArchiveKey]);
+        _gFlags.drawsFill =
+            [[dict objectForKey:drawsFillArchiveKey] boolValue];
+        _gFlags.drawsStroke =
+            [[dict objectForKey:drawsStrokeArchiveKey] boolValue];
+        _lineWidth =
+            [[dict objectForKey:lineWidthArchiveKey] floatValue];
+        _fillColor =
+            [[NSUnarchiver
+              unarchiveObjectWithData:
+              [dict objectForKey:fillColorArchiveKey]] retain];
+        _strokeColor =
+            [[NSUnarchiver
+              unarchiveObjectWithData:
+              [dict objectForKey:strokeColorArchiveKey]] retain];
+        _knobMask =
+            [[dict objectForKey:knobMaskArchiveKey] intValue];
+        _page =
+            [[dict objectForKey:pageArchiveKey] unsignedIntValue];
+    }
+    return self;
+}
+
+- (NSDictionary *)archivalDictionary
+{
+    NSMutableDictionary *ret = [NSMutableDictionary dictionary];
+    [ret setObject:arrayFromRect(_bounds) forKey:boundsArchiveKey];
+    [ret setObject:arrayFromRect(_naturalBounds)
+            forKey:naturalBoundsArchiveKey];
+    [ret setObject:[NSNumber numberWithBool:_gFlags.drawsFill]
+            forKey:drawsFillArchiveKey];
+    [ret setObject:[NSNumber numberWithBool:_gFlags.drawsStroke]
+            forKey:drawsStrokeArchiveKey];
+    [ret setObject:[NSNumber numberWithFloat:_lineWidth]
+            forKey:lineWidthArchiveKey];
+    [ret setObject:[NSArchiver archivedDataWithRootObject:_fillColor]
+            forKey:fillColorArchiveKey];
+    [ret setObject:[NSArchiver archivedDataWithRootObject:_strokeColor]
+            forKey:strokeColorArchiveKey];
+    [ret setObject:[NSNumber numberWithInt:_knobMask]
+            forKey:knobMaskArchiveKey];
+    [ret setObject:[NSNumber numberWithUnsignedInt:_page]
+            forKey:pageArchiveKey];
+    [ret setObject:[[self class] archivalClassName]
+            forKey:graphicClassArchiveKey];
+    [ret setObject:[NSNumber numberWithInt:graphicArchiveVersion]
+            forKey:versionArchiveKey];
+    return ret;
+}
+
++ (NSString *)archivalClassName;
+{
+    return @"Graphic";
+}
+
+#pragma mark -
+#pragma mark generic functions for docView interaction
 
 - (BOOL)placeWithEvent:(NSEvent *)theEvent
 {
@@ -129,6 +261,17 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
     assert(shiftSlope != 0.0);
     
     for (;;) {
+        // print event info for now
+        NSLog(@"event info:\n");
+        NSLog(@"  pressure:           %f\n", [theEvent pressure]);
+        NSLog(@"  tangentialPressure: %f\n", [theEvent tangentialPressure]);
+        NSLog(@"  tilt: %@\n", NSStringFromPoint([theEvent tilt]));
+        NSLog(@"  loc: %@\n", NSStringFromPoint([theEvent locationInWindow]));
+        NSLog(@"  absolute X: %d\n", [theEvent absoluteX]);
+        NSLog(@"  absolute Y: %d\n", [theEvent absoluteY]);
+        NSLog(@"  absolute Z: %d\n", [theEvent absoluteZ]);
+    
+    
         NSRect newBounds = _bounds;
         flipX = NO;
         flipY = NO;

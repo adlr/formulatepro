@@ -46,6 +46,12 @@ enum {
 
 + (FPGraphic *)graphicInDocumentView:(FPDocumentView *)docView;
 - (id)initInDocumentView:(FPDocumentView *)docView;
++ (FPGraphic *)graphicFromArchivalDictionary:(NSDictionary *)dict
+                              inDocumentView:(FPDocumentView *)docView;
+- (id)initWithArchivalDictionary:(NSDictionary *)dict
+                  inDocumentView:(FPDocumentView *)docView;
++ (NSString *)archivalClassName;
+- (NSDictionary *)archivalDictionary;
 
 - (BOOL)placeWithEvent:(NSEvent *)theEvent;
 - (void)resizeWithEvent:(NSEvent *)theEvent byKnob:(int)knob;

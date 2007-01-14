@@ -4,9 +4,11 @@
 #import <PDFKit/PDFKit.h>
 
 @class FPGraphic;
+@class MyDocument;
 
 @interface FPDocumentView : NSView
 {
+    IBOutlet MyDocument *_doc;
     PDFDocument *_pdf_document;
     PDFDisplayBox _box;
     float _scale_factor;
@@ -46,6 +48,10 @@
 // printing
 - (FPDocumentView *)printableCopy;
 - (NSRect)rectForPage:(int)page; // indexed from 1, not 0
+
+// opening and saving
+- (NSArray *)archivalOverlayGraphics;
+- (void)setOverlayGraphicsFromArray:(NSArray *)arr;
 
 // private
 - (NSAffineTransform *)transformForPage:(unsigned int)page;

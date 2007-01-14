@@ -5,7 +5,13 @@
             LANGUAGE = ObjC; 
             SUPERCLASS = NSSegmentedControl; 
         }, 
-        {CLASS = FPDocumentView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {
+            ACTIONS = {placeImage = id; zoomIn = id; zoomOut = id; }; 
+            CLASS = FPDocumentView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_doc" = MyDocument; }; 
+            SUPERCLASS = NSView; 
+        }, 
         {
             CLASS = FPDocumentWindow; 
             LANGUAGE = ObjC; 

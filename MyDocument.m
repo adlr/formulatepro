@@ -8,13 +8,22 @@
 
 #import "MyDocument.h"
 
-static NSString* MyDocToolbarIdentifier = @"info.adlr.formulatepro.documenttoolbaridentifier";
-static NSString *MyDocToolbarIdentifierZoomIn = @"info.adlr.formulatepro.documenttoolbaridentifier.zoomin";
-static NSString *MyDocToolbarIdentifierZoomOut = @"info.adlr.formulatepro.documenttoolbaridentifier.zoomout";
-static NSString *MyDocToolbarIdentifierOneUpTwoUpBook = @"info.adlr.formulatepro.documenttoolbaridentifier.oneuptwoupBook";
-static NSString *MyDocToolbarIdentifierSingleContinuous = @"info.adlr.formulatepro.documenttoolbaridentifier.singlecontinuous";
-static NSString *MyDocToolbarIdentifierNextPage = @"info.adlr.formulatepro.documenttoolbaridentifier.nextpage";
-static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.documenttoolbaridentifier.previouspage";
+//static NSString *nativeDocumentFormat = @"FormulatePro Document";
+
+static NSString* MyDocToolbarIdentifier =
+    @"info.adlr.formulatepro.documenttoolbaridentifier";
+static NSString *MyDocToolbarIdentifierZoomIn =
+    @"info.adlr.formulatepro.documenttoolbaridentifier.zoomin";
+static NSString *MyDocToolbarIdentifierZoomOut =
+    @"info.adlr.formulatepro.documenttoolbaridentifier.zoomout";
+static NSString *MyDocToolbarIdentifierOneUpTwoUpBook =
+    @"info.adlr.formulatepro.documenttoolbaridentifier.oneuptwoupBook";
+static NSString *MyDocToolbarIdentifierSingleContinuous =
+    @"info.adlr.formulatepro.documenttoolbaridentifier.singlecontinuous";
+static NSString *MyDocToolbarIdentifierNextPage =
+    @"info.adlr.formulatepro.documenttoolbaridentifier.nextpage";
+static NSString *MyDocToolbarIdentifierPreviousPage =
+    @"info.adlr.formulatepro.documenttoolbaridentifier.previouspage";
 
 @interface MyDocument (Private)
 - (void)setupToolbar;
@@ -27,14 +36,17 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
     self = [super init];
     if (self) {
         // Add your subclass-specific initialization here.
-        // If an error occurs here, send a [self release] message and return nil.
+        // If an error occurs here, send a [self release] message and return
+        // nil.
         _pdf_document = nil;
+        _tempOverlayGraphics = nil;
     }
     return self;
 }
 
 - (void)dealloc
 {
+    [_originalPDFData release];
     [_one_up_vs_two_up_vs_book release];
     [_single_vs_continuous release];
     [_pdf_document release];
@@ -44,21 +56,44 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
 - (NSString *)windowNibName
 {
     // Override returning the nib file name of the document
-    // If you need to use a subclass of NSWindowController or if your document supports multiple NSWindowControllers, you should remove this method and override -makeWindowControllers instead.
+    // If you need to use a subclass of NSWindowController or if your document
+    // supports multiple NSWindowControllers, you should remove this method
+    // and override -makeWindowControllers instead.
     return @"MyDocument";
 }
 
 - (void)windowControllerDidLoadNib:(NSWindowController *) aController
 {
     [super windowControllerDidLoadNib:aController];
-    // Add any code here that needs to be executed once the windowController has loaded the document's window.
+    // Add any code here that needs to be executed once the windowController
+    // has loaded the document's window.
     
 	// Load PDF.
-	if ([self fileName])
-	{
-		_pdf_document = [[PDFDocument alloc] initWithURL: [NSURL fileURLWithPath: [self fileName]]];
+//	if ([self fileName])
+//	{
+//        // TODO(adlr): report nsdata error to the user
+//        _originalPDFData = [NSData dataWithContentsOfURL:[self fileURL]
+//                                                 options:0
+//                                                   error:nil];
+//        if (nil == _originalPDFData) {
+//            // report error.
+//            return;
+//        }
+//        [_originalPDFData retain];
+//		_pdf_document = [[PDFDocument alloc] initWithData:_originalPDFData];
+//        if (nil == _pdf_document) {
+//            // report error.
+//            return;
+//        }
+    if (_pdf_document) {
         [_document_view setPDFDocument:_pdf_document];
-	}
+        if (_tempOverlayGraphics) {
+            [_document_view setOverlayGraphicsFromArray:_tempOverlayGraphics];
+            [_tempOverlayGraphics release];
+        }
+	} else {
+        assert(0);
+    }
     
     // toolbar item views
     [_one_up_vs_two_up_vs_book retain];
@@ -101,17 +136,92 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
     [self setupToolbar];
 }
 
-- (NSData *)dataRepresentationOfType:(NSString *)aType
-{
-    // Insert code here to write your document from the given data.  You can also choose to override -fileWrapperRepresentationOfType: or -writeToFile:ofType: instead.
-    
-    // For applications targeted for Tiger or later systems, you should use the new Tiger API -dataOfType:error:.  In this case you can also choose to override -writeToURL:ofType:error:, -fileWrapperOfType:error:, or -writeToURL:ofType:forSaveOperation:originalContentsURL:error: instead.
+//+ (NSArray *)readableTypes
+//{
+//    return [NSArray arrayWithObjects:nativeDocumentFormat,
+//                                     @"PDF Document",
+//                                     nil];
+//}
+//
+//+ (NSArray *)writableTypes
+//{
+//    return [NSArray arrayWithObject:nativeDocumentFormat];
+//}
+//
+//+ (BOOL)isNativeType:(NSString *)aType
+//{
+//    return [aType isEqualToString:nativeDocumentFormat];
+//}
 
-    return nil;
+//- (NSData *)dataRepresentationOfType:(NSString *)aType
+//{
+    // Insert code here to write your document from the given data.  You can
+    // also choose to override -fileWrapperRepresentationOfType: or
+    // -writeToFile:ofType: instead.
+    
+    // For applications targeted for Tiger or later systems, you should use
+    // the new Tiger API -dataOfType:error:.  In this case you can also choose
+    // to override -writeToURL:ofType:error:, -fileWrapperOfType:error:, or
+    // -writeToURL:ofType:forSaveOperation:originalContentsURL:error: instead.
+
+//    return nil;
+//}
+
+- (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError
+{
+    NSLog(@"dataOfType:%@\n", typeName);
+    NSMutableDictionary *d = [NSMutableDictionary dictionary];
+    NSLog(@"line %d\n", __LINE__);
+    [d setObject:_originalPDFData forKey:@"originalPDFData"];
+    NSLog(@"line %d\n", __LINE__);
+    [d setObject:[_document_view archivalOverlayGraphics]
+          forKey:@"archivalOverlayGraphics"];
+    NSLog(@"line %d\n", __LINE__);
+    [d setObject:[NSNumber numberWithInt:1] forKey:@"version"];
+    NSLog(@"line %d\n", __LINE__);
+    
+
+    NSString *errorDesc;
+    NSData *ret =
+        [NSPropertyListSerialization
+         dataFromPropertyList:d
+                       format:NSPropertyListXMLFormat_v1_0
+             errorDescription:&errorDesc];
+    if (nil == ret) {
+        NSLog(@"error: %@\n", errorDesc);
+        [errorDesc release];
+        return [NSData data];
+    }
+    return ret;
 }
 
-- (BOOL)loadDataRepresentation:(NSData *)data ofType:(NSString *)aType
+- (BOOL)readFromData:(NSData *)data
+              ofType:(NSString *)typeName
+               error:(NSError **)outError
 {
+    NSLog(@"readFromData:0x%08x ofType:%@\n", (unsigned)data, typeName);
+    if ([typeName isEqualToString:@"PDF Document"]) {
+        _originalPDFData = [data retain];
+    } else if ([typeName isEqualToString:@"FormulatePro Document"]) {
+        NSMutableDictionary *dict =
+            [NSPropertyListSerialization
+             propertyListFromData:data
+                 mutabilityOption:NSPropertyListMutableContainersAndLeaves
+                           format:nil
+                 errorDescription:nil];
+        if (nil == dict) assert(0);
+        // TODO(adlr): check for error, version, convert these keys to
+        // constants
+        _originalPDFData = [[dict objectForKey:@"originalPDFData"] retain];
+        _tempOverlayGraphics = [[dict objectForKey:@"archivalOverlayGraphics"]
+                                retain];
+    }
+    _pdf_document = [[PDFDocument alloc] initWithData:_originalPDFData];
+    if (nil == _pdf_document) {
+        // report error
+        NSLog(@"error with PDF format!\n");
+        return NO;
+    }
     return YES;
 }
 
@@ -134,17 +244,24 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
 //        switch([_pdf_view displayMode]) {
 //            case kPDFDisplaySinglePage: // fall through
 //            case kPDFDisplaySinglePageContinuous:
-//                new_mode = (ss==1?kPDFDisplaySinglePageContinuous:kPDFDisplaySinglePage); break;
+//                new_mode =
+//                    (ss==1?kPDFDisplaySinglePageContinuous:
+//                           kPDFDisplaySinglePage); break;
 //            case kPDFDisplayTwoUp: // fall through
 //            case kPDFDisplayTwoUpContinuous:
-//                new_mode = (ss==1?kPDFDisplayTwoUpContinuous:kPDFDisplayTwoUp); break;
+//                new_mode = (ss==1?kPDFDisplayTwoUpContinuous:
+//                                  kPDFDisplayTwoUp); break;
 //        }
 //    } else {
 //        switch([_pdf_view displayMode]) {
-//            case kPDFDisplaySinglePage: new_mode = kPDFDisplaySinglePageContinuous; break;
-//            case kPDFDisplaySinglePageContinuous: new_mode = kPDFDisplaySinglePage; break;
-//            case kPDFDisplayTwoUp: new_mode = kPDFDisplayTwoUpContinuous; break;
-//            case kPDFDisplayTwoUpContinuous: new_mode = kPDFDisplayTwoUp; break;
+//            case kPDFDisplaySinglePage:
+//                new_mode = kPDFDisplaySinglePageContinuous; break;
+//            case kPDFDisplaySinglePageContinuous:
+//                new_mode = kPDFDisplaySinglePage; break;
+//            case kPDFDisplayTwoUp:
+//                new_mode = kPDFDisplayTwoUpContinuous; break;
+//            case kPDFDisplayTwoUpContinuous:
+//                new_mode = kPDFDisplayTwoUp; break;
 //        }
 //    }
 //    [_pdf_view setDisplayMode:new_mode];    
@@ -157,8 +274,9 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
 //    int sc_idx = 0;
 //    
 //    if (sender == _one_up_vs_two_up_vs_book) {
-//        int cont = [_pdf_view displayMode] == kPDFDisplaySinglePageContinuous ||
-//        [_pdf_view displayMode] == kPDFDisplayTwoUpContinuous;
+//        int cont =
+//            [_pdf_view displayMode] == kPDFDisplaySinglePageContinuous ||
+//            [_pdf_view displayMode] == kPDFDisplayTwoUpContinuous;
 //        if ([_one_up_vs_two_up_vs_book selectedSegment] == 0) {
 //            if (cont)
 //                new_up_mode = kPDFDisplaySinglePageContinuous;
@@ -170,7 +288,8 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
 //            else
 //                new_up_mode = kPDFDisplayTwoUp;
 //        }
-//        [_pdf_view setDisplaysAsBook:([_one_up_vs_two_up_vs_book selectedSegment] == 2)];
+//        [_pdf_view setDisplaysAsBook:
+//         ([_one_up_vs_two_up_vs_book selectedSegment] == 2)];
 //        [_pdf_view setDisplayMode:new_up_mode];
 //        return;
 //    }
@@ -231,9 +350,12 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
 
 - (void) setupToolbar {
     // Create a new toolbar instance, and attach it to our document window 
-    NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:MyDocToolbarIdentifier] autorelease];
+    NSToolbar *toolbar =
+        [[[NSToolbar alloc] initWithIdentifier:MyDocToolbarIdentifier]
+         autorelease];
     
-    // Set up toolbar properties: Allow customization, give a default display mode, and remember state in user defaults 
+    // Set up toolbar properties: Allow customization, give a default display
+    // mode, and remember state in user defaults 
     [toolbar setAllowsUserCustomization:YES];
     [toolbar setAutosavesConfiguration:YES];
     [toolbar setDisplayMode:NSToolbarDisplayModeIconAndLabel];
@@ -245,19 +367,28 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
     [_document_window setToolbar:toolbar];
 }
 
-- (NSToolbarItem *) toolbar: (NSToolbar *)toolbar itemForItemIdentifier: (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted {
-    // Required delegate method:  Given an item identifier, this method returns an item 
-    // The toolbar will use this method to obtain toolbar items that can be displayed in the customization sheet, or in the toolbar itself 
+- (NSToolbarItem *) toolbar:(NSToolbar *)toolbar
+      itemForItemIdentifier:(NSString *)itemIdent
+  willBeInsertedIntoToolbar:(BOOL)willBeInserted {
+    // Required delegate method:  Given an item identifier, this method
+    // returns an item. The toolbar will use this method to obtain toolbar
+    // items that can be displayed in the customization sheet, or in the
+    // toolbar itself 
     NSToolbarItem *toolbarItem = nil;
     
     if ([itemIdent isEqual: MyDocToolbarIdentifierZoomIn]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+        toolbarItem =
+            [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdent]
+             autorelease];
         
-        // Set the text label to be displayed in the toolbar and customization palette 
+        // Set the text label to be displayed in the toolbar and customization
+        // palette 
         [toolbarItem setLabel: @"Zoom In"];
         [toolbarItem setPaletteLabel: @"Zoom In"];
         
-        // Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
+        // Set up a reasonable tooltip, and image   Note, these aren't
+        // localized, but you will likely want to localize many of the item's
+        // properties 
         [toolbarItem setToolTip: @"Zoom In"];
         [toolbarItem setImage: [NSImage imageNamed: @"viewmag+"]];
         
@@ -265,13 +396,18 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
         [toolbarItem setTarget: self];
         [toolbarItem setAction: @selector(zoomIn:)];
     } else if ([itemIdent isEqual: MyDocToolbarIdentifierZoomOut]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+        toolbarItem =
+            [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent]
+             autorelease];
         
-        // Set the text label to be displayed in the toolbar and customization palette 
+        // Set the text label to be displayed in the toolbar and customization
+        // palette 
         [toolbarItem setLabel: @"Zoom Out"];
         [toolbarItem setPaletteLabel: @"Zoom Out"];
         
-        // Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
+        // Set up a reasonable tooltip, and image   Note, these aren't
+        // localized, but you will likely want to localize many of the item's
+        // properties 
         [toolbarItem setToolTip: @"Zoom Out"];
         [toolbarItem setImage: [NSImage imageNamed: @"viewmag-"]];
         
@@ -279,52 +415,74 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
         [toolbarItem setTarget: self];
         [toolbarItem setAction: @selector(zoomOut:)];
     } else if ([itemIdent isEqual: MyDocToolbarIdentifierOneUpTwoUpBook]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+        toolbarItem =
+            [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent]
+             autorelease];
         
-        // Set the text label to be displayed in the toolbar and customization palette 
+        // Set the text label to be displayed in the toolbar and customization
+        // palette 
         [toolbarItem setLabel: @"One Up, Two Up, Book Mode"];
         [toolbarItem setPaletteLabel: @"One Up, Two Up, Book Mode"];
         
-        // Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
+        // Set up a reasonable tooltip, and image   Note, these aren't
+        // localized, but you will likely want to localize many of the item's
+        // properties 
         [toolbarItem setToolTip: @"One Up, Two Up, Book Mode"];
-        //[toolbarItem setImage: [NSImage imageNamed: @"SaveDocumentItemImage"]];
+        //[toolbarItem setImage:
+        //    [NSImage imageNamed:@"SaveDocumentItemImage"]];
         [toolbarItem setView:_one_up_vs_two_up_vs_book];
-        [toolbarItem setMinSize:NSMakeSize(NSWidth([_one_up_vs_two_up_vs_book frame]),
-                                           NSHeight([_one_up_vs_two_up_vs_book frame]))];
-        [toolbarItem setMaxSize:NSMakeSize(NSWidth([_one_up_vs_two_up_vs_book frame]),
-                                           NSHeight([_one_up_vs_two_up_vs_book frame]))];
+        [toolbarItem setMinSize:
+            NSMakeSize(NSWidth([_one_up_vs_two_up_vs_book frame]),
+                       NSHeight([_one_up_vs_two_up_vs_book frame]))];
+        [toolbarItem setMaxSize:
+            NSMakeSize(NSWidth([_one_up_vs_two_up_vs_book frame]),
+                       NSHeight([_one_up_vs_two_up_vs_book frame]))];
         
         // Tell the item what message to send when it is clicked 
         [toolbarItem setTarget: self];
         [toolbarItem setAction: @selector(toggleOneUpTwoUpBookMode:)];
     } else if ([itemIdent isEqual: MyDocToolbarIdentifierSingleContinuous]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+        toolbarItem =
+            [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent]
+             autorelease];
         
-        // Set the text label to be displayed in the toolbar and customization palette 
+        // Set the text label to be displayed in the toolbar and customization
+        // palette 
         [toolbarItem setLabel: @"(Non) Continuous"];
         [toolbarItem setPaletteLabel: @"(Non) Continuous"];
         
-        // Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-        [toolbarItem setToolTip: @"Display the entire document or just current spread"];
-        //[toolbarItem setImage: [NSImage imageNamed: @"SaveDocumentItemImage"]];
+        // Set up a reasonable tooltip, and image   Note, these aren't
+        // localized, but you will likely want to localize many of the item's
+        // properties 
+        [toolbarItem setToolTip:
+            @"Display the entire document or just current spread"];
+        //[toolbarItem setImage:
+        //    [NSImage imageNamed: @"SaveDocumentItemImage"]];
         [toolbarItem setView:_single_vs_continuous];
-        [toolbarItem setMinSize:NSMakeSize(NSWidth([_single_vs_continuous frame]),
-                                           NSHeight([_single_vs_continuous frame]))];
-        [toolbarItem setMaxSize:NSMakeSize(NSWidth([_single_vs_continuous frame]),
-                                           NSHeight([_single_vs_continuous frame]))];
+        [toolbarItem setMinSize:
+            NSMakeSize(NSWidth([_single_vs_continuous frame]),
+                       NSHeight([_single_vs_continuous frame]))];
+        [toolbarItem setMaxSize:
+            NSMakeSize(NSWidth([_single_vs_continuous frame]),
+                       NSHeight([_single_vs_continuous frame]))];
         [toolbarItem setAutovalidates:YES];
         
         // Tell the item what message to send when it is clicked 
         [toolbarItem setTarget: self];
         [toolbarItem setAction: @selector(toggleContinuous:)];
     } else if ([itemIdent isEqual: MyDocToolbarIdentifierNextPage]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+        toolbarItem =
+            [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent]
+             autorelease];
         
-        // Set the text label to be displayed in the toolbar and customization palette 
+        // Set the text label to be displayed in the toolbar and customization
+        // palette 
         [toolbarItem setLabel: @"Next Page"];
         [toolbarItem setPaletteLabel: @"Next Page"];
         
-        // Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
+        // Set up a reasonable tooltip, and image   Note, these aren't
+        // localized, but you will likely want to localize many of the item's
+        // properties 
         [toolbarItem setToolTip: @"Next Page"];
         [toolbarItem setImage: [NSImage imageNamed: @"next"]];
         
@@ -332,13 +490,18 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
         [toolbarItem setTarget: self];
         [toolbarItem setAction: @selector(goToNextPage:)];
     } else if ([itemIdent isEqual: MyDocToolbarIdentifierPreviousPage]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+        toolbarItem =
+            [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent]
+             autorelease];
         
-        // Set the text label to be displayed in the toolbar and customization palette 
+        // Set the text label to be displayed in the toolbar and customization
+        // palette 
         [toolbarItem setLabel: @"Previous Page"];
         [toolbarItem setPaletteLabel: @"Previous Page"];
         
-        // Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
+        // Set up a reasonable tooltip, and image   Note, these aren't
+        // localized, but you will likely want to localize many of the item's
+        // properties
         [toolbarItem setToolTip: @"Previous Page"];
         [toolbarItem setImage: [NSImage imageNamed: @"previous"]];
         
@@ -346,17 +509,20 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
         [toolbarItem setTarget: self];
         [toolbarItem setAction: @selector(goToPreviousPage:)];
     } else {
-        // itemIdent refered to a toolbar item that is not provide or supported by us or cocoa 
-        // Returning nil will inform the toolbar this kind of item is not supported 
+        // itemIdent refered to a toolbar item that is not provide or
+        // supported by us or cocoa. Returning nil will inform the toolbar
+        // this kind of item is not supported 
         toolbarItem = nil;
     }
     return toolbarItem;
 }
 
 - (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar {
-    // Required delegate method:  Returns the ordered list of items to be shown in the toolbar by default    
-    // If during the toolbar's initialization, no overriding values are found in the user defaults, or if the
-    // user chooses to revert to the default items this set will be used 
+    // Required delegate method:  Returns the ordered list of items to be
+    // shown in the toolbar by default. If during the toolbar's
+    // initialization, no overriding values are found in the user defaults, or
+    // if the user chooses to revert to the default items this set will be
+    // used
     return [NSArray arrayWithObjects:
         MyDocToolbarIdentifierZoomIn,
         MyDocToolbarIdentifierZoomOut,
@@ -369,9 +535,11 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
 }
 
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar {
-    // Required delegate method:  Returns the list of all allowed items by identifier.  By default, the toolbar 
-    // does not assume any items are allowed, even the separator.  So, every allowed item must be explicitly listed   
-    // The set of allowed items is used to construct the customization palette 
+    // Required delegate method:  Returns the list of all allowed items by
+    // identifier.  By default, the toolbar does not assume any items are
+    // allowed, even the separator.  So, every allowed item must be explicitly
+    // listed. The set of allowed items is used to construct the customization
+    // palette 
     return [NSArray arrayWithObjects:
         MyDocToolbarIdentifierZoomIn,
         MyDocToolbarIdentifierZoomOut,
@@ -395,28 +563,49 @@ static NSString *MyDocToolbarIdentifierPreviousPage = @"info.adlr.formulatepro.d
 #pragma mark -
 #pragma mark Printing Methods
 
-// This method will only be invoked on Mac 10.4 and later. If you're writing an application that has to run on 10.3.x and earlier you should override -printShowingPrintPanel: instead.
-- (NSPrintOperation *)printOperationWithSettings:(NSDictionary *)printSettings error:(NSError **)outError {
+// This method will only be invoked on Mac 10.4 and later. If you're writing
+// an application that has to run on 10.3.x and earlier you should override
+// -printShowingPrintPanel: instead.
+- (NSPrintOperation *)printOperationWithSettings:(NSDictionary *)printSettings
+                                           error:(NSError **)outError {
     NSLog(@"print operations\n");
     // Create a view that will be used just for printing.
     //NSSize documentSize = [self documentSize];
-    //SKTRenderingView *renderingView = [[SKTRenderingView alloc] initWithFrame:NSMakeRect(0.0, 0.0, documentSize.width, documentSize.height) graphics:[self graphics]];
+    //SKTRenderingView *renderingView = [[SKTRenderingView alloc]
+    //    initWithFrame:NSMakeRect(0.0, 0.0, documentSize.width,
+    //                             documentSize.height)
+    //         graphics:[self graphics]];
     FPDocumentView *printView = [_document_view printableCopy];
     
     // Create a print operation.
-    NSPrintOperation *printOperation = [NSPrintOperation printOperationWithView:printView printInfo:[self printInfo]];
+    NSPrintOperation *printOperation =
+        [NSPrintOperation printOperationWithView:printView
+                                       printInfo:[self printInfo]];
     [printView release];
     
-    // Specify that the print operation can run in a separate thread. This will cause the print progress panel to appear as a sheet on the document window.
+    // Specify that the print operation can run in a separate thread. This
+    // will cause the print progress panel to appear as a sheet on the
+    // document window.
     [printOperation setCanSpawnSeparateThread:YES];
     
-    // Set any print settings that might have been specified in a Print Document Apple event. We do it this way because we shouldn't be mutating the result of [self printInfo] here, and using the result of [printOperation printInfo], a copy of the original print info, means we don't have to make yet another temporary copy of [self printInfo].
-    [[[printOperation printInfo] dictionary] addEntriesFromDictionary:printSettings];
-    //[[[printOperation printInfo] dictionary] setValue:[NSNumber numberWithInt:[_pdf_document pageCount]] forKey:@"NSPagesAcross"];
-    [[[printOperation printInfo] dictionary] setValue:[NSNumber numberWithInt:[_pdf_document pageCount]] forKey:@"NSLastPage"];
-    NSLog(@"print operation dict: %@\n", [[printOperation printInfo] dictionary]);
+    // Set any print settings that might have been specified in a Print
+    // Document Apple event. We do it this way because we shouldn't be
+    // mutating the result of [self printInfo] here, and using the result of
+    // [printOperation printInfo], a copy of the original print info, means we
+    // don't have to make yet another temporary copy of [self printInfo].
+    [[[printOperation printInfo] dictionary]
+        addEntriesFromDictionary:printSettings];
+    //[[[printOperation printInfo] dictionary]
+    //    setValue:[NSNumber numberWithInt:[_pdf_document pageCount]]
+    //      forKey:@"NSPagesAcross"];
+    [[[printOperation printInfo] dictionary]
+        setValue:[NSNumber numberWithInt:[_pdf_document pageCount]]
+          forKey:@"NSLastPage"];
     
-    // We don't have to autorelease the print operation because +[NSPrintOperation printOperationWithView:printInfo:] of course already autoreleased it. Nothing in this method can fail, so we never return nil, so we don't have to worry about setting *outError.
+    // We don't have to autorelease the print operation because
+    // +[NSPrintOperation printOperationWithView:printInfo:] of course already
+    // autoreleased it. Nothing in this method can fail, so we never return
+    // nil, so we don't have to worry about setting *outError.
     return printOperation;
     
 }
