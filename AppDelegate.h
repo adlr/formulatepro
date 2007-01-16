@@ -18,6 +18,8 @@
 }
 - (IBAction)showLicense:(id)sender;
 - (IBAction)provideFeedback:(id)sender;
+- (IBAction)viewBugList:(id)sender;
+- (IBAction)fileNewBug:(id)sender;
 - (NSWindow *)renderWindow;
 
 - (IBAction)placeImage:(id)sender;

@@ -60,8 +60,8 @@ static const float ZoomScaleFactor = 1.3;
 - (void)initMemberVariables
 {
     _pdf_document = nil;
-    _box = //kPDFDisplayBoxCropBox;
-    _box = kPDFDisplayBoxMediaBox;
+    _box = kPDFDisplayBoxCropBox;
+    //_box = kPDFDisplayBoxMediaBox;
     _scale_factor = 1.0;
     _draws_shadow = YES;
     _inQuickMove = NO;

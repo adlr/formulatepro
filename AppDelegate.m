@@ -37,6 +37,20 @@
         [NSURL URLWithString:@"mailto:formulate@adlr.info"]];
 }
 
+- (IBAction)viewBugList:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:
+        [NSURL
+         URLWithString:@"http://code.google.com/p/formulatepro/issues/list"]];
+}
+
+- (IBAction)fileNewBug:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:
+     [NSURL
+      URLWithString:@"http://code.google.com/p/formulatepro/issues/entry"]];
+}
+
 - (NSWindow *)renderWindow
 {
     return _renderWindow;

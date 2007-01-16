@@ -11,6 +11,8 @@
 
 @interface FPTextAreaB : FPGraphic {
     NSTextView *_editor;
+    
+    NSTextStorage *_textStorage;
     BOOL _isPlacing;
     BOOL _isEditing;
 	BOOL _isAutoSizedX;
@@ -21,4 +23,5 @@
 
 - (void)documentDidZoom;
 
+- (void)myFrameChanged:(NSTextView *)foo;
 @end

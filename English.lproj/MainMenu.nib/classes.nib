@@ -1,7 +1,13 @@
 {
     IBClasses = (
         {
-            ACTIONS = {placeImage = id; provideFeedback = id; showLicense = id; }; 
+            ACTIONS = {
+                fileNewBug = id; 
+                placeImage = id; 
+                provideFeedback = id; 
+                showLicense = id; 
+                viewBugList = id; 
+            }; 
             CLASS = AppDelegate; 
             LANGUAGE = ObjC; 
             OUTLETS = {

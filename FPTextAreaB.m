@@ -10,8 +10,6 @@
 #import "NSMutableDictionaryAdditions.h"
 #import "FPArchiveExtras.h"
 
-static NSTextView * newEditor(void);
-
 @implementation FPTextAreaB
 
 + (NSString *)archivalClassName;
@@ -24,18 +22,46 @@ static NSString *editorTextStorageKey = @"editorTextStorage";
 static NSString *autoSizedXArchiveKey = @"autoSizedX";
 static NSString *autoSizedYArchiveKey = @"autoSizedY";
 
+// caller owns returned object
+- (void)instantiateVariableWidthEditor
+{
+    NSTextView *ret =
+    [[NSTextView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 40.0, 40.0)];
+    [[ret textContainer] setLineFragmentPadding:1.0];
+    [ret setDrawsBackground:NO];
+    [ret setPostsFrameChangedNotifications:YES];
+    [ret setPostsBoundsChangedNotifications:YES];
+    [[NSNotificationCenter defaultCenter]
+         addObserver:self
+            selector:@selector(myFrameChanged:)
+                name:NSViewFrameDidChangeNotification
+              object:ret];
+    
+    [[ret textContainer] setWidthTracksTextView:NO];
+    [[ret textContainer] setContainerSize:NSMakeSize(1.0e6, 1.0e6)];
+    [ret setHorizontallyResizable:YES];
+    [ret setMinSize:NSMakeSize(1.0, 1.0)];
+    [ret setMaxSize:NSMakeSize(1.0e6, 1.0e6)];
+    
+    [[ret textContainer] setHeightTracksTextView:NO];
+    [ret setVerticallyResizable:YES];
+    
+    assert(ret);
+    _editor = [ret retain];
+}
+
 - (id)initWithArchivalDictionary:(NSDictionary *)dict
                   inDocumentView:(FPDocumentView *)docView
 {
     self = [super initWithArchivalDictionary:dict
                               inDocumentView:docView];
     if (self) {
-        _editor = newEditor();
-        [_editor setFrame:rectFromArray([dict objectForKey:editorFrameKey])];
         NSData *rtf_data = [[dict objectForKey:editorTextStorageKey]
                             dataUsingEncoding:NSUTF8StringEncoding];
-        [_editor replaceCharactersInRange:NSMakeRange(0, 0)
-                                  withRTF:rtf_data];
+        _textStorage = [[NSTextStorage alloc] initWithRTF:rtf_data
+                                       documentAttributes:nil];
+        if (nil == _textStorage)  // decoding error
+            _textStorage = [[NSTextStorage alloc] init];
         _isPlacing = NO;
         _isEditing = NO;
         _isAutoSizedX = [[dict objectForKey:autoSizedXArchiveKey] boolValue];
@@ -54,7 +80,8 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
     [ret setObject:arrayFromRect([_editor frame])
          forNonexistentKey:editorFrameKey];
     NSData *d =
-        [_editor RTFFromRange:NSMakeRange(0, [[_editor string] length])];
+        [_textStorage RTFFromRange:NSMakeRange(0, [_textStorage length])
+                documentAttributes:nil];
     NSString *rtfstr =
         [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
 
@@ -71,12 +98,14 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
     self = [super initInDocumentView:docView];
     if (self) {
         _editor = nil;
+        _textStorage = [[NSTextStorage alloc] init];
         _isPlacing = NO;
         _isEditing = NO;
         _isAutoSizedX = YES;
         _isAutoSizedY = YES;
         _editorScaleFactor = 1.0;
         _gFlags.drawsStroke = NO;
+        _knobMask = MiddleLeftKnob | MiddleRightKnob;
     }
     return self;
 }
@@ -94,7 +123,7 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
     
     _bounds.origin = point;
     point = [_docView pagePointForPointFromEvent:theEvent page:_page];
-    _bounds.size = NSMakeSize(0.0,0.0);
+    _bounds.size = NSMakeSize(10.0,10.0);
     _naturalBounds.origin = point;
     _naturalBounds.size = NSMakeSize(1.0, 1.0);
     
@@ -110,18 +139,58 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
     return YES;
 }
 
+//- (void)setToFixedWidth
+//{
+//    [_editor setHorizontallyResizable:NO];
+//    _isAutoSizedX = NO;
+//    [[_editor textContainer] setWidthTracksTextView:YES];
+//}
+
+static NSLayoutManager *sharedDrawingLayoutManager();
+
 - (void)setBounds:(NSRect)bounds
 {
-    if (_editor && (!_isPlacing) && (!_isEditing)) {
-        [_editor setFrame:bounds];
-        _isAutoSizedX = NO;
-        _isAutoSizedY = NO;
-        [[_editor textContainer] setWidthTracksTextView:YES];
-        [_editor setHorizontallyResizable:NO]; //x
-        [_editor setMaxSize:NSMakeSize(NSWidth([_editor frame]),
-                                       [_editor maxSize].height)];
+    if ((!_isPlacing) && (!_isEditing)) {
+        //NSRect pixelBounds = [_docView convertRect:bounds fromPage:_page];
+        NSLayoutManager *lm = sharedDrawingLayoutManager();
+        NSTextContainer *tc = [[lm textContainers] objectAtIndex:0];
+        NSRange glyphRange;
+        [tc setContainerSize:NSMakeSize(NSWidth(bounds), 1.0e6)];
+        [_textStorage addLayoutManager:lm];
+        // Force layout of the text and find out how much of it fits in
+        // the container.
+        glyphRange = [lm glyphRangeForTextContainer:tc];
+        NSRect glyphRect = [lm usedRectForTextContainer:tc];
+        [_textStorage removeLayoutManager:lm];
+        float heightChange = NSHeight(glyphRect) - NSHeight(bounds);
+        bounds.origin.y -= heightChange;
+        bounds.size.height = NSHeight(glyphRect);
+        NSLog(@"glyph: %@\n", NSStringFromRect(glyphRect));
     }
     [super setBounds:bounds];
+}
+
+- (void)resizeWithEvent:(NSEvent *)theEvent byKnob:(int)knob
+{
+    _isAutoSizedX = NO;
+    [super resizeWithEvent:theEvent byKnob:knob];
+}
+
+static NSLayoutManager *sharedDrawingLayoutManager() {
+    // This method returns an NSLayoutManager that can be used to draw the contents of a SKTTextArea.
+    static NSLayoutManager *sharedLM = nil;
+    if (!sharedLM) {
+        NSTextContainer *tc = [[NSTextContainer allocWithZone:NULL] initWithContainerSize:NSMakeSize(1.0e6, 1.0e6)];
+        
+        sharedLM = [[NSLayoutManager allocWithZone:NULL] init];
+        
+        [tc setWidthTracksTextView:NO];
+        [tc setHeightTracksTextView:NO];
+        [tc setLineFragmentPadding:1.0];
+        [sharedLM addTextContainer:tc];
+        [tc release];
+    }
+    return sharedLM;
 }
 
 - (void)draw
@@ -132,21 +201,20 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
         [[NSColor blackColor] set];
         [path stroke];
     }
-    if (_editor && (!_isEditing)) {
+    if (!_isEditing) {
         NSAffineTransform *transform = [NSAffineTransform transform];
         [transform scaleXBy:1.0 yBy:-1.0];
         [transform translateXBy:0.0
                             yBy:(-1.0*(NSMinY(_bounds) + NSMaxY(_bounds)))];
         [transform concat];
     
-        NSTextStorage *contents = [_editor textStorage];
-        if ([contents length] > 0) {
-            NSLayoutManager *lm = [_editor layoutManager];
-            NSTextContainer *tc = [_editor textContainer];
+        //NSTextStorage *contents = [_editor textStorage];
+        if ([_textStorage length] > 0) {
+            NSLayoutManager *lm = sharedDrawingLayoutManager();
+            NSTextContainer *tc = [[lm textContainers] objectAtIndex:0];
             NSRange glyphRange;
-
-            //[tc setContainerSize:bounds.size];
-            //[contents addLayoutManager:lm];
+            [tc setContainerSize:_bounds.size];
+            [_textStorage addLayoutManager:lm];
             // Force layout of the text and find out how much of it fits in
             // the container.
             glyphRange = [lm glyphRangeForTextContainer:tc];
@@ -157,7 +225,7 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
                 [lm drawGlyphsForGlyphRange:glyphRange
                                     atPoint:_bounds.origin];
             }
-            //[contents removeLayoutManager:lm];
+            [_textStorage removeLayoutManager:lm];
         }
         [transform invert];
         [transform concat];
@@ -167,6 +235,7 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
 - (void)documentDidZoom
 {
     NSLog(@"document did zoom\n");
+    if (nil == _editor) return;
     [_editor scaleUnitSquareToSize:NSMakeSize([_docView scaleFactor] /
                                               _editorScaleFactor,
                                               [_docView scaleFactor] /
@@ -191,15 +260,6 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
 //    [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds] fromPage:_page]];
 }
 
-static NSTextView * newEditor(void) {
-    NSTextView *ret =
-        [[NSTextView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 40.0, 40.0)];
-    [[ret textContainer] setLineFragmentPadding:1.0];
-    [ret setDrawsBackground:NO];
-    assert(ret);
-    return ret;
-}
-
 - (void)startEditing
 {
     //NSTextStorage *contents = [[NSTextStorage allocWithZone:[self zone]] init];
@@ -207,39 +267,29 @@ static NSTextView * newEditor(void) {
     _isEditing = YES;
     if (_editor == nil) {
         NSLog(@"allocating\n");
-        _editor = newEditor();
-        [_editor setPostsFrameChangedNotifications:YES];
-        [_editor setPostsBoundsChangedNotifications:YES];
-        [[NSNotificationCenter defaultCenter]
-         addObserver:self
-            selector:@selector(myFrameChanged:)
-                name:NSViewFrameDidChangeNotification
-              object:_editor];
-        
-        [[_editor textContainer] setWidthTracksTextView:NO];
-        [[_editor textContainer] setContainerSize:NSMakeSize(300.0, 300.0)];
-        [_editor setHorizontallyResizable:YES]; //x
-        [_editor setMinSize:NSMakeSize(1.0, 1.0)];
-        [_editor setMaxSize:NSMakeSize(1.0e6, 1.0e6)];
-        
-        [[_editor textContainer] setHeightTracksTextView:NO];
-        [_editor setVerticallyResizable:YES]; //x
+        [self instantiateVariableWidthEditor];
 	}
     [self documentDidZoom];
+    [_textStorage addLayoutManager:[_editor layoutManager]];
 	
-	//if (_isAutoSized) {
-		//[[_editor textContainer] setContainerSize:NSMakeSize(300.0, 300.0)];
-	//} else {
-	//	[[_editor textContainer] setContainerSize:_bounds.size];
-	//}
-    NSRect frame = _bounds;
-    [[_editor layoutManager]
-     glyphRangeForTextContainer:[_editor textContainer]];
-    frame.size = [[_editor layoutManager]
+    if (_isAutoSizedX) {
+        NSRect frame = _bounds;
+        [[_editor layoutManager]
+        glyphRangeForTextContainer:[_editor textContainer]];
+        frame.size = [[_editor layoutManager]
                   usedRectForTextContainer:[_editor textContainer]].size;
-    [self setBounds:frame];
-    [_editor setFrame:[_docView convertRect:frame fromPage:_page]];
-    //[contents addLayoutManager:[_editor layoutManager]];
+
+        [[_editor textContainer] setContainerSize:NSMakeSize(1.0e6,
+                                                             1.0e6)];
+        [[_editor textContainer] setWidthTracksTextView:NO];
+        [_editor setHorizontallyResizable:YES];
+    } else {
+        [[_editor textContainer] setContainerSize:NSMakeSize(NSWidth(_bounds),
+                                                             1.0e6)];
+        [[_editor textContainer] setWidthTracksTextView:NO];
+        [_editor setHorizontallyResizable:NO];
+    }
+    [_editor setFrame:[_docView convertRect:_bounds fromPage:_page]];
     [_docView addSubview:_editor];
     [_editor setDelegate:self];
     [[_docView window] makeFirstResponder:_editor];
@@ -281,6 +331,7 @@ static NSTextView * newEditor(void) {
 {
 	NSLog(@"stop editing\n");
     assert(_editor);
+    [_textStorage removeLayoutManager:[_editor layoutManager]];
     [_editor setSelectedRange:NSMakeRange(0, 0)];
     [_editor setDelegate:nil];
 	//[[_editor layoutManager] setDelegate:nil];
