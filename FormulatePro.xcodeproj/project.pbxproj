@@ -50,6 +50,8 @@
 		C4DC0DA60A82D35500DB476E /* next.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DA40A82D35500DB476E /* next.png */; };
 		C4DC0DA70A82D35500DB476E /* previous.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DA50A82D35500DB476E /* previous.png */; };
 		C4DC0DB70A82D99700DB476E /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DB60A82D99700DB476E /* LICENSE.txt */; };
+		C4EE455A0BC8BCC400F417D3 /* FPArchivalDictionaryUpgrader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C4EE45580BC8BCC400F417D3 /* FPArchivalDictionaryUpgrader.h */; };
+		C4EE455B0BC8BCC400F417D3 /* FPArchivalDictionaryUpgrader.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EE45590BC8BCC400F417D3 /* FPArchivalDictionaryUpgrader.m */; };
 		C4F40AD50B35D6F1008063B4 /* FPDocumentWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F40AD40B35D6F1008063B4 /* FPDocumentWindow.m */; };
 		C4F40BA90B35FBFD008063B4 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4F40BA80B35FBFD008063B4 /* Sparkle.framework */; };
 		C4F40BC60B35FC65008063B4 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C4F40BA80B35FBFD008063B4 /* Sparkle.framework */; };
@@ -68,6 +70,7 @@
 				C4B25AAA0B431F8800DADA0F /* FPImage.h in CopyFiles */,
 				C4B25D540B4AD7C900DADA0F /* FPArchiveExtras.h in CopyFiles */,
 				C4B25D970B4ADF8100DADA0F /* NSMutableDictionaryAdditions.h in CopyFiles */,
+				C4EE455A0BC8BCC400F417D3 /* FPArchivalDictionaryUpgrader.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,6 +137,8 @@
 		C4DC0E710A85925A00DB476E /* FPEllipse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPEllipse.m; sourceTree = "<group>"; };
 		C4DC0FEE0A85C4BA00DB476E /* FPSquiggle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPSquiggle.h; sourceTree = "<group>"; };
 		C4DC0FEF0A85C4BA00DB476E /* FPSquiggle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPSquiggle.m; sourceTree = "<group>"; };
+		C4EE45580BC8BCC400F417D3 /* FPArchivalDictionaryUpgrader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPArchivalDictionaryUpgrader.h; sourceTree = "<group>"; };
+		C4EE45590BC8BCC400F417D3 /* FPArchivalDictionaryUpgrader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPArchivalDictionaryUpgrader.m; sourceTree = "<group>"; };
 		C4F40AD30B35D6F1008063B4 /* FPDocumentWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPDocumentWindow.h; sourceTree = "<group>"; };
 		C4F40AD40B35D6F1008063B4 /* FPDocumentWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPDocumentWindow.m; sourceTree = "<group>"; };
 		C4F40BA80B35FBFD008063B4 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = third_party/Sparkle.framework; sourceTree = "<group>"; };
@@ -271,6 +276,8 @@
 			isa = PBXGroup;
 			children = (
 				C4B25D530B4AD7C900DADA0F /* FPArchiveExtras.h */,
+				C4EE45580BC8BCC400F417D3 /* FPArchivalDictionaryUpgrader.h */,
+				C4EE45590BC8BCC400F417D3 /* FPArchivalDictionaryUpgrader.m */,
 				C4AB40E30A5BDC7D00EE29B2 /* FPGraphic.h */,
 				C4AB40E40A5BDC7D00EE29B2 /* FPGraphic.m */,
 				C4DC0E630A85907800DB476E /* FPRectangle.h */,
@@ -380,6 +387,7 @@
 				C45E46B60B3CF55B00D41543 /* FPCheckmark.m in Sources */,
 				C4B25AAB0B431F8800DADA0F /* FPImage.m in Sources */,
 				C4B25D980B4ADF8100DADA0F /* NSMutableDictionaryAdditions.m in Sources */,
+				C4EE455B0BC8BCC400F417D3 /* FPArchivalDictionaryUpgrader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

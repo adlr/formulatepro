@@ -7,6 +7,7 @@
 //
 
 #import "MyDocument.h"
+#import "FPArchivalDictionaryUpgrader.h"
 
 //static NSString *nativeDocumentFormat = @"FormulatePro Document";
 
@@ -88,6 +89,10 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
     if (_pdf_document) {
         [_document_view setPDFDocument:_pdf_document];
         if (_tempOverlayGraphics) {
+            if ([FPArchivalDictionaryUpgrader currentVersion] > _tempOverlayGraphicsVersion) {
+                [FPArchivalDictionaryUpgrader upgradeGraphicsInPlace:_tempOverlayGraphics
+                                                         fromVersion:_tempOverlayGraphicsVersion];
+            }
             [_document_view setOverlayGraphicsFromArray:_tempOverlayGraphics];
             [_tempOverlayGraphics release];
         }
@@ -177,7 +182,8 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
     [d setObject:[_document_view archivalOverlayGraphics]
           forKey:@"archivalOverlayGraphics"];
     NSLog(@"line %d\n", __LINE__);
-    [d setObject:[NSNumber numberWithInt:1] forKey:@"version"];
+    [d setObject:[NSNumber numberWithInt:[FPArchivalDictionaryUpgrader currentVersion]]
+          forKey:@"version"];
     NSLog(@"line %d\n", __LINE__);
     
 
@@ -215,6 +221,17 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
         _originalPDFData = [[dict objectForKey:@"originalPDFData"] retain];
         _tempOverlayGraphics = [[dict objectForKey:@"archivalOverlayGraphics"]
                                 retain];
+        _tempOverlayGraphicsVersion = [[dict objectForKey:@"version"] intValue];
+        if ([FPArchivalDictionaryUpgrader currentVersion] < _tempOverlayGraphicsVersion) {
+            *outError = [NSError errorWithDomain:@"info.adlr.FormulatePro.ErrorDomain"
+                                            code:1
+                                        userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+                                            @"Bad Version.",NSLocalizedDescriptionKey,
+                                            @"The file was created with a newer version of "
+                                            @"FormulatePro.",NSLocalizedFailureReasonErrorKey,
+                                            nil]];
+            return NO;
+        }
     }
     _pdf_document = [[PDFDocument alloc] initWithData:_originalPDFData];
     if (nil == _pdf_document) {

@@ -53,6 +53,7 @@ static NSString *versionArchiveKey = @"version";
         _strokeColor = [[NSColor blackColor] retain];
         _knobMask = 0xff; // all knobs
         _gFlags.drawsStroke = YES;
+        _gFlags.drawsFill = NO;
     }
     return self;
 }

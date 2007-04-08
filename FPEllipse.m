@@ -20,10 +20,14 @@
 {
     NSBezierPath *path = [NSBezierPath bezierPathWithOvalInRect:[self bounds]];
     [path setLineWidth:[self lineWidth]];
-    [[NSColor redColor] set];
-    [path fill];
-    [[NSColor blackColor] set];
-    [path stroke];
+    if (_gFlags.drawsFill) {
+        [_fillColor set];
+        [path fill];
+    }
+    if (_gFlags.drawsStroke) {
+        [_strokeColor set];
+        [path stroke];
+    }
 }
 
 @end

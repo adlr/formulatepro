@@ -23,6 +23,7 @@
     
     NSData *_originalPDFData;
     NSMutableArray *_tempOverlayGraphics;
+    int _tempOverlayGraphicsVersion;
     
     PDFDocument *_pdf_document;
     
