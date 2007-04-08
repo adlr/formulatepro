@@ -184,12 +184,14 @@ static const float ZoomScaleFactor = 1.3;
             FPGraphic *g;
             g = [_overlayGraphics objectAtIndex:j];
             if ([g page] == i)
-                [g draw];
+                [g draw:[_selectedGraphics containsObject:g]];
         }
         for (unsigned int j = 0; j < [_overlayGraphics count]; j++) {
             FPGraphic *g;
             g = [_overlayGraphics objectAtIndex:j];
-            if ([g page] == i && [_selectedGraphics containsObject:g])
+            if ((_editingGraphic != g) &&
+                ([g page] == i) &&
+                [_selectedGraphics containsObject:g])
                 [g drawKnobs];
         }
 
@@ -386,8 +388,7 @@ static const float ZoomScaleFactor = 1.3;
     BOOL justStoppedEditing = NO;
     if (_editingGraphic) {
         [_editingGraphic stopEditing];
-        assert([_selectedGraphics count] == 0);
-        [_selectedGraphics addObject:_editingGraphic];
+        assert([_selectedGraphics count] == 1);
         _editingGraphic = nil;
         justStoppedEditing = YES;
     }
@@ -462,7 +463,8 @@ static const float ZoomScaleFactor = 1.3;
                             assert(nil == _editingGraphic);
                             _editingGraphic = graphic;
                             [_selectedGraphics removeAllObjects];
-                            [graphic startEditing];
+                            [_selectedGraphics addObject:_editingGraphic];
+                            [_editingGraphic startEditing];
                             [self setNeedsDisplay:YES];
                             return;
                         }
@@ -504,7 +506,9 @@ static const float ZoomScaleFactor = 1.3;
             [_selectedGraphics removeAllObjects];
             assert(nil == _editingGraphic);
             _editingGraphic = graphic;
-            [graphic startEditing];
+            [_selectedGraphics removeAllObjects];
+            [_selectedGraphics addObject:_editingGraphic];
+            [_editingGraphic startEditing];
             [self setNeedsDisplay:YES];
         }
     }
