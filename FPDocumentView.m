@@ -53,6 +53,7 @@ static const float ZoomScaleFactor = 1.3;
         _editingGraphic = nil;
     }
     ret->_editingGraphic = nil;
+    ret->_doc = _doc;
     [ret setPDFDocument:_pdf_document];
     return ret;
 }
@@ -612,8 +613,6 @@ static const float ZoomScaleFactor = 1.3;
 // for now, we'll scale the document as a whole such that each page will fit
 // in the printer sized page, and we'll scale up as much as possible
 
-#define MINF(a, b) (((a) < (b)) ? (a) : (b))
-
 - (void)beginDocument
 {
     // first calculate the max page size in the PDF w/o using the scaling
@@ -628,11 +627,11 @@ static const float ZoomScaleFactor = 1.3;
             maxPageSize.height = sz.height;
     }
     // now, how big is the printed page?
-    NSSize printSize = [[NSPrintInfo sharedPrintInfo] paperSize];
+    NSSize printSize = [[_doc printInfo] paperSize];
     // printed page is how many times as big as the pdf?
     float heightRatio =  printSize.height / maxPageSize.height;
     float widthRatio =  printSize.width / maxPageSize.width;
-    float maxRatio = MINF(heightRatio, widthRatio);
+    float maxRatio = MIN(heightRatio, widthRatio);
     _scale_factor = maxRatio;
     [self setFrame:[self frame]];
     [super beginDocument];

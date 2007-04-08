@@ -607,7 +607,6 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
     // autoreleased it. Nothing in this method can fail, so we never return
     // nil, so we don't have to worry about setting *outError.
     return printOperation;
-    
 }
 
 - (void)setPrintInfo:(NSPrintInfo *)printInfo
