@@ -16,7 +16,7 @@
     return @"Ellipse";
 }
 
-- (void)draw
+- (void)draw:(BOOL)selected
 {
     NSBezierPath *path = [NSBezierPath bezierPathWithOvalInRect:[self bounds]];
     [path setLineWidth:[self lineWidth]];

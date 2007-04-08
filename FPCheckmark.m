@@ -25,7 +25,7 @@
     return self;
 }
 
-- (void)draw
+- (void)draw:(BOOL)selected
 {
     NSBezierPath *path = [NSBezierPath bezierPath];
     [path setLineWidth:[self lineWidth]];

@@ -193,12 +193,17 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
     return sharedLM;
 }
 
-- (void)draw
+- (void)draw:(BOOL)selected
 {
     if (_gFlags.drawsStroke) {
         NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self bounds]];
         [path setLineWidth:[self lineWidth]];
         [[NSColor blackColor] set];
+        [path stroke];
+    } else if (selected) {
+        NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self bounds]];
+        [path setLineWidth:[self lineWidth]];
+        [[NSColor lightGrayColor] set];
         [path stroke];
     }
     if (!_isEditing) {

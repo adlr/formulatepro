@@ -119,7 +119,7 @@
 #define DRAW_WITH_BITMAP 1
 #define DRAW_METHOD DRAW_WITH_PDF
 
-- (void)draw
+- (void)draw:(BOOL)selected
 {
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:NSInsetRect(_bounds, 0.0, 0.0)];
     [[NSColor blueColor] set];

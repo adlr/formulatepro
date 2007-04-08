@@ -62,7 +62,7 @@ enum {
 
 - (unsigned int)page;
 
-- (void)draw;
+- (void)draw:(BOOL)selected;
 - (void)drawKnobs;
 - (int)knobForEvent:(NSEvent *)theEvent;
 - (NSRect)pageRectForKnob:(int)knob isBoundRect:(BOOL)isBound;

@@ -20,7 +20,7 @@
     return [super archivalDictionary];
 }
 
-- (void)draw
+- (void)draw:(BOOL)selected
 {
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self bounds]];
     [path setLineWidth:[self lineWidth]];

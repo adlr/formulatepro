@@ -63,7 +63,7 @@ static NSString *imageArchiveKey = @"image";
     [super dealloc];
 }
 
-- (void)draw
+- (void)draw:(BOOL)selected
 {
     [_image drawInRect:[self bounds]
               fromRect:NSZeroRect

@@ -70,7 +70,7 @@ static NSString *pathArchiveKey = @"path";
     return self;
 }
 
-- (void)draw
+- (void)draw:(BOOL)selected
 {
     NSBezierPath *tempPath = [[_path copy] autorelease];
     NSAffineTransform *scaleTransform = [NSAffineTransform transform];

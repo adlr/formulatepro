@@ -387,7 +387,7 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
     _page = page;
 }
 
-- (void)draw
+- (void)draw:(BOOL)selected
 {
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:_bounds];
     [path setLineWidth:_lineWidth];
