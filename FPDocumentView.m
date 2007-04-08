@@ -400,6 +400,10 @@ static const float ZoomScaleFactor = 1.3;
     unsigned int tool =
         [[FPToolPaletteController sharedToolPaletteController] currentTool];
 
+    unsigned int page = [self pageForPointFromEvent:theEvent];
+    NSPoint pagePoint =
+        [self pagePointForPointFromEvent:theEvent page:page];
+        
     if (_inQuickMove) {
         assert(1 == [_selectedGraphics count]);
         // see if we hit a selected graphic's knob
@@ -447,10 +451,6 @@ static const float ZoomScaleFactor = 1.3;
         // if not holding shift:
         //   if shape is selected, do nothing
         //   else make shape the only selected shape
-        unsigned int page = [self pageForPointFromEvent:theEvent];
-        NSPoint pagePoint =
-            [self pagePointForPointFromEvent:theEvent page:page];
-        
         int i;
         for (i = [_overlayGraphics count] - 1; i >= 0; i--) {
             FPGraphic *graphic = [_overlayGraphics objectAtIndex:i];
@@ -495,25 +495,45 @@ static const float ZoomScaleFactor = 1.3;
         return;
     }
     
-    // we aren't the arrow tool. so just make a new graphic and get it up
-    // and running
-    FPGraphic *graphic =
-        [[[FPToolPaletteController sharedToolPaletteController] 
-            classForCurrentTool] graphicInDocumentView:self];
-    assert(graphic);
-    [_overlayGraphics addObject:graphic];
-    BOOL keep = [graphic placeWithEvent:theEvent];
-    if (keep == NO) {
-        [_overlayGraphics removeLastObject];
-    } else {
-        if ([graphic isEditable]) {
-            [_selectedGraphics removeAllObjects];
-            assert(nil == _editingGraphic);
-            _editingGraphic = graphic;
+    // we aren't the arrow tool. if we hit a graphic that's editable, and the
+    // tool is that class, edit that graphic. otherwise make a new graphic
+    // and get it up and running.
+    Class toolClass = [[FPToolPaletteController sharedToolPaletteController] 
+        classForCurrentTool];
+    int i;
+    for (i = [_overlayGraphics count] - 1; i >= 0; i--) {
+        FPGraphic *gr = [_overlayGraphics objectAtIndex:i];
+        if ([gr isEditable] && ([gr class] == toolClass) &&
+            NSPointInRect(pagePoint, [gr safeBounds])) {
+            if (_editingGraphic)
+                [_editingGraphic stopEditing];
+            _editingGraphic = gr;
             [_selectedGraphics removeAllObjects];
             [_selectedGraphics addObject:_editingGraphic];
             [_editingGraphic startEditing];
             [self setNeedsDisplay:YES];
+            break;
+        }
+    }
+    if (i < 0) {  // didn't start editing a graphic
+        FPGraphic *graphic =
+            [[[FPToolPaletteController sharedToolPaletteController] 
+                classForCurrentTool] graphicInDocumentView:self];
+        assert(graphic);
+        [_overlayGraphics addObject:graphic];
+        BOOL keep = [graphic placeWithEvent:theEvent];
+        if (keep == NO) {
+            [_overlayGraphics removeLastObject];
+        } else {
+            if ([graphic isEditable]) {
+                [_selectedGraphics removeAllObjects];
+                assert(nil == _editingGraphic);
+                _editingGraphic = graphic;
+                [_selectedGraphics removeAllObjects];
+                [_selectedGraphics addObject:_editingGraphic];
+                [_editingGraphic startEditing];
+                [self setNeedsDisplay:YES];
+            }
         }
     }
 }
@@ -526,10 +546,8 @@ static const float ZoomScaleFactor = 1.3;
 - (void)beginQuickMove:(id)unused
 {
     NSLog(@"beginQuickMove\n");
-    [_selectedGraphics removeAllObjects];
     if (_editingGraphic) {
         [_editingGraphic stopEditing];
-        [_selectedGraphics addObject:_editingGraphic];
         _editingGraphic = nil;
     }
     [self setNeedsDisplay:YES];
@@ -551,7 +569,6 @@ static const float ZoomScaleFactor = 1.3;
     _inQuickMove = NO;
 
     _editingGraphic = [_selectedGraphics anyObject];
-    [_selectedGraphics removeAllObjects];
     [self setNeedsDisplay:YES];
     [_editingGraphic startEditing];
 }
