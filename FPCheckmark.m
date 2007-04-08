@@ -43,18 +43,29 @@
 
 - (BOOL)placeWithEvent:(NSEvent *)theEvent
 {
-    NSPoint point;
-    
-    _page = [_docView pageForPointFromEvent:theEvent];
-    point = [_docView pagePointForPointFromEvent:theEvent page:_page];
-    
     _bounds.size = NSMakeSize(10.0, 10.0);
-    _bounds.origin = NSMakePoint(point.x - NSWidth(_bounds) / 2,
-                                 point.y - NSHeight(_bounds) / 2);
     _naturalBounds = _bounds;
-    [_docView setNeedsDisplayInRect:
-        [_docView convertRect:[self safeBounds] fromPage:_page]];
     
+    for (;;) {
+        _page = [_docView pageForPointFromEvent:theEvent];
+        NSPoint point = [_docView pagePointForPointFromEvent:theEvent page:_page];
+
+        // invalidate old bounds
+        [_docView setNeedsDisplayInRect:
+            [_docView convertRect:[self safeBounds] fromPage:_page]];
+        _bounds.origin = NSMakePoint(point.x - NSWidth(_bounds) / 2,
+                                     point.y - NSHeight(_bounds) / 2);
+        // invalidate new bounds
+        [_docView setNeedsDisplayInRect:
+            [_docView convertRect:[self safeBounds] fromPage:_page]];
+
+        // get ready for next iteration of the loop, or break out of loop
+        theEvent = [[_docView window] nextEventMatchingMask:
+            (NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
+        if ([theEvent type] == NSLeftMouseUp)
+            break;
+    }
+
     return YES;
 }
 
