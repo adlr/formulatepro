@@ -13,6 +13,8 @@ enum {
     FPToolStamp
 };
 
+extern NSString *FPToolChosen;
+
 @interface FPToolPaletteController : NSWindowController
 {
     IBOutlet NSButton *arrowToolButton;

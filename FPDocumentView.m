@@ -103,6 +103,10 @@ static const float ZoomScaleFactor = 1.3;
     [[NSNotificationCenter defaultCenter]
         addObserver:self selector:@selector(endQuickMove:)
         name:FPEndQuickMove object:nil];
+    [[NSNotificationCenter defaultCenter]
+        addObserver:self selector:@selector(toolChosen:)
+               name:FPToolChosen object:nil];
+    
 }
 
 - (void)setPDFDocument:(PDFDocument *)pdf_document
@@ -550,6 +554,15 @@ static const float ZoomScaleFactor = 1.3;
     [_selectedGraphics removeAllObjects];
     [self setNeedsDisplay:YES];
     [_editingGraphic startEditing];
+}
+
+- (void)toolChosen:(id)unused
+{
+    if (_editingGraphic) {
+        [_editingGraphic stopEditing];
+        _editingGraphic = nil;
+        [self setNeedsDisplay:YES];
+    }
 }
 
 - (void)placeImage:(id)sender

@@ -7,6 +7,8 @@
 #import "FPTextAreaB.h"
 #import "FPCheckmark.h"
 
+NSString *FPToolChosen = @"FPToolChosen";
+
 @implementation FPToolPaletteController
 
 static FPToolPaletteController *_sharedController;
@@ -66,6 +68,9 @@ static FPToolPaletteController *_sharedController;
     [_buttonArray makeObjectsPerformSelector:@selector(setState:)
                                   withObject:(id)NSOffState];
     [sender setState:NSOnState];
+    [[NSNotificationCenter defaultCenter] postNotification:
+        [NSNotification notificationWithName:FPToolChosen
+                                      object:self]];
 }
 
 - (unsigned int)currentTool
