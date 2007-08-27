@@ -118,20 +118,54 @@ static const float ZoomScaleFactor = 1.3;
     [self setNeedsDisplay:YES];
 }
 
+- (void)getViewingMidpointToPage:(int*)page pagePoint:(NSPoint*)pagePoint
+{
+    NSPoint midpoint = NSMakePoint(NSMidX([_scrollView documentVisibleRect]),
+                                   NSMidY([_scrollView documentVisibleRect]));
+    *page = [self pageForPoint:midpoint];
+    *pagePoint = [self convertPoint:midpoint toPage:*page];
+}
+
+- (void)scrollToMidpointOnPage:(int)page point:(NSPoint)midPoint
+{
+    float viewWidth = NSWidth([[_scrollView contentView] documentVisibleRect]);
+    float viewHeight = NSHeight([[_scrollView contentView] documentVisibleRect]);
+    NSPoint viewPoint = [self convertPoint:midPoint fromPage:page];
+    NSPoint viewOrigin = NSMakePoint(viewPoint.x - viewWidth/2.0,
+                                     viewPoint.y - viewHeight/2.0);
+    [[_scrollView contentView] scrollToPoint:viewOrigin];
+    [_scrollView reflectScrolledClipView:[_scrollView contentView]];
+}
+
 - (void)zoomIn:(id)sender
 {
+    NSPoint pagePoint;
+    int page;
+    [self getViewingMidpointToPage:&page pagePoint:&pagePoint];
+
     _scale_factor *= ZoomScaleFactor;
     [self setFrame:[self frame]];
     [self setNeedsDisplay:YES];
+
+    [self scrollToMidpointOnPage:page point:pagePoint];
+    
+    // tell an editing graphic (which may have a view), that doc zoomed
     if (_editingGraphic)
         [_editingGraphic documentDidZoom];
 }
 
 - (void)zoomOut:(id)sender
 {
+    NSPoint pagePoint;
+    int page;
+    [self getViewingMidpointToPage:&page pagePoint:&pagePoint];
+    
     _scale_factor /= ZoomScaleFactor;
     [self setFrame:[self frame]];
     [self setNeedsDisplay:YES];
+    
+    [self scrollToMidpointOnPage:page point:pagePoint];
+
     if (_editingGraphic)
         [_editingGraphic documentDidZoom];
 }
@@ -215,12 +249,18 @@ static const float ZoomScaleFactor = 1.3;
     NSPoint loc_in_view =
         [[[self window] contentView] convertPoint:loc_in_window toView:self];
 
-    if (nil == _pdf_document) return 0;
+    return [self pageForPoint:loc_in_view];
+}
+
+- (unsigned int)pageForPoint:(NSPoint)point
+{
+    if (nil == _pdf_document)
+        return 0;
     float bottom_border = PageBorderSize / 2.0;
     for (unsigned int i = 0; i < [_pdf_document pageCount]; i++) {
         NSSize sz = [self sizeForPage:i];
         bottom_border += sz.height + PageBorderSize;
-        if (loc_in_view.y < bottom_border) return i;
+        if (point.y < bottom_border) return i;
     }
     return [_pdf_document pageCount] - 1;
 }

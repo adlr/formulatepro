@@ -18,6 +18,9 @@
     NSMutableArray *_overlayGraphics;
     NSMutableSet *_selectedGraphics;
     FPGraphic *_editingGraphic;
+    
+    // For zooming
+    IBOutlet NSScrollView *_scrollView;
 }
 
 - (void)setPDFDocument:(PDFDocument *)pdf_document;
@@ -38,6 +41,7 @@
 
 // coordinate transforms
 - (unsigned int)pageForPointFromEvent:(NSEvent *)theEvent;
+- (unsigned int)pageForPoint:(NSPoint)point;
 - (NSPoint)pagePointForPointFromEvent:(NSEvent *)theEvent
                                  page:(unsigned int)page;
 - (NSRect)convertRect:(NSRect)rect toPage:(unsigned int)page;

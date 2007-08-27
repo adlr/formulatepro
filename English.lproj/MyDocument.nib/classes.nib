@@ -9,7 +9,7 @@
             ACTIONS = {placeImage = id; zoomIn = id; zoomOut = id; }; 
             CLASS = FPDocumentView; 
             LANGUAGE = ObjC; 
-            OUTLETS = {"_doc" = MyDocument; }; 
+            OUTLETS = {"_doc" = MyDocument; "_scrollView" = NSScrollView; }; 
             SUPERCLASS = NSView; 
         }, 
         {
