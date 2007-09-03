@@ -4,6 +4,7 @@
 #import "FPToolPaletteController.h"
 #import "FPGraphic.h"
 #import "FPImage.h"
+#import "FPLogging.h"
 
 @implementation FPDocumentView
 
@@ -131,8 +132,8 @@ static const float ZoomScaleFactor = 1.3;
     float viewWidth = NSWidth([[_scrollView contentView] documentVisibleRect]);
     float viewHeight = NSHeight([[_scrollView contentView] documentVisibleRect]);
     NSPoint viewPoint = [self convertPoint:midPoint fromPage:page];
-    NSPoint viewOrigin = NSMakePoint(viewPoint.x - viewWidth/2.0,
-                                     viewPoint.y - viewHeight/2.0);
+    NSPoint viewOrigin = NSMakePoint(floorf(viewPoint.x - viewWidth/2.0),
+                                     floorf(viewPoint.y - viewHeight/2.0));
     [[_scrollView contentView] scrollToPoint:viewOrigin];
     [_scrollView reflectScrolledClipView:[_scrollView contentView]];
 }
@@ -141,6 +142,7 @@ static const float ZoomScaleFactor = 1.3;
 {
     NSPoint pagePoint;
     int page;
+    DLog(@"old frame: %@\n", NSStringFromRect([self frame]));
     [self getViewingMidpointToPage:&page pagePoint:&pagePoint];
 
     _scale_factor *= ZoomScaleFactor;
@@ -150,6 +152,7 @@ static const float ZoomScaleFactor = 1.3;
     [self scrollToMidpointOnPage:page point:pagePoint];
     
     // tell an editing graphic (which may have a view), that doc zoomed
+    DLog(@"new frame: %@\n", NSStringFromRect([self frame]));
     if (_editingGraphic)
         [_editingGraphic documentDidZoom];
 }
@@ -158,6 +161,7 @@ static const float ZoomScaleFactor = 1.3;
 {
     NSPoint pagePoint;
     int page;
+    DLog(@"old frame: %@\n", NSStringFromRect([self frame]));
     [self getViewingMidpointToPage:&page pagePoint:&pagePoint];
     
     _scale_factor /= ZoomScaleFactor;
@@ -166,6 +170,8 @@ static const float ZoomScaleFactor = 1.3;
     
     [self scrollToMidpointOnPage:page point:pagePoint];
 
+    // tell an editing graphic (which may have a view), that doc zoomed
+    DLog(@"new frame: %@\n", NSStringFromRect([self frame]));
     if (_editingGraphic)
         [_editingGraphic documentDidZoom];
 }
@@ -184,7 +190,7 @@ static const float ZoomScaleFactor = 1.3;
 - (void)drawRect:(NSRect)rect
 {
     NSGraphicsContext* theContext = [NSGraphicsContext currentContext];
-    NSLog(@"draw rect\n");
+    DLog(@"draw rect %@\n", NSStringFromRect(rect));
 
     // draw background
     [[NSColor grayColor] set];

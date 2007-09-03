@@ -45,6 +45,7 @@
 		C4B25D540B4AD7C900DADA0F /* FPArchiveExtras.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C4B25D530B4AD7C900DADA0F /* FPArchiveExtras.h */; };
 		C4B25D970B4ADF8100DADA0F /* NSMutableDictionaryAdditions.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C4B25D950B4ADF8100DADA0F /* NSMutableDictionaryAdditions.h */; };
 		C4B25D980B4ADF8100DADA0F /* NSMutableDictionaryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C4B25D960B4ADF8100DADA0F /* NSMutableDictionaryAdditions.m */; };
+		C4D109500C8CA529003A767D /* FPLogging.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C4D1094F0C8CA529003A767D /* FPLogging.h */; };
 		C4DC0D980A82D28800DB476E /* viewmag-.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0D960A82D28800DB476E /* viewmag-.png */; };
 		C4DC0D990A82D28800DB476E /* viewmag+.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0D970A82D28800DB476E /* viewmag+.png */; };
 		C4DC0DA60A82D35500DB476E /* next.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DA40A82D35500DB476E /* next.png */; };
@@ -71,6 +72,7 @@
 				C4B25D540B4AD7C900DADA0F /* FPArchiveExtras.h in CopyFiles */,
 				C4B25D970B4ADF8100DADA0F /* NSMutableDictionaryAdditions.h in CopyFiles */,
 				C4EE455A0BC8BCC400F417D3 /* FPArchivalDictionaryUpgrader.h in CopyFiles */,
+				C4D109500C8CA529003A767D /* FPLogging.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +128,7 @@
 		C4B25D530B4AD7C900DADA0F /* FPArchiveExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPArchiveExtras.h; sourceTree = "<group>"; };
 		C4B25D950B4ADF8100DADA0F /* NSMutableDictionaryAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableDictionaryAdditions.h; sourceTree = "<group>"; };
 		C4B25D960B4ADF8100DADA0F /* NSMutableDictionaryAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMutableDictionaryAdditions.m; sourceTree = "<group>"; };
+		C4D1094F0C8CA529003A767D /* FPLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPLogging.h; sourceTree = "<group>"; };
 		C4DC0D960A82D28800DB476E /* viewmag-.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "viewmag-.png"; sourceTree = SOURCE_ROOT; };
 		C4DC0D970A82D28800DB476E /* viewmag+.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "viewmag+.png"; sourceTree = SOURCE_ROOT; };
 		C4DC0DA40A82D35500DB476E /* next.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = next.png; sourceTree = SOURCE_ROOT; };
@@ -229,6 +232,7 @@
 		2A37F4AFFDCFA73011CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				C4D1094F0C8CA529003A767D /* FPLogging.h */,
 				32DBCF750370BD2300C91783 /* FormulatePro_Prefix.pch */,
 				2A37F4B0FDCFA73011CA2CEA /* main.m */,
 			);
@@ -489,9 +493,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_PEDANTIC = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				OTHER_CFLAGS = "-DDEBUG";
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				WARNING_CFLAGS = "-Wall";
