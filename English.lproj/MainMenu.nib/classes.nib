@@ -33,6 +33,13 @@
         }, 
         {CLASS = FPTextRenderingView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
         {
+            ACTIONS = {nextTip = id; previousTip = id; }; 
+            CLASS = FPTipsController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_tipTextField" = NSTextField; "_tipWindow" = NSWindow; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
             ACTIONS = {chooseTool = id; }; 
             CLASS = FPToolPaletteController; 
             LANGUAGE = ObjC; 

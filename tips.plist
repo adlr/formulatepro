@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<string>To move text while editing, hold down Command (⌘) and Option and drag the text.</string>
+	<string>If you pick a font from the font panel (Edit→Font→Show Fonts) while not editing, it will be used as the default font for all new text entries.</string>
+	<string>To export a FormulatePro document as a PDF, choose File→Print, click the PDF button and choose Save As PDF</string>
+	<string>FormulatePro can zoom in on a PDF far more than many PDF viewers</string>
+</array>
+</plist>
