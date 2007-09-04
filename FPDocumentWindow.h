@@ -17,6 +17,9 @@ extern NSString *FPEndQuickMove;
 @interface FPDocumentWindow : NSWindow {
     IBOutlet FPDocumentView *_docView;
     BOOL _sentQuickMove;
+    NSFont * _defaultFont;
 }
+
+- (NSFont *)currentFont;
 
 @end

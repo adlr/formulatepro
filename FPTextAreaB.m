@@ -9,6 +9,7 @@
 #import "FPTextAreaB.h"
 #import "NSMutableDictionaryAdditions.h"
 #import "FPArchiveExtras.h"
+#import "FPLogging.h"
 
 @implementation FPTextAreaB
 
@@ -130,21 +131,13 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
     // if the next event is mouse up, then the user didn't drag at all
     theEvent = [[_docView window] nextEventMatchingMask:
                 (NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
-    if ([theEvent type] == NSLeftMouseUp) {
-        _isAutoSizedX = _isAutoSizedY = YES;
-    } else {
+    _isAutoSizedX = _isAutoSizedY = YES;
+    if ([theEvent type] != NSLeftMouseUp) {
         [self resizeWithEvent:theEvent byKnob:LowerRightKnob];
     }
     _isPlacing = NO;
     return YES;
 }
-
-//- (void)setToFixedWidth
-//{
-//    [_editor setHorizontallyResizable:NO];
-//    _isAutoSizedX = NO;
-//    [[_editor textContainer] setWidthTracksTextView:YES];
-//}
 
 static NSLayoutManager *sharedDrawingLayoutManager();
 
@@ -172,8 +165,9 @@ static NSLayoutManager *sharedDrawingLayoutManager();
 
 - (void)resizeWithEvent:(NSEvent *)theEvent byKnob:(int)knob
 {
-    _isAutoSizedX = NO;
     [super resizeWithEvent:theEvent byKnob:knob];
+    if (NSWidth([self bounds]) >= 10.0)  // only go fixed size if it's wide enough
+        _isAutoSizedX = NO;
 }
 
 static NSLayoutManager *sharedDrawingLayoutManager() {
@@ -200,7 +194,7 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
         [path setLineWidth:[self lineWidth]];
         [[NSColor blackColor] set];
         [path stroke];
-    } else if (selected) {
+    } else if (selected || _isPlacing) {
         NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self bounds]];
         [path setLineWidth:[self lineWidth]];
         [[NSColor lightGrayColor] set];
@@ -268,10 +262,12 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
 - (void)startEditing
 {
     //NSTextStorage *contents = [[NSTextStorage allocWithZone:[self zone]] init];
-    NSLog(@"mouse down\n");
+    DLog(@"mouse down\n");
     _isEditing = YES;
+    BOOL isFirstEdit = NO;
     if (_editor == nil) {
-        NSLog(@"allocating\n");
+        isFirstEdit = YES;
+        DLog(@"allocating\n");
         [self instantiateVariableWidthEditor];
 	}
     [self documentDidZoom];
@@ -296,14 +292,27 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
     }
     [_editor setFrame:[_docView convertRect:_bounds fromPage:_page]];
     [_docView addSubview:_editor];
+
+    if (isFirstEdit) {
+        NSDictionary *attributes = [NSDictionary dictionaryWithObject:[_docView currentFont] forKey:NSFontAttributeName];
+        [_editor setTypingAttributes:attributes];
+        DLog(@"editingn w/ attributes: %@\n", attributes);
+    }
+    
     [_editor setDelegate:self];
     [[_docView window] makeFirstResponder:_editor];
 }
 
+// When text changes, we may need to update the frame of the in-use NSTextView
+// and our bounds.
 - (void)textDidChange:(NSNotification *)notification {
-    NSLog(@"textDidChange:\n");
+    DLog(@"textDidChange:\n");
+
+    // first invalidate the current (ie, old) bounds
     [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds]
                                                  fromPage:_page]];
+
+    // get the frame of the editor and use it to compute the new bounds
     NSRect frame = [_editor frame];
     [[_editor layoutManager]
      glyphRangeForTextContainer:[_editor textContainer]];
@@ -311,25 +320,17 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
                   usedRectForTextContainer:[_editor textContainer]].size;
     frame.size.height *= _editorScaleFactor;
     frame.size.width *= _editorScaleFactor;
+    if (NO == _isAutoSizedX)
+        frame.size.width = NSWidth([self bounds]);
+
+    // set the frame to the text view and ourself
     [_editor setFrame:frame];
     [self setBounds:[_docView convertRect:frame toPage:_page]];
-    /*
-    NSSize textSize;
-    BOOL fixedWidth = ([[notification object] isHorizontallyResizable] ? NO : YES);
-    
-    textSize = NSMakeSize(1000.0, 1000.0);
-    NSLog(@"textSize: %@\n", NSStringFromSize(textSize));
-    
-    if ((textSize.width > _bounds.size.width) || (textSize.height > _bounds.size.height)) {
-        _bounds = NSMakeRect(_bounds.origin.x, _bounds.origin.y, ((!fixedWidth && (textSize.width > _bounds.size.width)) ? textSize.width : _bounds.size.width), ((textSize.height > _bounds.size.height) ? textSize.height : _bounds.size.height));
-    }
-     */
-//    NSLog(@"used rect tc: %@\n", NSStringFromRect([[_editor layoutManager] usedRectForTextContainer:[_editor textContainer]]));
-//    NSLog(@"editor frame:  %@\n", NSStringFromRect([_editor frame]));
-//    NSLog(@"editor bounds: %@\n", NSStringFromRect([_editor bounds]));
+
+    // trigger redrawing in the new bounds
     [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds]
                                                  fromPage:_page]];
-    NSLog(@"new bounds: %@\n", NSStringFromRect([self bounds]));
+    DLog(@"new bounds: %@\n", NSStringFromRect([self bounds]));
 }
 
 - (void)stopEditing

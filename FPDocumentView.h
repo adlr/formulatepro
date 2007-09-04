@@ -57,6 +57,9 @@
 - (NSArray *)archivalOverlayGraphics;
 - (void)setOverlayGraphicsFromArray:(NSArray *)arr;
 
+// font
+- (NSFont *)currentFont;
+
 // private
 - (NSAffineTransform *)transformForPage:(unsigned int)page;
 @end

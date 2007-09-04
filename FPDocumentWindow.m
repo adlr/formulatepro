@@ -7,6 +7,7 @@
 //
 
 #import "FPDocumentWindow.h"
+#import "FPLogging.h"
 
 NSString *FPBeginQuickMove = @"FPBeginQuickMove";
 NSString *FPAbortQuickMove = @"FPAbortQuickMove";
@@ -16,9 +17,35 @@ enum {FPDeleteKey = 0x7f};
 
 @implementation FPDocumentWindow
 
+- (void)changeFont:(id)sender
+{
+    DLog(@"font changed.\n");
+    //NSFont *oldFont = [self selectionFont];
+    NSFont *newFont = [sender convertFont:_defaultFont];
+    DLog(@"old %@, new %@\n", _defaultFont, newFont);
+    
+    if (_defaultFont != newFont) {
+        [_defaultFont release];
+        _defaultFont = [newFont retain];
+    }
+    return;
+}
+
+- (NSFont *)currentFont
+{
+    return _defaultFont;
+}
+    
+- (BOOL)becomeFirstResponder
+{
+    DLog(@"becomeFirstResponder\n");
+    return YES;
+}
+
 - (void)awakeFromNib
 {
     _sentQuickMove = NO;
+    _defaultFont = [[NSFont userFontOfSize:0.0] retain];
 }
 
 - (void)keyDown:(NSEvent *)theEvent
@@ -37,7 +64,7 @@ enum {FPDeleteKey = 0x7f};
 
 - (void)flagsChanged:(NSEvent *)theEvent
 {
-    NSLog(@"flags changed\n");
+    DLog(@"flags changed\n");
     if ((NO == _sentQuickMove) &&
         ([theEvent modifierFlags] & NSAlternateKeyMask) &&
         ([theEvent modifierFlags] & NSCommandKeyMask) &&

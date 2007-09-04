@@ -12,6 +12,11 @@
 static const float PageBorderSize = 10.0;
 static const float ZoomScaleFactor = 1.3;
 
+- (NSFont *)currentFont
+{
+    return [(FPDocumentWindow*)[self window] currentFont];
+}
+
 - (NSSize)sizeForPage:(unsigned int)page
 {
     PDFPage *pg = [_pdf_document pageAtIndex:page];
@@ -107,7 +112,6 @@ static const float ZoomScaleFactor = 1.3;
     [[NSNotificationCenter defaultCenter]
         addObserver:self selector:@selector(toolChosen:)
                name:FPToolChosen object:nil];
-    
 }
 
 - (void)setPDFDocument:(PDFDocument *)pdf_document
@@ -190,7 +194,7 @@ static const float ZoomScaleFactor = 1.3;
 - (void)drawRect:(NSRect)rect
 {
     NSGraphicsContext* theContext = [NSGraphicsContext currentContext];
-    DLog(@"draw rect %@\n", NSStringFromRect(rect));
+    //DLog(@"draw rect %@\n", NSStringFromRect(rect));
 
     // draw background
     [[NSColor grayColor] set];
@@ -626,6 +630,7 @@ static const float ZoomScaleFactor = 1.3;
         _editingGraphic = nil;
         [self setNeedsDisplay:YES];
     }
+    //[[self window] makeFirstResponder:[self window]];
 }
 
 - (void)placeImage:(id)sender
