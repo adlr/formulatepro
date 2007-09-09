@@ -465,7 +465,6 @@ static const float ZoomScaleFactor = 1.3;
         }
         
         // see if we hit the shape
-        unsigned int page = [self pageForPointFromEvent:theEvent];
         if ([graphic page] == page) {
             NSPoint pagePoint =
                 [self pagePointForPointFromEvent:theEvent page:page];
@@ -554,6 +553,7 @@ static const float ZoomScaleFactor = 1.3;
     for (i = [_overlayGraphics count] - 1; i >= 0; i--) {
         FPGraphic *gr = [_overlayGraphics objectAtIndex:i];
         if ([gr isEditable] && ([gr class] == toolClass) &&
+            ([gr page] == page) &&
             NSPointInRect(pagePoint, [gr safeBounds])) {
             if (_editingGraphic)
                 [_editingGraphic stopEditing];
