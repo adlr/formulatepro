@@ -41,6 +41,31 @@ static NSString *versionArchiveKey = @"version";
     return [ret autorelease];
 }
 
+- (id)copyWithZone:(NSZone *)zone
+{
+    id ret = [[[self class] allocWithZone:zone] initWithGraphic:self];
+    return ret;
+}
+
+- (id)initWithGraphic:(FPGraphic *)graphic
+{
+    self = [super init];
+    if (self) {
+        _bounds = graphic->_bounds;
+        _naturalBounds = graphic->_naturalBounds;
+        _origBounds = graphic->_origBounds;
+        _gFlags = graphic->_gFlags;
+        _lineWidth = graphic->_lineWidth;
+        _fillColor = [graphic->_fillColor copy];
+        _strokeColor = [graphic->_strokeColor copy];
+        _knobMask = graphic->_knobMask;
+        _docView = graphic->_docView;
+        _hasPage = graphic->_hasPage;
+        _page = graphic->_page;
+    }
+    return self;
+}
+
 - (id)initInDocumentView:(FPDocumentView *)docView
 {
     self = [super init];

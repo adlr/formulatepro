@@ -12,6 +12,17 @@
 
 @implementation FPImage
 
+- (id)initWithGraphic:(FPGraphic *)graphic
+{
+    self = [super initWithGraphic:graphic];
+    assert([graphic class] == [FPImage class]);
+    FPImage *gr = (FPImage *)graphic;
+    if (self) {
+        self->_image = [gr->_image copy];
+    }
+    return self;
+}
+
 + (NSString *)archivalClassName;
 {
     return @"Image";

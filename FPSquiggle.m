@@ -16,6 +16,17 @@
     return @"Squiggle";
 }
 
+- (id)initWithGraphic:(FPGraphic *)graphic
+{
+    self = [super initWithGraphic:graphic];
+    assert([graphic class] == [FPSquiggle class]);
+    if (self) {
+        FPSquiggle *gr = (FPSquiggle *)graphic;
+        self->_path = [gr->_path copy];
+    }
+    return self;
+}
+
 static NSString *pathArchiveKey = @"path";
 
 - (id)initWithArchivalDictionary:(NSDictionary *)dict

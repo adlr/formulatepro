@@ -537,7 +537,26 @@ static const float ZoomScaleFactor = 1.3;
         } else {
             if ([_selectedGraphics count]) {
                 [self setNeedsDisplay:YES];
+                if ([theEvent modifierFlags] & NSAlternateKeyMask) {
+                    DLog(@"will copy\n");
+                    // if option key is down, and a drag is begun, 
+                    // copy the elements and drag those new ones
+                    NSMutableArray *newGraphics = [NSMutableArray array];
+                    for (int i = 0; i < [_overlayGraphics count]; i++) {
+                        FPGraphic *gr = [_overlayGraphics objectAtIndex:i];
+                        if ([_selectedGraphics containsObject:gr]) {
+                            [newGraphics addObject:[gr copy]];
+                        }
+                    }
+                    assert([newGraphics count] == [_selectedGraphics count]);
+                    [_overlayGraphics addObjectsFromArray:newGraphics];
+                    [_selectedGraphics removeAllObjects];
+                    [_selectedGraphics addObjectsFromArray:newGraphics];
+                    DLog(@"done copying\n");
+                }
+                DLog(@"will move\n");
                 [self moveSelectionWithEvent:theEvent];
+                DLog(@"done w/ move\n");
             }
         }
         [self setNeedsDisplay:YES];

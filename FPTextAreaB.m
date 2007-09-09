@@ -18,6 +18,25 @@
     return @"TextArea";
 }
 
+- (id)initWithGraphic:(FPGraphic *)graphic
+{
+    self = [super initWithGraphic:graphic];
+    assert([graphic class] == [FPTextAreaB class]);
+    if (self) {
+        FPTextAreaB *gr = (FPTextAreaB *)graphic;
+        self->_textStorage = [[NSTextStorage allocWithZone:[self zone]] init];
+        [_textStorage replaceCharactersInRange:NSMakeRange(0, [_textStorage length])
+                          withAttributedString:gr->_textStorage];
+        self->_editor = nil;
+        self->_isPlacing = gr->_isPlacing;
+        self->_isEditing = gr->_isEditing;
+        self->_isAutoSizedX = gr->_isAutoSizedX;
+        self->_isAutoSizedY = gr->_isAutoSizedY;
+        self->_editorScaleFactor = gr->_editorScaleFactor;
+    }
+    return self;
+}
+
 static NSString *editorFrameKey = @"editorFrame";
 static NSString *editorTextStorageKey = @"editorTextStorage";
 static NSString *autoSizedXArchiveKey = @"autoSizedX";

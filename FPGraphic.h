@@ -44,7 +44,9 @@ enum {
     unsigned int _page;
 }
 
+- (id)copyWithZone:(NSZone *)zone;
 + (FPGraphic *)graphicInDocumentView:(FPDocumentView *)docView;
+- (id)initWithGraphic:(FPGraphic *)graphic;
 - (id)initInDocumentView:(FPDocumentView *)docView;
 + (FPGraphic *)graphicFromArchivalDictionary:(NSDictionary *)dict
                               inDocumentView:(FPDocumentView *)docView;
