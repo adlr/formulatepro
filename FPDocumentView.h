@@ -36,6 +36,9 @@
 
 - (void)deleteKeyPressed;
 
+- (void)getViewingMidpointToPage:(unsigned int*)page pagePoint:(NSPoint*)pagePoint;
+- (void)scrollToMidpointOnPage:(unsigned int)page point:(NSPoint)midPoint;
+
 // place image
 - (void)placeImage:(id)sender;
 

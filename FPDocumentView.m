@@ -123,7 +123,7 @@ static const float ZoomScaleFactor = 1.3;
     [self setNeedsDisplay:YES];
 }
 
-- (void)getViewingMidpointToPage:(int*)page pagePoint:(NSPoint*)pagePoint
+- (void)getViewingMidpointToPage:(unsigned int*)page pagePoint:(NSPoint*)pagePoint
 {
     NSPoint midpoint = NSMakePoint(NSMidX([_scrollView documentVisibleRect]),
                                    NSMidY([_scrollView documentVisibleRect]));
@@ -131,7 +131,7 @@ static const float ZoomScaleFactor = 1.3;
     *pagePoint = [self convertPoint:midpoint toPage:*page];
 }
 
-- (void)scrollToMidpointOnPage:(int)page point:(NSPoint)midPoint
+- (void)scrollToMidpointOnPage:(unsigned int)page point:(NSPoint)midPoint
 {
     float viewWidth = NSWidth([[_scrollView contentView] documentVisibleRect]);
     float viewHeight = NSHeight([[_scrollView contentView] documentVisibleRect]);
@@ -145,7 +145,7 @@ static const float ZoomScaleFactor = 1.3;
 - (void)zoomIn:(id)sender
 {
     NSPoint pagePoint;
-    int page;
+    unsigned int page;
     DLog(@"old frame: %@\n", NSStringFromRect([self frame]));
     [self getViewingMidpointToPage:&page pagePoint:&pagePoint];
 
@@ -164,7 +164,7 @@ static const float ZoomScaleFactor = 1.3;
 - (void)zoomOut:(id)sender
 {
     NSPoint pagePoint;
-    int page;
+    unsigned int page;
     DLog(@"old frame: %@\n", NSStringFromRect([self frame]));
     [self getViewingMidpointToPage:&page pagePoint:&pagePoint];
     
