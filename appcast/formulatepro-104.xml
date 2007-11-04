@@ -7,6 +7,13 @@ www.andymatuschak.org/xml-namespaces/sparkle">
         <description>Most recent changes with links to updates.</description> 
         <language>en</language> 
         <item> 
+            <title>Version 0.0.3 (Beta 3)</title> 
+            <description>http://adlr.info/appcasts/FormulatePro-0.0.3.html</description> 
+            <pubDate>Sun, 4 Nov 2007 07:21:00 +0000</pubDate> 
+            <enclosure sparkle:version="0.0.3" url="http://formulatepro.googlecode.com/files/FormulatePro-0.0.3.dmg" length="312473" 
+type="application/octet-stream"/> 
+        </item> 
+        <item> 
             <title>Version 0.0.2 (Beta 2)</title> 
             <description>http://adlr.info/appcasts/FormulatePro-0.0.2.html</description> 
             <pubDate>Sun, 8 Apr 2007 07:15:00 +0000</pubDate> 
