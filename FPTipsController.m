@@ -78,7 +78,6 @@ static NSString *kFPNextToolTip = @"FPNextToolTip";
     [self displayTip:_tipOnDisplay];
     [_tipWindow center];
     [_tipWindow makeKeyAndOrderFront:self];
-    DLog(@"okay\n");
 }
 
 - (IBAction)nextTip:(id)sender

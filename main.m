@@ -14,8 +14,10 @@ int main(int argc, char *argv[])
     SInt32 os_version;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
-    if (Gestalt(gestaltSystemVersion, &os_version) == noErr)
-    {
+    if (3 == argc && !strcmp("--feedUrl", argv[1])) {
+        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithUTF8String:argv[2]]
+                                                  forKey:@"SUFeedURL"];
+    } else if (Gestalt(gestaltSystemVersion, &os_version) == noErr) {
         char buf[5];
         NSString *feedURL;
        
