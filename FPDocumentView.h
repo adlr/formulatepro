@@ -10,6 +10,7 @@
 {
     IBOutlet MyDocument *_doc;
     PDFDocument *_pdf_document;
+    unsigned int _current_page;
     PDFDisplayBox _box;
     float _scale_factor;
     BOOL _draws_shadow;
@@ -28,6 +29,10 @@
 - (void)zoomIn:(id)sender;
 - (void)zoomOut:(id)sender;
 
+- (void)nextPage;
+- (void)previousPage;
+- (void)scrollToPage:(unsigned int)page;
+
 - (float)scaleFactor;
 
 - (BOOL)shouldEnterQuickMove;
@@ -36,7 +41,7 @@
 
 - (void)deleteSelectedGraphics;
 
-- (void)getViewingMidpointToPage:(unsigned int*)page pagePoint:(NSPoint*)pagePoint;
+- (unsigned int)getViewingMidpointToPage:(unsigned int*)page pagePoint:(NSPoint*)pagePoint;
 - (void)scrollToMidpointOnPage:(unsigned int)page point:(NSPoint)midPoint;
 
 // place image

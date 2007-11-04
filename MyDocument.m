@@ -357,12 +357,12 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
 
 - (IBAction)goToNextPage:(id)sender
 {
-    //[_pdf_view goToNextPage:sender];
+    [_document_view nextPage];
 }
 
 - (IBAction)goToPreviousPage:(id)sender
 {
-    //[_pdf_view goToPreviousPage:sender];
+    [_document_view previousPage];
 }
 
 #pragma mark -
@@ -547,8 +547,6 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
         MyDocToolbarIdentifierZoomIn,
         MyDocToolbarIdentifierZoomOut,
         NSToolbarSeparatorItemIdentifier,
-        MyDocToolbarIdentifierPreviousPage,
-        MyDocToolbarIdentifierNextPage,
         NSToolbarFlexibleSpaceItemIdentifier,
         NSToolbarCustomizeToolbarItemIdentifier,
         nil];
@@ -563,8 +561,8 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
     return [NSArray arrayWithObjects:
         MyDocToolbarIdentifierZoomIn,
         MyDocToolbarIdentifierZoomOut,
-        MyDocToolbarIdentifierOneUpTwoUpBook,
-        MyDocToolbarIdentifierSingleContinuous,
+        //MyDocToolbarIdentifierOneUpTwoUpBook,
+        //MyDocToolbarIdentifierSingleContinuous,
         MyDocToolbarIdentifierPreviousPage,
         MyDocToolbarIdentifierNextPage,
         

@@ -17,10 +17,16 @@ static const float ZoomScaleFactor = 1.3;
     return [(FPDocumentWindow*)[self window] currentFont];
 }
 
-- (NSSize)sizeForPage:(unsigned int)page
+- (NSSize)pageSizeForPage:(unsigned int)page
 {
     PDFPage *pg = [_pdf_document pageAtIndex:page];
     NSSize ret = [pg boundsForBox:_box].size;
+    return ret;
+}
+
+- (NSSize)sizeForPage:(unsigned int)page
+{
+    NSSize ret = [self pageSizeForPage:page];
     ret.width *= _scale_factor;
     ret.height *= _scale_factor;
     return ret;
@@ -67,6 +73,7 @@ static const float ZoomScaleFactor = 1.3;
 - (void)initMemberVariables
 {
     _pdf_document = nil;
+    _current_page = 0;
     _box = kPDFDisplayBoxCropBox;
     //_box = kPDFDisplayBoxMediaBox;
     _scale_factor = 1.0;
@@ -112,6 +119,19 @@ static const float ZoomScaleFactor = 1.3;
     [[NSNotificationCenter defaultCenter]
         addObserver:self selector:@selector(toolChosen:)
                name:FPToolChosen object:nil];
+    
+    [[self superview] setPostsBoundsChangedNotifications:YES];
+    [[self superview] setPostsFrameChangedNotifications:YES];
+    [[NSNotificationCenter defaultCenter]
+       addObserver:self
+          selector:@selector(viewingRectChanged:)
+              name:NSViewBoundsDidChangeNotification
+            object:[self superview]];
+    [[NSNotificationCenter defaultCenter]
+       addObserver:self
+          selector:@selector(viewingRectChanged:)
+              name:NSViewFrameDidChangeNotification
+            object:[self superview]];
 }
 
 - (void)setPDFDocument:(PDFDocument *)pdf_document
@@ -123,12 +143,16 @@ static const float ZoomScaleFactor = 1.3;
     [self setNeedsDisplay:YES];
 }
 
-- (void)getViewingMidpointToPage:(unsigned int*)page pagePoint:(NSPoint*)pagePoint
+- (unsigned int)getViewingMidpointToPage:(unsigned int*)page pagePoint:(NSPoint*)pagePoint
 {
     NSPoint midpoint = NSMakePoint(NSMidX([_scrollView documentVisibleRect]),
                                    NSMidY([_scrollView documentVisibleRect]));
-    *page = [self pageForPoint:midpoint];
-    *pagePoint = [self convertPoint:midpoint toPage:*page];
+    unsigned int ret = [self pageForPoint:midpoint];
+    if (page)
+        *page = ret;
+    if (pagePoint)
+        *pagePoint = [self convertPoint:midpoint toPage:*page];
+    return ret;
 }
 
 - (void)scrollToMidpointOnPage:(unsigned int)page point:(NSPoint)midPoint
@@ -179,6 +203,34 @@ static const float ZoomScaleFactor = 1.3;
     DLog(@"new frame: %@\n", NSStringFromRect([self frame]));
     if (_editingGraphic)
         [_editingGraphic documentDidZoom];
+}
+
+- (void)previousPage
+{
+    if (0 == _current_page)
+        return;
+    _current_page--;
+    [self scrollToPage:_current_page];
+}
+
+- (void)nextPage
+{
+    if ((_current_page + 1) == [_pdf_document pageCount])
+        return;
+    _current_page++;
+    [self scrollToPage:_current_page];
+}
+
+- (void)viewingRectChanged:(id)sender
+{
+    _current_page = [self getViewingMidpointToPage:nil pagePoint:nil];
+}
+
+- (void)scrollToPage:(unsigned int)page
+{
+    NSSize sz = [self pageSizeForPage:page];
+    NSRect fullPageRect = NSMakeRect(0, 0, sz.width, sz.height);
+    [self scrollRectToVisible:[self convertRect:fullPageRect fromPage:page]];
 }
 
 - (float)scaleFactor
