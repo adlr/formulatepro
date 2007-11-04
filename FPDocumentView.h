@@ -34,7 +34,7 @@
 - (void)beginQuickMove:(id)unused;
 - (void)endQuickMove:(id)unused;
 
-- (void)deleteKeyPressed;
+- (void)deleteSelectedGraphics;
 
 - (void)getViewingMidpointToPage:(unsigned int*)page pagePoint:(NSPoint*)pagePoint;
 - (void)scrollToMidpointOnPage:(unsigned int)page point:(NSPoint)midPoint;

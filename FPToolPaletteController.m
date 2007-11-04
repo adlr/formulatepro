@@ -98,6 +98,37 @@ static FPToolPaletteController *_sharedController;
     return [FPRectangle class];
 }
 
+- (void)keyDown:(NSEvent *)theEvent
+{
+    if (1 != [[theEvent charactersIgnoringModifiers] length])
+        return;
+    // we don't want any modifiers, except numeric pad is okay
+    if ((NSDeviceIndependentModifierFlagsMask ^ NSNumericPadKeyMask) & [theEvent modifierFlags]) {
+        return;
+    }
+    unichar c = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
+    switch (c) {
+        case 't':
+            [self chooseTool:textAreaToolButton];
+            break;
+        case 'm':
+            [self chooseTool:arrowToolButton];
+            break;
+        case 'e':
+            [self chooseTool:ellipseToolButton];
+            break;
+        case 'u':
+            [self chooseTool:rectangleToolButton];
+            break;
+        case 'p':
+            [self chooseTool:squiggleToolButton];
+            break;
+        case 'x':
+            [self chooseTool:checkmarkToolButton];
+            break;
+    }
+}
+
 - (void)beginQuickMove:(id)unused
 {
     _toolBeforeQuickMove = [self currentTool];

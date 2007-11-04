@@ -185,7 +185,7 @@ static const float ZoomScaleFactor = 1.3;
     return _scale_factor;
 }
 
-- (void)deleteKeyPressed
+- (void)deleteSelectedGraphics
 {
     [_overlayGraphics removeObjectsInArray:[_selectedGraphics allObjects]];
     [self setNeedsDisplay:YES];

@@ -8,6 +8,7 @@
 
 #import "FPDocumentWindow.h"
 #import "FPLogging.h"
+#import "FPToolPaletteController.h"
 
 NSString *FPBeginQuickMove = @"FPBeginQuickMove";
 NSString *FPAbortQuickMove = @"FPAbortQuickMove";
@@ -58,7 +59,10 @@ enum {FPDeleteKey = 0x7f};
     (unsigned)NSDeleteFunctionKey);
     if (FPDeleteKey ==
         [[theEvent charactersIgnoringModifiers] characterAtIndex:0]) {
-        [_docView deleteKeyPressed];
+        [_docView deleteSelectedGraphics];
+    } else {
+        // perhaps it's a keypress to select a tool
+        [[FPToolPaletteController sharedToolPaletteController] keyDown:theEvent];
     }
 }
 

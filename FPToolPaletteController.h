@@ -35,6 +35,8 @@ extern NSString *FPToolChosen;
 - (unsigned int)currentTool;
 - (Class)classForCurrentTool;
 
+- (void)keyDown:(NSEvent *)theEvent;
+
 - (void)beginQuickMove:(id)unused;
 - (void)endQuickMove:(id)unused;
 
