@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sparkle="http:// 
+www.andymatuschak.org/xml-namespaces/sparkle"> 
+    <channel> 
+        <title>FormulatePro Changelog</title> 
+        <link>http://adlr.info/appcasts/formulatepro-104.xml</link> 
+        <description>Most recent changes with links to updates.</description> 
+        <language>en</language> 
+        <item> 
+            <title>Version 0.0.2 (Beta 2)</title> 
+            <description>http://adlr.info/appcasts/FormulatePro-0.0.2.html</description> 
+            <pubDate>Sun, 8 Apr 2007 07:15:00 +0000</pubDate> 
+            <enclosure sparkle:version="0.0.2" url="http://formulatepro.googlecode.com/files/FormulatePro-0.0.2.dmg" length="301168" 
+type="application/octet-stream"/> 
+        </item> 
+        <item> 
+            <title>Version 0.0.1 (Initial beta release)</title> 
+            <description>http://adlr.info/appcasts/FormulatePro-0.0.1.html</description> 
+            <pubDate>Mon, 15 Jan 2006 23:52:00 +0000</pubDate> 
+            <enclosure sparkle:version="0.0.1" url="http://adlr.info/apps/formulatepro/FormulatePro-0.0.1.dmg" length="299579" 
+type="application/octet-stream"/> 
+        </item> 
+    </channel> 
+</rss> 
