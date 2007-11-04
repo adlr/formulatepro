@@ -85,6 +85,11 @@ static const float ZoomScaleFactor = 1.3;
     _editingGraphic = nil;
 }
 
+- (void)windowWillClose:(id)sender
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_pdf_document release];
@@ -132,6 +137,11 @@ static const float ZoomScaleFactor = 1.3;
           selector:@selector(viewingRectChanged:)
               name:NSViewFrameDidChangeNotification
             object:[self superview]];
+    [[NSNotificationCenter defaultCenter]
+       addObserver:self
+          selector:@selector(windowWillClose:)
+              name:NSWindowWillCloseNotification
+            object:[self window]];
 }
 
 - (void)setPDFDocument:(PDFDocument *)pdf_document
