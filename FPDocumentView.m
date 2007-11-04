@@ -138,7 +138,8 @@ static const float ZoomScaleFactor = 1.3;
     NSPoint viewPoint = [self convertPoint:midPoint fromPage:page];
     NSPoint viewOrigin = NSMakePoint(floorf(viewPoint.x - viewWidth/2.0),
                                      floorf(viewPoint.y - viewHeight/2.0));
-    [[_scrollView contentView] scrollToPoint:viewOrigin];
+    [[_scrollView contentView] scrollToPoint:
+        [[_scrollView contentView] constrainScrollPoint:viewOrigin]];
     [_scrollView reflectScrolledClipView:[_scrollView contentView]];
 }
 
@@ -196,9 +197,6 @@ static const float ZoomScaleFactor = 1.3;
     NSGraphicsContext* theContext = [NSGraphicsContext currentContext];
     //DLog(@"draw rect %@\n", NSStringFromRect(rect));
 
-    // draw background
-    [[NSColor grayColor] set];
-    NSRectFill([self frame]);
     if (nil == _pdf_document) return;
     
     // draw the shadow and white page backgrounds, and pdf pages
