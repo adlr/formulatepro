@@ -214,10 +214,6 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				C45E46040B3CEDDB00D41543 /* NSMutableSetAdditions.h */,
-				C45E46050B3CEDDB00D41543 /* NSMutableSetAdditions.m */,
-				C4B25D950B4ADF8100DADA0F /* NSMutableDictionaryAdditions.h */,
-				C4B25D960B4ADF8100DADA0F /* NSMutableDictionaryAdditions.m */,
 				C4F40AD30B35D6F1008063B4 /* FPDocumentWindow.h */,
 				C4F40AD40B35D6F1008063B4 /* FPDocumentWindow.m */,
 				C4AB40360A5BB5D200EE29B2 /* AppDelegate.h */,
@@ -241,6 +237,10 @@
 		2A37F4AFFDCFA73011CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				C45E46040B3CEDDB00D41543 /* NSMutableSetAdditions.h */,
+				C45E46050B3CEDDB00D41543 /* NSMutableSetAdditions.m */,
+				C4B25D950B4ADF8100DADA0F /* NSMutableDictionaryAdditions.h */,
+				C4B25D960B4ADF8100DADA0F /* NSMutableDictionaryAdditions.m */,
 				C4D1094F0C8CA529003A767D /* FPLogging.h */,
 				32DBCF750370BD2300C91783 /* FormulatePro_Prefix.pch */,
 				2A37F4B0FDCFA73011CA2CEA /* main.m */,
