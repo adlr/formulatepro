@@ -208,6 +208,9 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
     NSLog(@"readFromData:0x%08x ofType:%@\n", (unsigned)data, typeName);
     if ([typeName isEqualToString:@"PDF Document"]) {
         _originalPDFData = [data retain];
+        [self setFileURL:nil];  // causes document to be "untitled" and otherwise
+                                // act like a brand new document. e.g. file->save
+                                // pops the save-as dialog
     } else if ([typeName isEqualToString:@"FormulatePro Document"]) {
         NSMutableDictionary *dict =
             [NSPropertyListSerialization
@@ -215,7 +218,7 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
                  mutabilityOption:NSPropertyListMutableContainersAndLeaves
                            format:nil
                  errorDescription:nil];
-        if (nil == dict) assert(0);
+        assert(nil != dict);
         // TODO(adlr): check for error, version, convert these keys to
         // constants
         _originalPDFData = [[dict objectForKey:@"originalPDFData"] retain];
