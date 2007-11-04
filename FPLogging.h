@@ -18,5 +18,5 @@ inline void DLog(NSString *format, ...)
     va_end(args);
 }
 #else
-inline void DLog(NSString *format, ...) { }
+static inline void DLog(NSString *format, ...) { }
 #endif
