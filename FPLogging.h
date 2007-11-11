@@ -9,7 +9,7 @@
 
 // from http://www.cocoabuilder.com/archive/message/cocoa/2002/2/7/50783
 #if DEBUG
-inline void DLog(NSString *format, ...)
+static inline void DLog(NSString *format, ...)
 {
     va_list args;
     

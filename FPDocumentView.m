@@ -21,6 +21,8 @@ static const float ZoomScaleFactor = 1.3;
 {
     PDFPage *pg = [_pdf_document pageAtIndex:page];
     NSSize ret = [pg boundsForBox:_box].size;
+	if (90 == ([pg rotation] % 180))
+		ret = NSMakeSize(ret.height, ret.width);
     return ret;
 }
 
