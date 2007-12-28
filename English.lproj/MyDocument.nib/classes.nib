@@ -21,6 +21,7 @@
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {
+                placeImage = id; 
                 toggleContinuous = id; 
                 toggleOneUpTwoUpBookMode = id; 
                 zoomIn = id; 
@@ -32,6 +33,7 @@
                 "_document_view" = FPDocumentView; 
                 "_document_window" = NSWindow; 
                 "_one_up_vs_two_up_vs_book" = NSSegmentedControl; 
+                "_print_accessory_view" = NSView; 
                 "_single_vs_continuous" = NSSegmentedControl; 
             }; 
             SUPERCLASS = NSDocument; 

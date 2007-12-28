@@ -5,6 +5,7 @@
 #import "FPGraphic.h"
 #import "FPImage.h"
 #import "FPLogging.h"
+#import "MyDocument.h"
 
 @implementation FPDocumentView
 
@@ -60,6 +61,7 @@ static const float ZoomScaleFactor = 1.3;
     ret->_scale_factor = _scale_factor;
     ret->_draws_shadow = NO;
     ret->_inQuickMove = NO;
+    ret->_is_printing = YES;
     ret->_overlayGraphics = [_overlayGraphics retain];
     ret->_selectedGraphics = [[NSMutableSet alloc] initWithCapacity:0];
     if (_editingGraphic) {
@@ -81,6 +83,7 @@ static const float ZoomScaleFactor = 1.3;
     _scale_factor = 1.0;
     _draws_shadow = YES;
     _inQuickMove = NO;
+    _is_printing = NO;
 
     _overlayGraphics = [[NSMutableArray alloc] initWithCapacity:1];
     _selectedGraphics = [[NSMutableSet alloc] initWithCapacity:1];
@@ -288,7 +291,9 @@ static const float ZoomScaleFactor = 1.3;
         
         NSAffineTransform *at = [self transformForPage:i];
         [at concat];
-        [[_pdf_document pageAtIndex:i] drawWithBox:_box];
+
+        if (!_is_printing || [_doc drawsOriginalPDF])
+            [[_pdf_document pageAtIndex:i] drawWithBox:_box];
 
         for (unsigned int j = 0; j < [_overlayGraphics count]; j++) {
             FPGraphic *g;
@@ -787,6 +792,8 @@ static const float ZoomScaleFactor = 1.3;
     for (unsigned int i = 0; i < [_pdf_document pageCount]; i++) {
         PDFPage *pg = [_pdf_document pageAtIndex:i];
         NSSize sz = [pg boundsForBox:_box].size;
+        if (90 == ([pg rotation] % 180))
+            sz = NSMakeSize(sz.height, sz.width);
         if (sz.width > maxPageSize.width)
             maxPageSize.width = sz.width;
         if (sz.height > maxPageSize.height)

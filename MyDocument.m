@@ -41,6 +41,7 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
         // nil.
         _pdf_document = nil;
         _tempOverlayGraphics = nil;
+        _print_original_pdf = [NSNumber numberWithBool:YES];
     }
     return self;
 }
@@ -620,6 +621,10 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
         setValue:[NSNumber numberWithInt:[_pdf_document pageCount]]
           forKey:@"NSLastPage"];
     
+    // add option for (not) printing original PDF
+    // this uses deprecated method b/c the replacement method is 10.5 only
+    [printOperation setAccessoryView:_print_accessory_view];
+    
     // We don't have to autorelease the print operation because
     // +[NSPrintOperation printOperationWithView:printInfo:] of course already
     // autoreleased it. Nothing in this method can fail, so we never return
@@ -632,6 +637,11 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
     NSLog(@"setPrintInfo\n");
     NSLog(@"print info dict: %@\n", [printInfo dictionary]);
     [super setPrintInfo:printInfo];
+}
+
+- (BOOL)drawsOriginalPDF
+{
+    return [_print_original_pdf boolValue];
 }
 
 @end

@@ -15,6 +15,7 @@
     float _scale_factor;
     BOOL _draws_shadow;
     BOOL _inQuickMove;
+    BOOL _is_printing;
 
     NSMutableArray *_overlayGraphics;
     NSMutableSet *_selectedGraphics;
