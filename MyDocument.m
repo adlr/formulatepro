@@ -574,8 +574,9 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
         nil];
 }
 
-- (void)placeImage:(id)sender;
+- (IBAction)placeImage:(id)sender;
 {
+    NSLog(@"MyDocument's plageImage\n");
     [_document_view placeImage:sender];
 }
 

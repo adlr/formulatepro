@@ -32,6 +32,11 @@ enum {FPDeleteKey = 0x7f};
     return;
 }
 
+- (FPDocumentView *)docView
+{
+    return _docView;
+}
+
 - (NSFont *)currentFont
 {
     return _defaultFont;

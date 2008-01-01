@@ -21,5 +21,6 @@ extern NSString *FPEndQuickMove;
 }
 
 - (NSFont *)currentFont;
+- (FPDocumentView *)docView;
 
 @end

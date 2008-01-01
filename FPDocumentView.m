@@ -253,9 +253,18 @@ static const float ZoomScaleFactor = 1.3;
     return _scale_factor;
 }
 
+- (NSSet*)selectedGraphics
+{
+    return _selectedGraphics;
+}
+
 - (void)deleteSelectedGraphics
 {
     [_overlayGraphics removeObjectsInArray:[_selectedGraphics allObjects]];
+    [_selectedGraphics removeAllObjects];
+    [[NSNotificationCenter defaultCenter] postNotificationName:FPSelectionChangedNotification
+                                                        object:[self window]
+                                                      userInfo:nil];    
     [self setNeedsDisplay:YES];
 }
 
@@ -554,6 +563,9 @@ static const float ZoomScaleFactor = 1.3;
                 if (knob != NoKnob) {
                     [_selectedGraphics removeAllObjects];
                     [_selectedGraphics addObject:graphic];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:FPSelectionChangedNotification
+                                                                        object:[self window]
+                                                                      userInfo:nil];
                     [self setNeedsDisplay:YES]; // to fix which knobs are
                                                 // showing
                     [graphic resizeWithEvent:theEvent byKnob:knob];
@@ -575,6 +587,9 @@ static const float ZoomScaleFactor = 1.3;
                 // we hit 'graphic'
                 if ([theEvent modifierFlags] & NSShiftKeyMask) {
                     [_selectedGraphics invertMembershipForObject:graphic];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:FPSelectionChangedNotification
+                                                                        object:[self window]
+                                                                      userInfo:nil];                    
                     [self setNeedsDisplay:YES];
                     return;
                 } else {
@@ -584,6 +599,9 @@ static const float ZoomScaleFactor = 1.3;
                             _editingGraphic = graphic;
                             [_selectedGraphics removeAllObjects];
                             [_selectedGraphics addObject:_editingGraphic];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:FPSelectionChangedNotification
+                                                                                object:[self window]
+                                                                              userInfo:nil];                            
                             [_editingGraphic startEditing];
                             [self setNeedsDisplay:YES];
                             return;
@@ -591,6 +609,9 @@ static const float ZoomScaleFactor = 1.3;
                     } else if (![_selectedGraphics containsObject:graphic]) {
                         [_selectedGraphics removeAllObjects];
                         [_selectedGraphics addObject:graphic];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:FPSelectionChangedNotification
+                                                                            object:[self window]
+                                                                          userInfo:nil];                        
                     }
                 }
                 break;
@@ -599,8 +620,12 @@ static const float ZoomScaleFactor = 1.3;
         if (i < 0) { // point didn't hit any shape
             // if we just stopped editing a shape, keep that selected,
             // otherwise, select none
-            if (justStoppedEditing == NO)
+            if (justStoppedEditing == NO) {
                 [_selectedGraphics removeAllObjects];
+                [[NSNotificationCenter defaultCenter] postNotificationName:FPSelectionChangedNotification
+                                                                    object:[self window]
+                                                                  userInfo:nil];                
+            }
         } else {
             if ([_selectedGraphics count]) {
                 [self setNeedsDisplay:YES];
@@ -620,6 +645,9 @@ static const float ZoomScaleFactor = 1.3;
                     [_selectedGraphics removeAllObjects];
                     [_selectedGraphics addObjectsFromArray:newGraphics];
                     DLog(@"done copying\n");
+                    [[NSNotificationCenter defaultCenter] postNotificationName:FPSelectionChangedNotification
+                                                                        object:[self window]
+                                                                      userInfo:nil];                    
                 }
                 DLog(@"will move\n");
                 [self moveSelectionWithEvent:theEvent];
@@ -646,6 +674,9 @@ static const float ZoomScaleFactor = 1.3;
             _editingGraphic = gr;
             [_selectedGraphics removeAllObjects];
             [_selectedGraphics addObject:_editingGraphic];
+            [[NSNotificationCenter defaultCenter] postNotificationName:FPSelectionChangedNotification
+                                                                object:[self window]
+                                                              userInfo:nil];            
             [_editingGraphic startEditing];
             [self setNeedsDisplay:YES];
             break;
@@ -667,6 +698,9 @@ static const float ZoomScaleFactor = 1.3;
                 _editingGraphic = graphic;
                 [_selectedGraphics removeAllObjects];
                 [_selectedGraphics addObject:_editingGraphic];
+                [[NSNotificationCenter defaultCenter] postNotificationName:FPSelectionChangedNotification
+                                                                    object:[self window]
+                                                                  userInfo:nil];                
                 [_editingGraphic startEditing];
                 [self setNeedsDisplay:YES];
             }
@@ -695,6 +729,9 @@ static const float ZoomScaleFactor = 1.3;
     _inQuickMove = NO;
     [_selectedGraphics removeAllObjects];
     _editingGraphic = nil;
+    [[NSNotificationCenter defaultCenter] postNotificationName:FPSelectionChangedNotification
+                                                        object:[self window]
+                                                      userInfo:nil];    
     [self setNeedsDisplay:YES];
 }
 
@@ -719,8 +756,9 @@ static const float ZoomScaleFactor = 1.3;
     //[[self window] makeFirstResponder:[self window]];
 }
 
-- (void)placeImage:(id)sender
+- (IBAction)placeImage:(id)sender
 {
+    NSLog(@"DocView's plageImage\n");
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     [panel setAllowsMultipleSelection:NO];
     [panel beginSheetForDirectory:nil

@@ -18,13 +18,22 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {checkFill = id; checkStroke = id; setStroke = id; stepStroke = id; }; 
+            ACTIONS = {
+                checkFill = id; 
+                checkHideWhenPrinting = id; 
+                checkStroke = id; 
+                setStroke = id; 
+                stepStroke = id; 
+            }; 
             CLASS = FPInspectorController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                "_dimensionsBox" = NSBox; 
                 "_fillCheckbox" = NSButton; 
                 "_fillColorWell" = NSColorWell; 
+                "_hideWhenPrinting" = NSButton; 
                 "_strokeCheckbox" = NSButton; 
+                "_strokeColorWell" = NSColorWell; 
                 "_widthLabel" = NSTextField; 
                 "_widthStepper" = NSStepper; 
                 "_widthTextField" = NSTextField; 
@@ -56,12 +65,13 @@
             SUPERCLASS = NSWindowController; 
         }, 
         {
-            ACTIONS = {"" = id; }; 
+            ACTIONS = {"" = id; placeImage = id; }; 
             CLASS = FirstResponder; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 
         }, 
         {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
+        {CLASS = PrefsWindow; LANGUAGE = ObjC; SUPERCLASS = NSWindow; }, 
         {
             ACTIONS = {checkForUpdates = id; }; 
             CLASS = SUUpdater; 

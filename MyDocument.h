@@ -35,7 +35,7 @@
 - (IBAction)zoomOut:(id)sender;
 - (IBAction)toggleOneUpTwoUpBookMode:(id)sender;
 - (IBAction)toggleContinuous:(id)sender;
-- (void)placeImage:(id)sender;
+- (IBAction)placeImage:(id)sender;
 
 - (BOOL)drawsOriginalPDF;
 @end

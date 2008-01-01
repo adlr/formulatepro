@@ -23,7 +23,7 @@
 - (void)draw:(BOOL)selected
 {
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self bounds]];
-    [path setLineWidth:[self lineWidth]];
+    [path setLineWidth:[self strokeWidth]];
     if (_gFlags.drawsFill) {
         [_fillColor set];
         [path fill];

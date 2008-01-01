@@ -8,16 +8,7 @@
 
 #import "AppDelegate.h"
 
-@interface AppDelegate (Private)
-- (void)choosePaletteButton:(NSButton *)button;
-@end
-
 @implementation AppDelegate
-
-- (void)awakeFromNib
-{
-    _lastEnable = YES; // menu items start out enabled in IB
-}
 
 - (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)application
 {
@@ -49,28 +40,6 @@
     [[NSWorkspace sharedWorkspace] openURL:
      [NSURL
       URLWithString:@"http://code.google.com/p/formulatepro/issues/entry"]];
-}
-
-- (NSWindow *)renderWindow
-{
-    return _renderWindow;
-}
-
-- (void)applicationDidUpdate:(NSNotification *)aNotification
-{
-    BOOL enable = NO;
-    if ([[NSApp orderedDocuments] count] > 0) {
-        enable = YES;
-    }
-    if (_lastEnable == enable) return;
-    [_placeImageMenuItem setAction:(enable ? @selector(placeImage:) : nil)];
-    _lastEnable = enable;
-}
-
-- (IBAction)placeImage:(id)sender
-{
-    assert([[NSApp orderedDocuments] count] > 0);
-    [[[NSApp orderedDocuments] objectAtIndex:0] placeImage:sender];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification

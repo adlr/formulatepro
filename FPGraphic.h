@@ -32,11 +32,14 @@ enum {
         unsigned int drawsFill:1;
         unsigned int drawsStroke:1;
         unsigned int manipulatingBounds:1;
-        unsigned int _pad:29;
+        unsigned int horizontallyFlipped:1;
+        unsigned int verticallyFlipped:1;
+        unsigned int hidesWhenPrinting:1;
+        unsigned int _pad:26;
     } _gFlags;
-    float _lineWidth;
-    NSColor *_fillColor;
-    NSColor *_strokeColor;
+    float _strokeWidth;
+    NSColor *_fillColor;  // STRONG
+    NSColor *_strokeColor;  // STRONG
     int _knobMask;
     
     FPDocumentView *_docView;
@@ -69,11 +72,26 @@ enum {
 - (int)knobForEvent:(NSEvent *)theEvent;
 - (NSRect)pageRectForKnob:(int)knob isBoundRect:(BOOL)isBound;
 
+- (BOOL)drawsStroke;
+- (void)setDrawsStroke:(BOOL)drawsStroke;
 - (NSRect)bounds;
 - (void)setBounds:(NSRect)bounds;
 - (NSRect)safeBounds;
 - (NSRect)boundsWithKnobs;
-- (float)lineWidth;
+- (float)strokeWidth;
+- (void)setStrokeWidth:(float)strokeWidth;
+- (NSColor *)strokeColor;
+- (void)setStrokeColor:(NSColor *)strokeColor;
+- (BOOL)drawsFill;
+- (void)setDrawsFill:(BOOL)drawsFill;
+- (NSColor *)fillColor;
+- (void)setFillColor:(NSColor *)fillColor;
+- (BOOL)isHorizontallyFlipped;
+- (void)setIsHorizontallyFlipped:(BOOL)isHorizontallyFlipped;
+- (BOOL)isVerticallyFlipped;
+- (void)setIsVerticallyFlipped:(BOOL)isVerticallyFlipped;
+- (BOOL)hidesWhenPrinting;
+- (void)setHidesWhenPrinting:(BOOL)hidesWhenPrinting;
 
 - (BOOL)isEditable;
 - (void)startEditing;

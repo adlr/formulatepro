@@ -28,10 +28,11 @@ static NSString *boundsArchiveKey = @"bounds";
 static NSString *naturalBoundsArchiveKey = @"naturalBounds";
 static NSString *drawsFillArchiveKey = @"drawsFill";
 static NSString *drawsStrokeArchiveKey = @"drawsStroke";
-static NSString *lineWidthArchiveKey = @"lineWidth";
+static NSString *strokeWidthArchiveKey = @"lineWidth";
 static NSString *fillColorArchiveKey = @"fillColor";
 static NSString *strokeColorArchiveKey = @"strokeColor";
 static NSString *knobMaskArchiveKey = @"knobMask";
+static NSString *hideWhenPrintingArchiveKey = @"hideWhenPrinting";
 static NSString *pageArchiveKey = @"page";
 static NSString *versionArchiveKey = @"version";
 
@@ -55,10 +56,11 @@ static NSString *versionArchiveKey = @"version";
         _naturalBounds = graphic->_naturalBounds;
         _origBounds = graphic->_origBounds;
         _gFlags = graphic->_gFlags;
-        _lineWidth = graphic->_lineWidth;
+        _strokeWidth = graphic->_strokeWidth;
         _fillColor = [graphic->_fillColor copy];
         _strokeColor = [graphic->_strokeColor copy];
         _knobMask = graphic->_knobMask;
+        _gFlags.hidesWhenPrinting = graphic->_gFlags.hidesWhenPrinting;
         _docView = graphic->_docView;
         _hasPage = graphic->_hasPage;
         _page = graphic->_page;
@@ -73,12 +75,13 @@ static NSString *versionArchiveKey = @"version";
         _hasPage = NO;
         _page = 0;
         _docView = docView;
-        _lineWidth = 1.0;
+        _strokeWidth = 1.0;
         _fillColor = [[NSColor redColor] retain];
         _strokeColor = [[NSColor blackColor] retain];
         _knobMask = 0xff; // all knobs
         _gFlags.drawsStroke = YES;
         _gFlags.drawsFill = NO;
+        _gFlags.hidesWhenPrinting = NO;
     }
     return self;
 }
@@ -125,7 +128,7 @@ static NSString *versionArchiveKey = @"version";
         // TODO(adlr): convert this to user feedback
         assert([[dict objectForKey:versionArchiveKey] intValue] ==
                graphicArchiveVersion);
-
+        
         _hasPage = YES;
         _docView = docView;
 
@@ -136,8 +139,8 @@ static NSString *versionArchiveKey = @"version";
             [[dict objectForKey:drawsFillArchiveKey] boolValue];
         _gFlags.drawsStroke =
             [[dict objectForKey:drawsStrokeArchiveKey] boolValue];
-        _lineWidth =
-            [[dict objectForKey:lineWidthArchiveKey] floatValue];
+        _strokeWidth =
+            [[dict objectForKey:strokeWidthArchiveKey] floatValue];
         _fillColor =
             [[NSUnarchiver
               unarchiveObjectWithData:
@@ -148,6 +151,8 @@ static NSString *versionArchiveKey = @"version";
               [dict objectForKey:strokeColorArchiveKey]] retain];
         _knobMask =
             [[dict objectForKey:knobMaskArchiveKey] intValue];
+        _gFlags.hidesWhenPrinting =
+            [[dict objectForKey:hideWhenPrintingArchiveKey] boolValue];
         _page =
             [[dict objectForKey:pageArchiveKey] unsignedIntValue];
     }
@@ -164,14 +169,16 @@ static NSString *versionArchiveKey = @"version";
             forKey:drawsFillArchiveKey];
     [ret setObject:[NSNumber numberWithBool:_gFlags.drawsStroke]
             forKey:drawsStrokeArchiveKey];
-    [ret setObject:[NSNumber numberWithFloat:_lineWidth]
-            forKey:lineWidthArchiveKey];
+    [ret setObject:[NSNumber numberWithFloat:_strokeWidth]
+            forKey:strokeWidthArchiveKey];
     [ret setObject:[NSArchiver archivedDataWithRootObject:_fillColor]
             forKey:fillColorArchiveKey];
     [ret setObject:[NSArchiver archivedDataWithRootObject:_strokeColor]
             forKey:strokeColorArchiveKey];
     [ret setObject:[NSNumber numberWithInt:_knobMask]
             forKey:knobMaskArchiveKey];
+    [ret setObject:[NSNumber numberWithBool:_gFlags.hidesWhenPrinting]
+            forKey:hideWhenPrintingArchiveKey];
     [ret setObject:[NSNumber numberWithUnsignedInt:_page]
             forKey:pageArchiveKey];
     [ret setObject:[[self class] archivalClassName]
@@ -416,16 +423,16 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
 - (void)draw:(BOOL)selected
 {
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:_bounds];
-    [path setLineWidth:_lineWidth];
+    [path setLineWidth:_strokeWidth];
     [[NSColor redColor] set];
     [path fill];
     [[NSColor blackColor] set];
     [path stroke];
 
     NSPoint p = NSMakePoint(_bounds.origin.x + _bounds.size.width +
-                            _lineWidth/2.0,
+                            _strokeWidth/2.0,
                             _bounds.origin.y + _bounds.size.height +
-                            _lineWidth/2.0);
+                            _strokeWidth/2.0);
     NSPoint q;
     NSRect rect;
     NSRect pdf_rect;
@@ -583,16 +590,16 @@ const float knobSize = 6.0;
 
 - (NSRect)safeBounds
 {
-    float halfWidth = _lineWidth/2.0;
+    float halfWidth = _strokeWidth/2.0;
     return NSMakeRect(_bounds.origin.x - halfWidth,
                       _bounds.origin.y - halfWidth,
-                      _bounds.size.width + _lineWidth,
-                      _bounds.size.height + _lineWidth);
+                      _bounds.size.width + _strokeWidth,
+                      _bounds.size.height + _strokeWidth);
 }
 
-- (float)lineWidth
+- (float)strokeWidth
 {
-    return _lineWidth;
+    return _strokeWidth;
 }
 
 - (NSRect)bounds
@@ -605,6 +612,85 @@ const float knobSize = 6.0;
     assert(bounds.size.width >= 0.0);
     assert(bounds.size.height >= 0.0);
     _bounds = bounds;
+}
+
+- (BOOL)drawsStroke
+{
+    return _gFlags.drawsStroke;
+}
+
+- (void)setDrawsStroke:(BOOL)drawsStroke
+{
+    _gFlags.drawsStroke = drawsStroke;
+}
+
+- (void)setStrokeWidth:(float)strokeWidth
+{
+    _strokeWidth = strokeWidth;
+}
+
+- (NSColor *)strokeColor
+{
+    return _strokeColor;
+}
+
+- (void)setStrokeColor:(NSColor *)strokeColor
+{
+    if (_strokeColor)
+        [_strokeColor autorelease];
+    _strokeColor = [strokeColor retain];    
+}
+
+- (BOOL)drawsFill
+{
+    return _gFlags.drawsFill;
+}
+
+- (void)setDrawsFill:(BOOL)drawsFill
+{
+    _gFlags.drawsFill = drawsFill;
+}
+
+- (NSColor *)fillColor
+{
+    return _fillColor;
+}
+
+- (void)setFillColor:(NSColor *)fillColor
+{
+    if (_fillColor)
+        [_fillColor autorelease];
+    _fillColor = [fillColor retain];
+}
+
+- (BOOL)isHorizontallyFlipped
+{
+    return _gFlags.horizontallyFlipped;
+}
+
+- (void)setIsHorizontallyFlipped:(BOOL)isHorizontallyFlipped
+{
+    _gFlags.horizontallyFlipped = isHorizontallyFlipped;
+}
+
+- (BOOL)isVerticallyFlipped
+{
+    return _gFlags.verticallyFlipped;
+}
+
+- (void)setIsVerticallyFlipped:(BOOL)isVerticallyFlipped
+{
+    _gFlags.verticallyFlipped = isVerticallyFlipped;
+}
+
+- (BOOL)hidesWhenPrinting
+{
+    return _gFlags.hidesWhenPrinting;
+}
+
+- (void)setHidesWhenPrinting:(BOOL)hidesWhenPrinting
+{
+    _gFlags.hidesWhenPrinting = hidesWhenPrinting;
 }
 
 - (BOOL)isEditable

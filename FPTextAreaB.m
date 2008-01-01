@@ -210,12 +210,12 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
 {
     if (_gFlags.drawsStroke) {
         NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self bounds]];
-        [path setLineWidth:[self lineWidth]];
+        [path setLineWidth:[self strokeWidth]];
         [[NSColor blackColor] set];
         [path stroke];
     } else if (selected || _isPlacing) {
         NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self bounds]];
-        [path setLineWidth:[self lineWidth]];
+        [path setLineWidth:[self strokeWidth]];
         [[NSColor lightGrayColor] set];
         [path stroke];
     }

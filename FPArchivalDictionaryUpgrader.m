@@ -13,19 +13,29 @@
 
 + (int)currentVersion
 {
-    return 2;
+    return 3;
 }
 
 + (NSDictionary *)upgradeDictionary:(NSDictionary*)dict
                         fromVersion:(int)old_version
 {
     NSMutableDictionary *ret = [dict mutableCopy];
-    if (([[dict objectForKey:@"Graphic Class"] isEqualToString:@"Rectangle"]) ||
-        ([[dict objectForKey:@"Graphic Class"] isEqualToString:@"Rectangle"])) {
-        if (2 > old_version) {
+    // upgrade from 1 -> 2 if necessary
+    if (2 > old_version) {
+        // in version 1, drawsFill and drawsStroke were set to NO, but they
+        // were, in fact, drawn. here we change them to yes
+        if (([[dict objectForKey:@"Graphic Class"] isEqualToString:@"Rectangle"]) ||
+            ([[dict objectForKey:@"Graphic Class"] isEqualToString:@"Rectangle"])) {
             [ret setObject:[NSNumber numberWithBool:YES] forKey:@"drawsFill"];
             [ret setObject:[NSNumber numberWithBool:YES] forKey:@"drawsStroke"];
         }
+    }
+    // upgrade from 2 -> 3 if necessary
+    if (3 > old_version) {
+        // in versions 1 and 2, all graphics were sent to the printer.
+        // staring in version 3, there is a BOOL to decide if graphics
+        // get printed
+        [ret setObject:[NSNumber numberWithBool:NO] forKey:@"hideWhenPrinting"];
     }
     return ret;
 }

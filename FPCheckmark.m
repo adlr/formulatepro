@@ -20,7 +20,7 @@
 {
     self = [super initInDocumentView:docView];
     if (self) {
-        _lineWidth *= 2.0;
+        _strokeWidth *= 2.0;
     }
     return self;
 }
@@ -28,7 +28,7 @@
 - (void)draw:(BOOL)selected
 {
     NSBezierPath *path = [NSBezierPath bezierPath];
-    [path setLineWidth:[self lineWidth]];
+    [path setLineWidth:[self strokeWidth]];
     [[NSColor blackColor] set];
     [path moveToPoint:NSMakePoint(NSMinX([self bounds]),
                                   NSMinY([self bounds]))];

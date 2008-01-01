@@ -6,6 +6,8 @@
 @class FPGraphic;
 @class MyDocument;
 
+#define FPSelectionChangedNotification @"FPSelectionChangedNotification"
+
 @interface FPDocumentView : NSView
 {
     IBOutlet MyDocument *_doc;
@@ -40,13 +42,14 @@
 - (void)beginQuickMove:(id)unused;
 - (void)endQuickMove:(id)unused;
 
+- (NSSet *)selectedGraphics;
 - (void)deleteSelectedGraphics;
 
 - (unsigned int)getViewingMidpointToPage:(unsigned int*)page pagePoint:(NSPoint*)pagePoint;
 - (void)scrollToMidpointOnPage:(unsigned int)page point:(NSPoint)midPoint;
 
 // place image
-- (void)placeImage:(id)sender;
+- (IBAction)placeImage:(id)sender;
 
 // coordinate transforms
 - (unsigned int)pageForPointFromEvent:(NSEvent *)theEvent;
