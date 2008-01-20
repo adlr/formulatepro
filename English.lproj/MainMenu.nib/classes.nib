@@ -1,83 +1,173 @@
-{
-    IBClasses = (
-        {
-            ACTIONS = {
-                fileNewBug = id; 
-                placeImage = id; 
-                provideFeedback = id; 
-                showLicense = id; 
-                viewBugList = id; 
-            }; 
-            CLASS = AppDelegate; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                "_inspectorWindow" = NSPanel; 
-                "_placeImageMenuItem" = NSMenuItem; 
-                "_renderWindow" = NSWindow; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {
-                checkFill = id; 
-                checkHideWhenPrinting = id; 
-                checkStroke = id; 
-                setStroke = id; 
-                stepStroke = id; 
-            }; 
-            CLASS = FPInspectorController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                "_dimensionsBox" = NSBox; 
-                "_fillCheckbox" = NSButton; 
-                "_fillColorWell" = NSColorWell; 
-                "_hideWhenPrinting" = NSButton; 
-                "_strokeCheckbox" = NSButton; 
-                "_strokeColorWell" = NSColorWell; 
-                "_widthLabel" = NSTextField; 
-                "_widthStepper" = NSStepper; 
-                "_widthTextField" = NSTextField; 
-            }; 
-            SUPERCLASS = NSWindowController; 
-        }, 
-        {CLASS = FPTextRenderingView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
-        {
-            ACTIONS = {nextTip = id; previousTip = id; }; 
-            CLASS = FPTipsController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {"_tipTextField" = NSTextField; "_tipWindow" = NSWindow; }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {chooseTool = id; }; 
-            CLASS = FPToolPaletteController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                arrowToolButton = NSButton; 
-                checkmarkToolButton = NSButton; 
-                ellipseToolButton = NSButton; 
-                rectangleToolButton = NSButton; 
-                squiggleToolButton = NSButton; 
-                stampToolButton = NSButton; 
-                textAreaToolButton = NSButton; 
-                textFieldToolButton = NSButton; 
-            }; 
-            SUPERCLASS = NSWindowController; 
-        }, 
-        {
-            ACTIONS = {"" = id; placeImage = id; }; 
-            CLASS = FirstResponder; 
-            LANGUAGE = ObjC; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
-        {CLASS = PrefsWindow; LANGUAGE = ObjC; SUPERCLASS = NSWindow; }, 
-        {
-            ACTIONS = {checkForUpdates = id; }; 
-            CLASS = SUUpdater; 
-            LANGUAGE = ObjC; 
-            SUPERCLASS = NSObject; 
-        }
-    ); 
-    IBVersion = 1; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBClasses</key>
+	<array>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>nextTip</key>
+				<string>id</string>
+				<key>previousTip</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FPTipsController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>_tipTextField</key>
+				<string>NSTextField</string>
+				<key>_tipWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>fileNewBug</key>
+				<string>id</string>
+				<key>placeImage</key>
+				<string>id</string>
+				<key>provideFeedback</key>
+				<string>id</string>
+				<key>showLicense</key>
+				<string>id</string>
+				<key>viewBugList</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>AppDelegate</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>_inspectorWindow</key>
+				<string>NSPanel</string>
+				<key>_placeImageMenuItem</key>
+				<string>NSMenuItem</string>
+				<key>_renderWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key></key>
+				<string>id</string>
+				<key>placeImage</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>chooseTool</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FPToolPaletteController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>arrowToolButton</key>
+				<string>NSButton</string>
+				<key>checkmarkToolButton</key>
+				<string>NSButton</string>
+				<key>ellipseToolButton</key>
+				<string>NSButton</string>
+				<key>rectangleToolButton</key>
+				<string>NSButton</string>
+				<key>squiggleToolButton</key>
+				<string>NSButton</string>
+				<key>stampToolButton</key>
+				<string>NSButton</string>
+				<key>textAreaToolButton</key>
+				<string>NSButton</string>
+				<key>textFieldToolButton</key>
+				<string>NSButton</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSWindowController</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>checkForUpdates</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>SUUpdater</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>checkFill</key>
+				<string>id</string>
+				<key>checkHideWhenPrinting</key>
+				<string>id</string>
+				<key>checkStroke</key>
+				<string>id</string>
+				<key>setStroke</key>
+				<string>id</string>
+				<key>stepStroke</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FPInspectorController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>_dimensionsBox</key>
+				<string>NSBox</string>
+				<key>_fillCheckbox</key>
+				<string>NSButton</string>
+				<key>_fillColorWell</key>
+				<string>NSColorWell</string>
+				<key>_hideWhenPrinting</key>
+				<string>NSButton</string>
+				<key>_strokeCheckbox</key>
+				<string>NSButton</string>
+				<key>_strokeColorWell</key>
+				<string>NSColorWell</string>
+				<key>_widthLabel</key>
+				<string>NSTextField</string>
+				<key>_widthStepper</key>
+				<string>NSStepper</string>
+				<key>_widthTextField</key>
+				<string>NSTextField</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSWindowController</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>FPNonMainWindow</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSWindow</string>
+		</dict>
+	</array>
+	<key>IBVersion</key>
+	<string>1</string>
+</dict>
+</plist>

@@ -83,12 +83,16 @@ static NSString *pathArchiveKey = @"path";
 
 - (void)draw:(BOOL)selected
 {
+	NSLog(@"draw path: %@\n", _path);
     NSBezierPath *tempPath = [[_path copy] autorelease];
     NSAffineTransform *scaleTransform = [NSAffineTransform transform];
-    NSAffineTransform *translateTransform = [NSAffineTransform transform];
-    [scaleTransform scaleXBy:(_bounds.size.width/[tempPath bounds].size.width)
-     yBy:(_bounds.size.height/[tempPath bounds].size.height)];
+	NSSize tempSize = [tempPath bounds].size;
+	[scaleTransform scaleXBy:(tempSize.width > 1.0e-6) ?
+							     (_bounds.size.width/tempSize.width) : 1.0
+	                     yBy:(tempSize.height > 1.0e-6) ?
+						         (_bounds.size.height/tempSize.height) : 1.0];
     [tempPath transformUsingAffineTransform:scaleTransform];
+    NSAffineTransform *translateTransform = [NSAffineTransform transform];
     [translateTransform
      translateXBy:(_bounds.origin.x - [tempPath bounds].origin.x)
               yBy:(_bounds.origin.y - [tempPath bounds].origin.y)];
@@ -126,6 +130,7 @@ static NSString *pathArchiveKey = @"path";
     
     _path = [[NSBezierPath bezierPath] retain];
     [_path moveToPoint:point];
+	NSLog(@"line at point: %@\n", NSStringFromPoint(point));
 
     gc = [NSGraphicsContext graphicsContextWithWindow:[_docView window]];
     [NSGraphicsContext setCurrentContext:gc];
@@ -138,6 +143,7 @@ static NSString *pathArchiveKey = @"path";
         
         new_point = [_docView pagePointForPointFromEvent:theEvent page:_page];
         [_path lineToPoint:new_point];
+		NSLog(@"line to point: %@\n", NSStringFromPoint(new_point));
         if (NSPointInRect([self pageToWindowPoint:point],
                           [[[_docView window] contentView] frame]) &&
             NSPointInRect([self pageToWindowPoint:new_point],
@@ -156,6 +162,7 @@ static NSString *pathArchiveKey = @"path";
             break;
     }
     _bounds = [_path bounds];
+	NSLog(@"path: %@\n", _path);
     [NSGraphicsContext restoreGraphicsState];
     [[[_docView window] contentView] setNeedsDisplay:YES];
     return YES;
