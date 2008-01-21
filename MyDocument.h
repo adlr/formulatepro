@@ -15,7 +15,6 @@
 
 @interface MyDocument : NSDocument
 {
-    //IBOutlet MyPDFView *_pdf_view;
     IBOutlet FPDocumentView *_document_view;
     IBOutlet NSWindow *_document_window;
     IBOutlet NSSegmentedControl *_one_up_vs_two_up_vs_book;

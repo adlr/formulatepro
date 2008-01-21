@@ -97,8 +97,8 @@
 		32DBCF750370BD2300C91783 /* FormulatePro_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormulatePro_Prefix.pch; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* FormulatePro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FormulatePro.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C43595C40D306E02006A7FF5 /* FPNonMainWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPNonMainWindow.m; sourceTree = SOURCE_ROOT; };
-		C43595C50D306E02006A7FF5 /* FPNonMainWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPNonMainWindow.h; sourceTree = SOURCE_ROOT; };
+		C43595C40D306E02006A7FF5 /* FPNonMainWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPNonMainWindow.m; sourceTree = "<group>"; };
+		C43595C50D306E02006A7FF5 /* FPNonMainWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPNonMainWindow.h; sourceTree = "<group>"; };
 		C43B61D10B2FD56D00C1B850 /* FPTextAreaB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPTextAreaB.h; sourceTree = "<group>"; };
 		C43B61D20B2FD56D00C1B850 /* FPTextAreaB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPTextAreaB.m; sourceTree = "<group>"; };
 		C44981780A922A890084F508 /* AOSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOSegmentedControl.h; sourceTree = "<group>"; };
@@ -229,12 +229,8 @@
 				C4AB42810A623A6800EE29B2 /* FPToolPaletteController.m */,
 				C44988D00AA7B0F80084F508 /* FPInspectorController.h */,
 				C44988CF0AA7B0F80084F508 /* FPInspectorController.m */,
-				C44981780A922A890084F508 /* AOSegmentedControl.h */,
-				C44981790A922A890084F508 /* AOSegmentedControl.m */,
 				C4A904460B2C86E00015511A /* FPDocumentView.h */,
 				C4A904470B2C86E00015511A /* FPDocumentView.m */,
-				C43595C50D306E02006A7FF5 /* FPNonMainWindow.h */,
-				C43595C40D306E02006A7FF5 /* FPNonMainWindow.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -242,6 +238,10 @@
 		2A37F4AFFDCFA73011CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				C44981780A922A890084F508 /* AOSegmentedControl.h */,
+				C44981790A922A890084F508 /* AOSegmentedControl.m */,
+				C43595C50D306E02006A7FF5 /* FPNonMainWindow.h */,
+				C43595C40D306E02006A7FF5 /* FPNonMainWindow.m */,
 				C45E46040B3CEDDB00D41543 /* NSMutableSetAdditions.h */,
 				C45E46050B3CEDDB00D41543 /* NSMutableSetAdditions.m */,
 				C4B25D950B4ADF8100DADA0F /* NSMutableDictionaryAdditions.h */,

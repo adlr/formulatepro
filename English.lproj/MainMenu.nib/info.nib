@@ -4,15 +4,10 @@
 <dict>
 	<key>IBFramework Version</key>
 	<string>629</string>
-	<key>IBLastKnownRelativeProjectPath</key>
-	<string>../../FormulatePro.xcodeproj</string>
 	<key>IBOldestOS</key>
 	<integer>5</integer>
 	<key>IBOpenObjects</key>
-	<array>
-		<integer>402</integer>
-		<integer>466</integer>
-	</array>
+	<array/>
 	<key>IBSystem Version</key>
 	<string>9B18</string>
 	<key>targetFramework</key>

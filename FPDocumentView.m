@@ -427,6 +427,7 @@ static const float ZoomScaleFactor = 1.3;
     NSPoint loc_in_view =
         [[[self window] contentView] convertPoint:loc_in_window toView:self];
     NSPoint loc_in_page = [self convertPoint:loc_in_view toPage:page];
+	DLog(@"W: %@, V: %@, :P %@\n", NSStringFromPoint(loc_in_window), NSStringFromPoint(loc_in_view), NSStringFromPoint(loc_in_page));
     return loc_in_page;
 }
 
