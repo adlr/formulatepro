@@ -7,25 +7,28 @@ www.andymatuschak.org/xml-namespaces/sparkle">
         <description>Most recent changes with links to updates.</description> 
         <language>en</language> 
         <item> 
+            <title>Version 0.0.4 (Beta 4)</title> 
+            <description>http://adlr.info/appcasts/FormulatePro-0.0.4.html</description> 
+            <pubDate>Mon Jan 21 02:59:12 UTC 2008</pubDate> 
+            <enclosure sparkle:version="0.0.4" url="http://formulatepro.googlecode.com/files/FormulatePro-0.0.4.dmg" length="322636" type="application/octet-stream"/> 
+        </item> 
+        <item> 
             <title>Version 0.0.3 (Beta 3)</title> 
             <description>http://adlr.info/appcasts/FormulatePro-0.0.3.html</description> 
             <pubDate>Sun, 4 Nov 2007 07:21:00 +0000</pubDate> 
-            <enclosure sparkle:version="0.0.3" url="http://formulatepro.googlecode.com/files/FormulatePro-0.0.3.dmg" length="312473" 
-type="application/octet-stream"/> 
+            <enclosure sparkle:version="0.0.3" url="http://formulatepro.googlecode.com/files/FormulatePro-0.0.3.dmg" length="312473" type="application/octet-stream"/> 
         </item> 
         <item> 
             <title>Version 0.0.2 (Beta 2)</title> 
             <description>http://adlr.info/appcasts/FormulatePro-0.0.2.html</description> 
             <pubDate>Sun, 8 Apr 2007 07:15:00 +0000</pubDate> 
-            <enclosure sparkle:version="0.0.2" url="http://formulatepro.googlecode.com/files/FormulatePro-0.0.2.dmg" length="301168" 
-type="application/octet-stream"/> 
+            <enclosure sparkle:version="0.0.2" url="http://formulatepro.googlecode.com/files/FormulatePro-0.0.2.dmg" length="301168" type="application/octet-stream"/> 
         </item> 
         <item> 
             <title>Version 0.0.1 (Initial beta release)</title> 
             <description>http://adlr.info/appcasts/FormulatePro-0.0.1.html</description> 
             <pubDate>Mon, 15 Jan 2006 23:52:00 +0000</pubDate> 
-            <enclosure sparkle:version="0.0.1" url="http://adlr.info/apps/formulatepro/FormulatePro-0.0.1.dmg" length="299579" 
-type="application/octet-stream"/> 
+            <enclosure sparkle:version="0.0.1" url="http://adlr.info/apps/formulatepro/FormulatePro-0.0.1.dmg" length="299579" type="application/octet-stream"/> 
         </item> 
     </channel> 
 </rss> 
