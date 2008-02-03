@@ -1,93 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>IBClasses</key>
-	<array>
-		<dict>
-			<key>CLASS</key>
-			<string>NSSegmentedControl</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>SUPERCLASS</key>
-			<string>NSControl</string>
-		</dict>
-		<dict>
-			<key>CLASS</key>
-			<string>FPDocumentWindow</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>_docView</key>
-				<string>FPDocumentView</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSWindow</string>
-		</dict>
-		<dict>
-			<key>ACTIONS</key>
-			<dict>
-				<key>factorButtonChanged</key>
-				<string>id</string>
-				<key>zoomIn</key>
-				<string>id</string>
-				<key>zoomOut</key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>FPZoomingScrollView</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>SUPERCLASS</key>
-			<string>NSScrollView</string>
-		</dict>
-		<dict>
-			<key>CLASS</key>
-			<string>FirstResponder</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>CLASS</key>
-			<string>FPWindowController</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>_graphicsController</key>
-				<string>NSArrayController</string>
-				<key>_graphicsView</key>
-				<string>FPDocumentView</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSWindowController</string>
-		</dict>
-		<dict>
-			<key>CLASS</key>
-			<string>AOSegmentedControl</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>SUPERCLASS</key>
-			<string>NSSegmentedControl</string>
-		</dict>
-		<dict>
-			<key>CLASS</key>
-			<string>FPDocumentView</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>_scrollView</key>
-				<string>NSScrollView</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSView</string>
-		</dict>
-	</array>
-	<key>IBVersion</key>
-	<string>1</string>
-</dict>
-</plist>
+{
+    IBClasses = (
+        {
+            CLASS = AOSegmentedControl; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSSegmentedControl; 
+        }, 
+        {
+            CLASS = FPDocumentView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_scrollView" = NSScrollView; }; 
+            SUPERCLASS = NSView; 
+        }, 
+        {
+            CLASS = FPDocumentWindow; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_docView" = FPDocumentView; }; 
+            SUPERCLASS = NSWindow; 
+        }, 
+        {
+            CLASS = FPWindowController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_graphicsController" = NSArrayController; "_graphicsView" = FPDocumentView; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            ACTIONS = {factorButtonChanged = id; zoomIn = id; zoomOut = id; }; 
+            CLASS = FPZoomingScrollView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSScrollView; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }
+    ); 
+    IBVersion = 1; 
+}
