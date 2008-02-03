@@ -10,6 +10,11 @@
 #import "FPLogging.h"
 #import "MyDocument.h"
 
+#include <AvailabilityMacros.h>
+#ifndef MAC_OS_X_VERSION_10_5
+#define MAC_OS_X_VERSION_10_5 1050
+#endif  // MAC_OS_X_VERSION_10_5
+
 NSString *FPDocumentViewGraphicsBindingName = @"graphics";
 NSString *FPDocumentViewSelectionIndexesBindingName = @"selectionIndexes";
 
@@ -484,7 +489,7 @@ static const float ZoomScaleFactor = 1.3;
 }
 
 - (NSPoint)convertPointToBase:(NSPoint)aPoint
-{   
+{
     return [self convertPoint:aPoint toView:nil];
 }
 
