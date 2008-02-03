@@ -61,6 +61,11 @@ extern NSString *FPDocumentViewSelectionIndexesBindingName;
 // never returns nil
 - (NSIndexSet *)selectionIndexes;
 
+// drawing
+
+- (void)drawRect:(NSRect)rect;
+- (void)drawHandleAtPoint:(NSPoint)point;
+
 // Other methods
 
 - (void)setPDFDocument:(PDFDocument *)pdf_document;

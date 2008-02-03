@@ -1,3 +1,6 @@
+
+#import <objc/objc-runtime.h>
+
 #import "NSMutableSetAdditions.h"
 #import "FPDocumentView.h"
 #import "FPDocumentWindow.h"
@@ -13,6 +16,25 @@ NSString *FPDocumentViewSelectionIndexesBindingName = @"selectionIndexes";
 static NSString *FPDocumentViewGraphicsObservationContext = @"graphicsObservationContext";
 static NSString *FPDocumentViewIndividualGraphicObservationContext = @"individualGraphicObservationContext";
 static NSString *FPDocumentViewSelectionIndexesObservationContext = @"selectionIndexesObservationContext";
+
+static float getUIScaleFactorForWindow(NSWindow *window)
+{
+    static BOOL haveRet = NO;
+    static float ret;
+    if (haveRet)
+        return ret;
+    NSDictionary *deviceDescription = [window deviceDescription];
+    NSValue *resolutionValue = [deviceDescription valueForKey:NSDeviceResolution];
+    NSSize sz = [resolutionValue sizeValue];
+    ret = sz.width / 72.0;
+    return ret;
+}
+
+// are a and b very close to each other?
+static BOOL floatsEqual(float a, float b)
+{
+    return (fabsf(a - b)) < 1.0e-4;
+}
 
 @implementation FPDocumentView
 
@@ -423,6 +445,18 @@ static const float ZoomScaleFactor = 1.3;
             g = [[self graphics] objectAtIndex:j];
             if ([g page] == i)
                 [g draw:[[self selectionIndexes] containsIndex:j]];
+            {
+                NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self centerScanRect:[g bounds]]];
+//                [path setLineWidth:lineWidth];
+                [[NSColor blackColor] set];
+                [path stroke];
+            }
+        }
+        for (unsigned int j = 0; j < [[self graphics] count]; j++) {
+            FPGraphic *g;
+            g = [[self graphics] objectAtIndex:j];
+            if (([g page] == i) && ([[self selectionIndexes] containsIndex:j]))
+                [self drawHandleAtPoint:([g bounds].origin)];
         }
 //        for (unsigned int j = 0; j < [[self graphics] count]; j++) {
 //            FPGraphic *g;
@@ -439,6 +473,67 @@ static const float ZoomScaleFactor = 1.3;
       loop_end:
         how_far_down += NSHeight(page_rect) + PageBorderSize;
     }
+}
+
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
+// Note: these four methods will go away when 10.4 is no longer supported
+- (NSPoint)convertPointFromBase:(NSPoint)aPoint
+{
+    return [self convertPoint:aPoint fromView:nil];
+}
+
+- (NSPoint)convertPointToBase:(NSPoint)aPoint
+{   
+    return [self convertPoint:aPoint toView:nil];
+}
+
+- (NSRect)convertRectToBase:(NSRect)aRect
+{
+    return [self convertRect:aRect toView:nil];
+}
+
+- (NSRect)convertRectFromBase:(NSRect)aRect
+{
+    return [self convertRect:aRect fromView:nil];
+}
+#endif  // MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
+
+// called by graphics, so origin is the page origin
+- (void)drawHandleAtPoint:(NSPoint)point
+{
+    float lineWidth = 1.0;
+    float windowScaleFactor = getUIScaleFactorForWindow([self window]);
+    float handleSize = 6.0;
+    if (floatsEqual(windowScaleFactor, 1.25)) {
+        lineWidth = 1.0 / 1.25;
+        handleSize = 8.0;
+    } else if (floatsEqual(windowScaleFactor, 1.5)) {
+        lineWidth = 1.0 / 1.5;
+        handleSize = 10.0;
+    } else if (windowScaleFactor > 1.5) {
+        handleSize = 6.0 * windowScaleFactor;
+    }
+
+    NSPoint basePoint = [self convertPointToBase:point];
+    NSRect handleRectInWindow = NSMakeRect(basePoint.x - handleSize/2.0, basePoint.y - handleSize/2.0, handleSize, handleSize);
+    float unused;
+    if (!floatsEqual(0.0, modff(windowScaleFactor/2.0, &unused))) {
+        // if the line we draw occupies an odd number of pixels on screen,
+        // we must offset the center of the line
+        handleRectInWindow.origin.x = floorf(handleRectInWindow.origin.x);
+        if (!floatsEqual(1.25, windowScaleFactor))
+            // bug in NSView for 1.25 scaling it seems
+            handleRectInWindow.origin.x += 0.5;
+        handleRectInWindow.origin.y = floorf(handleRectInWindow.origin.y) + 0.5;
+    }
+
+    NSRect handleRectInSelf = [self convertRectFromBase:handleRectInWindow];
+    NSBezierPath *path = [NSBezierPath bezierPathWithRect:handleRectInSelf];
+    [path setLineWidth:lineWidth];
+    [[NSColor whiteColor] set];
+    [path fill];
+    [[NSColor blackColor] set];
+    [path stroke];
 }
 
 #pragma mark -
