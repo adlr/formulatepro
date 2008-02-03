@@ -535,6 +535,10 @@ static const float ZoomScaleFactor = 1.3;
 
     NSRect handleRectInSelf = [self convertRectFromBase:handleRectInWindow];
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:handleRectInSelf];
+    
+    NSRect lineWidthRect = [self convertRectFromBase:NSMakeRect(0.0, 0.0, lineWidth, lineWidth)];
+    lineWidth = lineWidthRect.size.width;
+
     [path setLineWidth:lineWidth];
     [[NSColor whiteColor] set];
     [path fill];
