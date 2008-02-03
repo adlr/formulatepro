@@ -14,7 +14,6 @@
     NSImage *_image;
 }
 
-- (id)initInDocumentView:(FPDocumentView *)docView
-               withImage:(NSImage *)image;
+- (id)initWithImage:(NSImage *)image;
 
 @end

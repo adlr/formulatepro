@@ -8,7 +8,7 @@ enum {
     FPToolRectangle,
     FPToolSquiggle,
     FPToolTextArea,
-	FPToolTextField,
+    FPToolTextField,
     FPToolCheckmark,
     FPToolStamp
 };
@@ -22,7 +22,7 @@ extern NSString *FPToolChosen;
     IBOutlet NSButton *rectangleToolButton;
     IBOutlet NSButton *squiggleToolButton;
     IBOutlet NSButton *textAreaToolButton;
-	IBOutlet NSButton *textFieldToolButton;
+    IBOutlet NSButton *textFieldToolButton;
     IBOutlet NSButton *checkmarkToolButton;
     IBOutlet NSButton *stampToolButton;
     

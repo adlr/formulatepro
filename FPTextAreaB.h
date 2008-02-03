@@ -15,13 +15,13 @@
     NSTextStorage *_textStorage;
     BOOL _isPlacing;
     BOOL _isEditing;
-	BOOL _isAutoSizedX;
-	BOOL _isAutoSizedY;
+    BOOL _isAutoSizedX;
+    BOOL _isAutoSizedY;
     
     float _editorScaleFactor;
 }
 
-- (void)documentDidZoom;
+//- (void)documentDidZoom;
 
 - (void)myFrameChanged:(NSTextView *)foo;
 @end

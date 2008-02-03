@@ -117,48 +117,6 @@
 			<string>NSObject</string>
 		</dict>
 		<dict>
-			<key>ACTIONS</key>
-			<dict>
-				<key>checkFill</key>
-				<string>id</string>
-				<key>checkHideWhenPrinting</key>
-				<string>id</string>
-				<key>checkStroke</key>
-				<string>id</string>
-				<key>setStroke</key>
-				<string>id</string>
-				<key>stepStroke</key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>FPInspectorController</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>_dimensionsBox</key>
-				<string>NSBox</string>
-				<key>_fillCheckbox</key>
-				<string>NSButton</string>
-				<key>_fillColorWell</key>
-				<string>NSColorWell</string>
-				<key>_hideWhenPrinting</key>
-				<string>NSButton</string>
-				<key>_strokeCheckbox</key>
-				<string>NSButton</string>
-				<key>_strokeColorWell</key>
-				<string>NSColorWell</string>
-				<key>_widthLabel</key>
-				<string>NSTextField</string>
-				<key>_widthStepper</key>
-				<string>NSStepper</string>
-				<key>_widthTextField</key>
-				<string>NSTextField</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSWindowController</string>
-		</dict>
-		<dict>
 			<key>CLASS</key>
 			<string>FPNonMainWindow</string>
 			<key>LANGUAGE</key>

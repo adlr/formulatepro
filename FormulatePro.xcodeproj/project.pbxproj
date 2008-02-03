@@ -16,12 +16,14 @@
 		C43595C60D306E02006A7FF5 /* FPNonMainWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = C43595C40D306E02006A7FF5 /* FPNonMainWindow.m */; };
 		C43B61D30B2FD56D00C1B850 /* FPTextAreaB.m in Sources */ = {isa = PBXBuildFile; fileRef = C43B61D20B2FD56D00C1B850 /* FPTextAreaB.m */; };
 		C449817A0A922A890084F508 /* AOSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = C44981790A922A890084F508 /* AOSegmentedControl.m */; };
-		C44988D10AA7B0F80084F508 /* FPInspectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = C44988CF0AA7B0F80084F508 /* FPInspectorController.m */; };
+		C45057890D453EE9000401E2 /* FPWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = C45057880D453EE9000401E2 /* FPWindowController.m */; };
+		C45057F90D455CE2000401E2 /* FPMouseEventProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = C45057F80D455CE2000401E2 /* FPMouseEventProxy.m */; };
 		C45E44A80B3C8C2700D41543 /* FormulatePro.icns in Resources */ = {isa = PBXBuildFile; fileRef = C45E44A70B3C8C2700D41543 /* FormulatePro.icns */; };
 		C45E46060B3CEDDB00D41543 /* NSMutableSetAdditions.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C45E46040B3CEDDB00D41543 /* NSMutableSetAdditions.h */; };
 		C45E46070B3CEDDB00D41543 /* NSMutableSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C45E46050B3CEDDB00D41543 /* NSMutableSetAdditions.m */; };
 		C45E46B50B3CF55B00D41543 /* FPCheckmark.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C45E46B30B3CF55B00D41543 /* FPCheckmark.h */; };
 		C45E46B60B3CF55B00D41543 /* FPCheckmark.m in Sources */ = {isa = PBXBuildFile; fileRef = C45E46B40B3CF55B00D41543 /* FPCheckmark.m */; };
+		C46F43D80D55675000E68E5F /* FPZoomingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = C46F43D70D55675000E68E5F /* FPZoomingScrollView.m */; };
 		C493CD3A0C8CEA3D00BFAEE8 /* FPTipsController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C493CD380C8CEA3D00BFAEE8 /* FPTipsController.h */; };
 		C493CD3B0C8CEA3D00BFAEE8 /* FPTipsController.m in Sources */ = {isa = PBXBuildFile; fileRef = C493CD390C8CEA3D00BFAEE8 /* FPTipsController.m */; };
 		C493CE0E0C8D222900BFAEE8 /* tips.plist in Resources */ = {isa = PBXBuildFile; fileRef = C493CE0D0C8D222900BFAEE8 /* tips.plist */; };
@@ -105,11 +107,17 @@
 		C44981790A922A890084F508 /* AOSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOSegmentedControl.m; sourceTree = "<group>"; };
 		C44988CF0AA7B0F80084F508 /* FPInspectorController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FPInspectorController.m; sourceTree = "<group>"; };
 		C44988D00AA7B0F80084F508 /* FPInspectorController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FPInspectorController.h; sourceTree = "<group>"; };
+		C45057870D453EE9000401E2 /* FPWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPWindowController.h; sourceTree = "<group>"; };
+		C45057880D453EE9000401E2 /* FPWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPWindowController.m; sourceTree = "<group>"; };
+		C45057F70D455CE1000401E2 /* FPMouseEventProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPMouseEventProxy.h; sourceTree = "<group>"; };
+		C45057F80D455CE2000401E2 /* FPMouseEventProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPMouseEventProxy.m; sourceTree = "<group>"; };
 		C45E44A70B3C8C2700D41543 /* FormulatePro.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = FormulatePro.icns; sourceTree = SOURCE_ROOT; };
 		C45E46040B3CEDDB00D41543 /* NSMutableSetAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableSetAdditions.h; sourceTree = "<group>"; };
 		C45E46050B3CEDDB00D41543 /* NSMutableSetAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMutableSetAdditions.m; sourceTree = "<group>"; };
 		C45E46B30B3CF55B00D41543 /* FPCheckmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPCheckmark.h; sourceTree = "<group>"; };
 		C45E46B40B3CF55B00D41543 /* FPCheckmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPCheckmark.m; sourceTree = "<group>"; };
+		C46F43D60D55675000E68E5F /* FPZoomingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPZoomingScrollView.h; sourceTree = "<group>"; };
+		C46F43D70D55675000E68E5F /* FPZoomingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPZoomingScrollView.m; sourceTree = "<group>"; };
 		C493CD380C8CEA3D00BFAEE8 /* FPTipsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPTipsController.h; sourceTree = "<group>"; };
 		C493CD390C8CEA3D00BFAEE8 /* FPTipsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPTipsController.m; sourceTree = "<group>"; };
 		C493CE0D0C8D222900BFAEE8 /* tips.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tips.plist; sourceTree = SOURCE_ROOT; };
@@ -221,16 +229,18 @@
 				C4F40AD40B35D6F1008063B4 /* FPDocumentWindow.m */,
 				C4AB40360A5BB5D200EE29B2 /* AppDelegate.h */,
 				C4AB40370A5BB5D200EE29B2 /* AppDelegate.m */,
-				C493CD380C8CEA3D00BFAEE8 /* FPTipsController.h */,
-				C493CD390C8CEA3D00BFAEE8 /* FPTipsController.m */,
 				2A37F4AEFDCFA73011CA2CEA /* MyDocument.h */,
 				2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */,
+				C45057870D453EE9000401E2 /* FPWindowController.h */,
+				C45057880D453EE9000401E2 /* FPWindowController.m */,
+				C4A904460B2C86E00015511A /* FPDocumentView.h */,
+				C4A904470B2C86E00015511A /* FPDocumentView.m */,
 				C4AB42800A623A6800EE29B2 /* FPToolPaletteController.h */,
 				C4AB42810A623A6800EE29B2 /* FPToolPaletteController.m */,
 				C44988D00AA7B0F80084F508 /* FPInspectorController.h */,
 				C44988CF0AA7B0F80084F508 /* FPInspectorController.m */,
-				C4A904460B2C86E00015511A /* FPDocumentView.h */,
-				C4A904470B2C86E00015511A /* FPDocumentView.m */,
+				C493CD380C8CEA3D00BFAEE8 /* FPTipsController.h */,
+				C493CD390C8CEA3D00BFAEE8 /* FPTipsController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -238,6 +248,8 @@
 		2A37F4AFFDCFA73011CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				C46F43D60D55675000E68E5F /* FPZoomingScrollView.h */,
+				C46F43D70D55675000E68E5F /* FPZoomingScrollView.m */,
 				C44981780A922A890084F508 /* AOSegmentedControl.h */,
 				C44981790A922A890084F508 /* AOSegmentedControl.m */,
 				C43595C50D306E02006A7FF5 /* FPNonMainWindow.h */,
@@ -297,6 +309,8 @@
 				C4B25D530B4AD7C900DADA0F /* FPArchiveExtras.h */,
 				C4EE45580BC8BCC400F417D3 /* FPArchivalDictionaryUpgrader.h */,
 				C4EE45590BC8BCC400F417D3 /* FPArchivalDictionaryUpgrader.m */,
+				C45057F70D455CE1000401E2 /* FPMouseEventProxy.h */,
+				C45057F80D455CE2000401E2 /* FPMouseEventProxy.m */,
 				C4AB40E30A5BDC7D00EE29B2 /* FPGraphic.h */,
 				C4AB40E40A5BDC7D00EE29B2 /* FPGraphic.m */,
 				C4DC0E630A85907800DB476E /* FPRectangle.h */,
@@ -397,7 +411,6 @@
 				C4AB40380A5BB5D200EE29B2 /* AppDelegate.m in Sources */,
 				C4AB42820A623A6800EE29B2 /* FPToolPaletteController.m in Sources */,
 				C449817A0A922A890084F508 /* AOSegmentedControl.m in Sources */,
-				C44988D10AA7B0F80084F508 /* FPInspectorController.m in Sources */,
 				C4A904480B2C86E00015511A /* FPDocumentView.m in Sources */,
 				C4A906000B2CBF900015511A /* FPEllipse.m in Sources */,
 				C4A906010B2CBF910015511A /* FPGraphic.m in Sources */,
@@ -412,6 +425,9 @@
 				C4EE455B0BC8BCC400F417D3 /* FPArchivalDictionaryUpgrader.m in Sources */,
 				C493CD3B0C8CEA3D00BFAEE8 /* FPTipsController.m in Sources */,
 				C43595C60D306E02006A7FF5 /* FPNonMainWindow.m in Sources */,
+				C45057890D453EE9000401E2 /* FPWindowController.m in Sources */,
+				C45057F90D455CE2000401E2 /* FPMouseEventProxy.m in Sources */,
+				C46F43D80D55675000E68E5F /* FPZoomingScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

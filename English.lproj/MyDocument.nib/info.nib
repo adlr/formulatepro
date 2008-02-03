@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>IBDocumentLocation</key>
-	<string>228 37 356 240 0 0 1280 778 </string>
-	<key>IBEditorPositions</key>
-	<dict>
-		<key>30</key>
-		<string>519 425 286 187 0 0 1280 778 </string>
-		<key>47</key>
-		<string>453 329 404 96 0 0 1280 778 </string>
-	</dict>
 	<key>IBFramework Version</key>
-	<string>481.0</string>
+	<string>629</string>
+	<key>IBLastKnownRelativeProjectPath</key>
+	<string>../../FormulatePro.xcodeproj</string>
+	<key>IBOldestOS</key>
+	<integer>5</integer>
 	<key>IBOpenObjects</key>
 	<array>
-		<integer>47</integer>
-		<integer>5</integer>
-		<integer>30</integer>
+		<integer>6</integer>
 	</array>
 	<key>IBSystem Version</key>
-	<string>8S2167</string>
+	<string>9B18</string>
+	<key>targetFramework</key>
+	<string>IBCocoaFramework</string>
 </dict>
 </plist>

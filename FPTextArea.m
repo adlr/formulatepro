@@ -23,7 +23,7 @@
         _editor = nil;
         _isPlacing = NO;
         _isEditing = NO;
-		_isAutoSized = YES;
+        _isAutoSized = YES;
     }
     return self;
 }
@@ -243,13 +243,13 @@
     theEvent = [[_docView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
     if ([theEvent type] != NSLeftMouseUp) {
         // ok, we have a shape, and user is dragging to size it
-		_isAutoSized = NO;
+        _isAutoSized = NO;
         _isPlacing = YES;
         [self resizeWithEvent:theEvent byKnob:LowerRightKnob];
         _isPlacing = NO;
     } else {
-		_isAutoSized = YES;
-	}
+        _isAutoSized = YES;
+    }
     return YES;
 }
 
@@ -327,31 +327,31 @@ PDFDisplayViewForMatteView(NSView *p)
 
 - (void)startEditing
 {
-	NSLog(@"start editing\n");
+    NSLog(@"start editing\n");
     NSRect frame;
     if (_editor == nil) {
         _editor = [[NSTextView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 40.0, 40.0)];
-		[[_editor textContainer] setLineFragmentPadding:1.0];
-	}
+        [[_editor textContainer] setLineFragmentPadding:1.0];
+    }
 
     [[_editor textContainer] setWidthTracksTextView:NO];
     [_editor setHorizontallyResizable:NO]; //x
 
     [[_editor textContainer] setHeightTracksTextView:NO];
     [_editor setVerticallyResizable:NO]; //x
-	
-	if (_isAutoSized) {
-		[[_editor textContainer] setContainerSize:NSMakeSize(300.0, 300.0)];
-	} else {
-		[[_editor textContainer] setContainerSize:_bounds.size];
-	}
+    
+    if (_isAutoSized) {
+        [[_editor textContainer] setContainerSize:NSMakeSize(300.0, 300.0)];
+    } else {
+        [[_editor textContainer] setContainerSize:_bounds.size];
+    }
     [_editor setMinSize:NSMakeSize(10.0, 15.0)];
     [_editor setMaxSize:NSMakeSize(1.0e6, 1.0e6)];
     
-	if (_isAutoSized) {
-		_bounds.size = [[_editor layoutManager] usedRectForTextContainer:[_editor textContainer]].size;
-		[[_editor layoutManager] setDelegate:self];
-	}
+    if (_isAutoSized) {
+        _bounds.size = [[_editor layoutManager] usedRectForTextContainer:[_editor textContainer]].size;
+        [[_editor layoutManager] setDelegate:self];
+    }
 
     frame = [_docView convertRect:[_docView convertRect:_bounds fromPage:_page] toView:PDFDisplayViewForMatteView(documentViewForPDFView(_docView))];
     NSLog(@"frame: %@\n", NSStringFromRect(frame));
@@ -394,19 +394,19 @@ PDFDisplayViewForMatteView(NSView *p)
 didCompleteLayoutForTextContainer:(NSTextContainer *)aTextContainer
 atEnd:(BOOL)flag
 {
-	NSLog(@"layoutManager:didCompleteLayoutForTextContainer:atEnd:\n");
-	NSLog(@"Test: size: %@\n", NSStringFromSize([self containerSizeOfString:@"a\nb"
-		withFontname:@"Helvetica"
-		fontSize:12.0]));
-	//NSTextContainer tempContainer = [[[NSTextContainer alloc] initWithContainerSize:NSMakeSize(300.0,300.0)] autorelease];
-	//NSLayoutManger tempLayoutManager = [[[NSLayoutManager alloc] init] autorelease];
-	
-	NSRect frame;
-	_bounds.size = [[_editor layoutManager] usedRectForTextContainer:[_editor textContainer]].size;
-	//[[_editor textContainer] containerSize];
+    NSLog(@"layoutManager:didCompleteLayoutForTextContainer:atEnd:\n");
+    NSLog(@"Test: size: %@\n", NSStringFromSize([self containerSizeOfString:@"a\nb"
+        withFontname:@"Helvetica"
+        fontSize:12.0]));
+    //NSTextContainer tempContainer = [[[NSTextContainer alloc] initWithContainerSize:NSMakeSize(300.0,300.0)] autorelease];
+    //NSLayoutManger tempLayoutManager = [[[NSLayoutManager alloc] init] autorelease];
+    
+    NSRect frame;
+    _bounds.size = [[_editor layoutManager] usedRectForTextContainer:[_editor textContainer]].size;
+    //[[_editor textContainer] containerSize];
     frame = [_docView convertRect:[_docView convertRect:_bounds fromPage:_page] toView:PDFDisplayViewForMatteView(documentViewForPDFView(_docView))];
-	[_editor setFrame:frame];
-	NSLog(@"setting frame to : %@\n", NSStringFromRect(frame));
+    [_editor setFrame:frame];
+    NSLog(@"setting frame to : %@\n", NSStringFromRect(frame));
 }
 
 /*
@@ -426,10 +426,10 @@ flippedFont(NSFont * font)
 
 - (void)stopEditing
 {
-	NSLog(@"stop editing\n");
+    NSLog(@"stop editing\n");
     assert(_editor);
     [_editor setDelegate:nil];
-	[[_editor layoutManager] setDelegate:nil];
+    [[_editor layoutManager] setDelegate:nil];
     [_editor removeFromSuperview];
     _isEditing = NO;
     /*

@@ -15,26 +15,29 @@
 
 @interface MyDocument : NSDocument
 {
-    IBOutlet FPDocumentView *_document_view;
-    IBOutlet NSWindow *_document_window;
-    IBOutlet NSSegmentedControl *_one_up_vs_two_up_vs_book;
-    IBOutlet NSSegmentedControl *_single_vs_continuous;
-    IBOutlet NSView *_print_accessory_view;
+//    IBOutlet FPDocumentView *_document_view;
+//    IBOutlet NSWindow *_document_window;
+//    IBOutlet NSSegmentedControl *_one_up_vs_two_up_vs_book;
+//    IBOutlet NSSegmentedControl *_single_vs_continuous;
+//    IBOutlet NSView *_print_accessory_view;
 
-    NSNumber *_print_original_pdf;
+//    NSNumber *_print_original_pdf;
     
     NSData *_originalPDFData;
-    NSMutableArray *_tempOverlayGraphics;
-    int _tempOverlayGraphicsVersion;
+    NSMutableArray *_overlayGraphics;
     
     PDFDocument *_pdf_document;
 }
 
-- (IBAction)zoomIn:(id)sender;
-- (IBAction)zoomOut:(id)sender;
-- (IBAction)toggleOneUpTwoUpBookMode:(id)sender;
-- (IBAction)toggleContinuous:(id)sender;
-- (IBAction)placeImage:(id)sender;
+- (NSMutableArray *)overlayGraphics;
+//- (void)setOverlayGraphics:(NSMutableArray *)overlayGraphics;
+- (PDFDocument *)pdfDocument;
 
-- (BOOL)drawsOriginalPDF;
+//- (IBAction)zoomIn:(id)sender;
+//- (IBAction)zoomOut:(id)sender;
+//- (IBAction)toggleOneUpTwoUpBookMode:(id)sender;
+//- (IBAction)toggleContinuous:(id)sender;
+//- (IBAction)placeImage:(id)sender;
+//
+//- (BOOL)drawsOriginalPDF;
 @end

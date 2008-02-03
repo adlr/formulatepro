@@ -71,10 +71,8 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
 }
 
 - (id)initWithArchivalDictionary:(NSDictionary *)dict
-                  inDocumentView:(FPDocumentView *)docView
 {
-    self = [super initWithArchivalDictionary:dict
-                              inDocumentView:docView];
+    self = [super initWithArchivalDictionary:dict];
     if (self) {
         NSData *rtf_data = [[dict objectForKey:editorTextStorageKey]
                             dataUsingEncoding:NSUTF8StringEncoding];
@@ -113,9 +111,9 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
     return ret;
 }
 
-- (id)initInDocumentView:(FPDocumentView *)docView
+- (id)init
 {
-    self = [super initInDocumentView:docView];
+    self = [super init];
     if (self) {
         _editor = nil;
         _textStorage = [[NSTextStorage alloc] init];
@@ -135,28 +133,28 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
     return YES;
 }
 
-- (BOOL)placeWithEvent:(NSEvent *)theEvent
-{
-    _isPlacing = YES;
-    _page = [_docView pageForPointFromEvent:theEvent];
-    NSPoint point = [_docView pagePointForPointFromEvent:theEvent page:_page];
-    
-    _bounds.origin = point;
-    point = [_docView pagePointForPointFromEvent:theEvent page:_page];
-    _bounds.size = NSMakeSize(10.0,10.0);
-    _naturalBounds.origin = point;
-    _naturalBounds.size = NSMakeSize(1.0, 1.0);
-    
-    // if the next event is mouse up, then the user didn't drag at all
-    theEvent = [[_docView window] nextEventMatchingMask:
-                (NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
-    _isAutoSizedX = _isAutoSizedY = YES;
-    if ([theEvent type] != NSLeftMouseUp) {
-        [self resizeWithEvent:theEvent byKnob:LowerRightKnob];
-    }
-    _isPlacing = NO;
-    return YES;
-}
+//- (BOOL)placeWithEvent:(NSEvent *)theEvent
+//{
+//    _isPlacing = YES;
+//    _page = [_docView pageForPointFromEvent:theEvent];
+//    NSPoint point = [_docView pagePointForPointFromEvent:theEvent page:_page];
+//    
+//    _bounds.origin = point;
+//    point = [_docView pagePointForPointFromEvent:theEvent page:_page];
+//    _bounds.size = NSMakeSize(10.0,10.0);
+//    _naturalBounds.origin = point;
+//    _naturalBounds.size = NSMakeSize(1.0, 1.0);
+//    
+//    // if the next event is mouse up, then the user didn't drag at all
+//    theEvent = [[_docView window] nextEventMatchingMask:
+//                (NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
+//    _isAutoSizedX = _isAutoSizedY = YES;
+//    if ([theEvent type] != NSLeftMouseUp) {
+//        [self resizeWithEvent:theEvent byKnob:LowerRightKnob];
+//    }
+//    _isPlacing = NO;
+//    return YES;
+//}
 
 static NSLayoutManager *sharedDrawingLayoutManager();
 
@@ -182,12 +180,12 @@ static NSLayoutManager *sharedDrawingLayoutManager();
     [super setBounds:bounds];
 }
 
-- (void)resizeWithEvent:(NSEvent *)theEvent byKnob:(int)knob
-{
-    [super resizeWithEvent:theEvent byKnob:knob];
-    if (NSWidth([self bounds]) >= 10.0)  // only go fixed size if it's wide enough
-        _isAutoSizedX = NO;
-}
+//- (void)resizeWithEvent:(NSEvent *)theEvent byKnob:(int)knob
+//{
+//    [super resizeWithEvent:theEvent byKnob:knob];
+//    if (NSWidth([self bounds]) >= 10.0)  // only go fixed size if it's wide enough
+//        _isAutoSizedX = NO;
+//}
 
 static NSLayoutManager *sharedDrawingLayoutManager() {
     // This method returns an NSLayoutManager that can be used to draw the contents of a SKTTextArea.
@@ -208,6 +206,7 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
 
 - (void)draw:(BOOL)selected
 {
+    DLog(@"draw: %@\n", selected ? @"YES" : @"NO");
     if (_gFlags.drawsStroke) {
         NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self bounds]];
         [path setLineWidth:[self strokeWidth]];
@@ -250,17 +249,17 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
     }
 }
 
-- (void)documentDidZoom
-{
-    NSLog(@"document did zoom\n");
-    if (nil == _editor) return;
-    [_editor scaleUnitSquareToSize:NSMakeSize([_docView scaleFactor] /
-                                              _editorScaleFactor,
-                                              [_docView scaleFactor] /
-                                              _editorScaleFactor)];
-    _editorScaleFactor = [_docView scaleFactor];
-    [_editor setFrame:[_docView convertRect:_bounds fromPage:_page]];
-}
+//- (void)documentDidZoom
+//{
+//    NSLog(@"document did zoom\n");
+//    if (nil == _editor) return;
+//    [_editor scaleUnitSquareToSize:NSMakeSize([_docView scaleFactor] /
+//                                              _editorScaleFactor,
+//                                              [_docView scaleFactor] /
+//                                              _editorScaleFactor)];
+//    _editorScaleFactor = [_docView scaleFactor];
+//    [_editor setFrame:[_docView convertRect:_bounds fromPage:_page]];
+//}
 
 - (void)myFrameChanged:(NSTextView *)foo
 {
@@ -268,8 +267,9 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
 //    NSLog(@"editor frame:  %@\n", NSStringFromRect([_editor frame]));
 //    NSLog(@"editor bounds: %@\n", NSStringFromRect([_editor bounds]));
     NSLog(@"myFrameChanged:\n");
-    [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds]
-                                                 fromPage:_page]];
+    // MAJORUP
+//    [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds]
+//                                                 fromPage:_page]];
     NSLog(@"new bounds: %@\n", NSStringFromRect([self bounds]));
 //    NSRect frame = [_editor frame];
 //    NSLog(@"my frame: %@\n", NSStringFromRect(frame));
@@ -288,10 +288,10 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
         isFirstEdit = YES;
         DLog(@"allocating\n");
         [self instantiateVariableWidthEditor];
-	}
+    }
     [self documentDidZoom];
     [_textStorage addLayoutManager:[_editor layoutManager]];
-	
+    
     if (_isAutoSizedX) {
         NSRect frame = _bounds;
         [[_editor layoutManager]
@@ -309,17 +309,17 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
         [[_editor textContainer] setWidthTracksTextView:NO];
         [_editor setHorizontallyResizable:NO];
     }
-    [_editor setFrame:[_docView convertRect:_bounds fromPage:_page]];
-    [_docView addSubview:_editor];
+    // MAJORUP [_editor setFrame:[_docView convertRect:_bounds fromPage:_page]];
+    // MAJORUP [_docView addSubview:_editor];
 
     if (isFirstEdit) {
-        NSDictionary *attributes = [NSDictionary dictionaryWithObject:[_docView currentFont] forKey:NSFontAttributeName];
-        [_editor setTypingAttributes:attributes];
-        DLog(@"editingn w/ attributes: %@\n", attributes);
+        // MAJORUP NSDictionary *attributes = [NSDictionary dictionaryWithObject:[_docView currentFont] forKey:NSFontAttributeName];
+        // MAJORUP [_editor setTypingAttributes:attributes];
+        // MAJORUP DLog(@"editingn w/ attributes: %@\n", attributes);
     }
     
     [_editor setDelegate:self];
-    [[_docView window] makeFirstResponder:_editor];
+    // MAJORUP [[_docView window] makeFirstResponder:_editor];
 }
 
 // When text changes, we may need to update the frame of the in-use NSTextView
@@ -328,8 +328,8 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
     DLog(@"textDidChange:\n");
 
     // first invalidate the current (ie, old) bounds
-    [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds]
-                                                 fromPage:_page]];
+    // MAJORUP [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds]
+    // MAJORUP                                              fromPage:_page]];
 
     // get the frame of the editor and use it to compute the new bounds
     NSRect frame = [_editor frame];
@@ -344,22 +344,22 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
 
     // set the frame to the text view and ourself
     [_editor setFrame:frame];
-    [self setBounds:[_docView convertRect:frame toPage:_page]];
+    // MAJORUP [self setBounds:[_docView convertRect:frame toPage:_page]];
 
     // trigger redrawing in the new bounds
-    [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds]
-                                                 fromPage:_page]];
+    // MAJORUP [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds]
+    // MAJORUP                                              fromPage:_page]];
     DLog(@"new bounds: %@\n", NSStringFromRect([self bounds]));
 }
 
 - (void)stopEditing
 {
-	NSLog(@"stop editing\n");
+    NSLog(@"stop editing\n");
     assert(_editor);
     [_textStorage removeLayoutManager:[_editor layoutManager]];
     [_editor setSelectedRange:NSMakeRange(0, 0)];
     [_editor setDelegate:nil];
-	//[[_editor layoutManager] setDelegate:nil];
+    //[[_editor layoutManager] setDelegate:nil];
     [_editor removeFromSuperview];
     _isEditing = NO;
 }

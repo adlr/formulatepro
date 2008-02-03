@@ -3,7 +3,7 @@
 //  FormulatePro
 //
 //  Created by Andrew de los Reyes on 9/3/07.
-//  Copyright 2007 __MyCompanyName__. All rights reserved.
+//  Copyright 2007 Andrew de los Reyes. All rights reserved.
 //
 
 #import "FPTipsController.h"

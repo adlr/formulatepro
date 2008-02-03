@@ -31,10 +31,8 @@
 static NSString *imageArchiveKey = @"image";
 
 - (id)initWithArchivalDictionary:(NSDictionary *)dict
-                  inDocumentView:(FPDocumentView *)docView
 {
-    self = [super initWithArchivalDictionary:dict
-                              inDocumentView:docView];
+    self = [super initWithArchivalDictionary:dict];
     if (self) {
         _image = [[NSUnarchiver unarchiveObjectWithData:
                    [dict objectForKey:imageArchiveKey]] retain];
@@ -52,20 +50,14 @@ static NSString *imageArchiveKey = @"image";
     return ret;
 }
 
-- (id)initInDocumentView:(FPDocumentView *)docView
-               withImage:(NSImage *)image;
+- (id)initWithImage:(NSImage *)image;
 {
-    self = [super initInDocumentView:docView];
+    self = [super init];
     if (self) {
         _image = [image retain];
         [_image setCacheMode:NSImageCacheNever];
         
-        NSPoint center;
-        [_docView getViewingMidpointToPage:&_page pagePoint:&center];
-
         _bounds.size = [_image size];
-        _bounds.origin = NSMakePoint(center.x - NSWidth(_bounds)/2,
-                                     center.y - NSHeight(_bounds)/2);
         _naturalBounds = _bounds;
     }
     return self;
@@ -82,8 +74,7 @@ static NSString *imageArchiveKey = @"image";
     [_image drawInRect:[self bounds]
               fromRect:NSZeroRect
              operation:NSCompositeSourceOver
-              fraction:1.0]; // 1.0 means fully opaque
+              fraction:1.0];  // 1.0 means fully opaque
 }
-
 
 @end
