@@ -477,6 +477,7 @@ static const float ZoomScaleFactor = 1.3;
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
 // Note: these four methods will go away when 10.4 is no longer supported
+// also, resolution independence is only supported on 10.5 systems.
 - (NSPoint)convertPointFromBase:(NSPoint)aPoint
 {
     return [self convertPoint:aPoint fromView:nil];
