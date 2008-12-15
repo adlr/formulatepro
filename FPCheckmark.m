@@ -29,7 +29,7 @@
 {
     NSBezierPath *path = [NSBezierPath bezierPath];
     [path setLineWidth:[self strokeWidth]];
-    [[NSColor blackColor] set];
+    [_strokeColor set];
     [path moveToPoint:NSMakePoint(NSMinX([self bounds]),
                                   NSMinY([self bounds]))];
     [path lineToPoint:NSMakePoint(NSMaxX([self bounds]),

@@ -32,6 +32,22 @@ enum {FPDeleteKey = 0x7f};
     return;
 }
 
+- (void)changeColor:(id)sender
+{
+  if ([_docView handleColorChange:[sender color]])
+    return;
+  DLog(@"default color changed. doc win\n");
+  NSColor *newColor = [sender color];
+  if (_defaultColor != newColor) {
+    [_defaultColor release];
+    _defaultColor = [newColor retain];
+  }
+}
+
+- (NSColor *)currentColor {
+  return _defaultColor;
+}
+
 - (FPDocumentView *)docView
 {
     return _docView;
@@ -52,6 +68,7 @@ enum {FPDeleteKey = 0x7f};
 {
     _sentQuickMove = NO;
     _defaultFont = [[NSFont userFontOfSize:0.0] retain];
+    _defaultColor = [[NSColor blackColor] retain];
 }
 
 - (void)keyDown:(NSEvent *)theEvent

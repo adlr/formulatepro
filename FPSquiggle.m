@@ -96,7 +96,7 @@ static NSString *pathArchiveKey = @"path";
      translateXBy:(_bounds.origin.x - [tempPath bounds].origin.x)
               yBy:(_bounds.origin.y - [tempPath bounds].origin.y)];
     [tempPath transformUsingAffineTransform:translateTransform];
-    [[NSColor blackColor] set];
+    [_strokeColor set];
     [tempPath stroke];
 }
 
@@ -135,6 +135,7 @@ static NSString *pathArchiveKey = @"path";
     [NSBezierPath setDefaultLineWidth:[_docView scaleFactor]];
     [_path setLineWidth:1.0];
     [_path setLineJoinStyle:NSBevelLineJoinStyle];
+    [_strokeColor set];
     
     for (;;) {
         NSPoint new_point;

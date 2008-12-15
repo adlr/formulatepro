@@ -45,6 +45,9 @@
 - (NSSet *)selectedGraphics;
 - (void)deleteSelectedGraphics;
 
+- (BOOL)handleColorChange:(NSColor*)newColor;
+- (NSColor*)defaultStrokeColor;
+
 - (unsigned int)getViewingMidpointToPage:(unsigned int*)page pagePoint:(NSPoint*)pagePoint;
 - (void)scrollToMidpointOnPage:(unsigned int)page point:(NSPoint)midPoint;
 

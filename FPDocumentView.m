@@ -793,6 +793,30 @@ static const float ZoomScaleFactor = 1.3;
 }
 
 #pragma mark -
+#pragma mark Color
+
+- (BOOL)handleColorChange:(NSColor*)newColor {
+  DLog(@"change color\n");
+  //setStrokeColor
+  if (_editingGraphic)
+    return YES;
+
+  if (0 == [_selectedGraphics count])
+    return NO;
+  for (int i = 0; i < [_overlayGraphics count]; i++) {
+    FPGraphic *graphic = [_overlayGraphics objectAtIndex:i];
+    if (![_selectedGraphics containsObject:graphic])
+      continue;
+    [graphic setStrokeColor:newColor];
+  }
+  return YES;
+}
+
+- (NSColor*)defaultStrokeColor {
+  return [(FPDocumentWindow*)[self window] currentColor];
+}
+
+#pragma mark -
 #pragma mark Printing Methods
 
 - (BOOL)knowsPageRange:(NSRangePointer)range

@@ -18,9 +18,12 @@ extern NSString *FPEndQuickMove;
     IBOutlet FPDocumentView *_docView;
     BOOL _sentQuickMove;
     NSFont * _defaultFont;
+    NSColor * _defaultColor;
 }
 
 - (NSFont *)currentFont;
 - (FPDocumentView *)docView;
+
+- (NSColor *)currentColor;
 
 @end

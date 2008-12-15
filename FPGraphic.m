@@ -77,7 +77,7 @@ static NSString *versionArchiveKey = @"version";
         _docView = docView;
         _strokeWidth = 1.0;
         _fillColor = [[NSColor redColor] retain];
-        _strokeColor = [[NSColor blackColor] retain];
+        _strokeColor = [[docView defaultStrokeColor] retain];
         _knobMask = 0xff; // all knobs
         _gFlags.drawsStroke = YES;
         _gFlags.drawsFill = NO;
@@ -639,6 +639,8 @@ const float knobSize = 6.0;
     if (_strokeColor)
         [_strokeColor autorelease];
     _strokeColor = [strokeColor retain];    
+    [_docView setNeedsDisplayInRect:
+            [_docView convertRect:[self boundsWithKnobs] fromPage:_page]];
 }
 
 - (BOOL)drawsFill

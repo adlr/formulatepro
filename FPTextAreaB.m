@@ -313,7 +313,10 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
     [_docView addSubview:_editor];
 
     if (isFirstEdit) {
-        NSDictionary *attributes = [NSDictionary dictionaryWithObject:[_docView currentFont] forKey:NSFontAttributeName];
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+            [_docView currentFont], NSFontAttributeName,
+            _strokeColor, NSForegroundColorAttributeName,
+            nil];
         [_editor setTypingAttributes:attributes];
         DLog(@"editingn w/ attributes: %@\n", attributes);
     }
