@@ -340,7 +340,7 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
     frame.size.height *= _editorScaleFactor;
     frame.size.width *= _editorScaleFactor;
     if (NO == _isAutoSizedX)
-        frame.size.width = NSWidth([self bounds]);
+        frame.size.width = NSWidth([self bounds]) * _editorScaleFactor;
 
     // set the frame to the text view and ourself
     [_editor setFrame:frame];

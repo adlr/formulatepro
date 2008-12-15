@@ -112,7 +112,7 @@
 		C45E46B40B3CF55B00D41543 /* FPCheckmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPCheckmark.m; sourceTree = "<group>"; };
 		C493CD380C8CEA3D00BFAEE8 /* FPTipsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPTipsController.h; sourceTree = "<group>"; };
 		C493CD390C8CEA3D00BFAEE8 /* FPTipsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPTipsController.m; sourceTree = "<group>"; };
-		C493CE0D0C8D222900BFAEE8 /* tips.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tips.plist; sourceTree = SOURCE_ROOT; };
+		C493CE0D0C8D222900BFAEE8 /* tips.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = tips.plist; sourceTree = SOURCE_ROOT; };
 		C4A904460B2C86E00015511A /* FPDocumentView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FPDocumentView.h; sourceTree = "<group>"; };
 		C4A904470B2C86E00015511A /* FPDocumentView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FPDocumentView.m; sourceTree = "<group>"; };
 		C4AB3EE80A5B010000EE29B2 /* PDFKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PDFKit.framework; path = /System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/PDFKit.framework; sourceTree = "<absolute>"; };
