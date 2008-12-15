@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <array>
 	<string>To move text while editing, hold down Command (⌘) and Option and drag the text.</string>
 	<string>If you pick a font from the font panel (Edit→Font→Show Fonts) while not editing, it will be used as the default font for all new text entries.</string>
 	<string>To export a FormulatePro document as a PDF, choose File→Print, click the PDF button and choose Save As PDF</string>
-	<string>FormulatePro can zoom in on a PDF far more than many PDF viewers</string>
+	<string>When filing a bug, look carefully to see if it&apos;s already been filed and if so, star it. More stars by a bug means it&apos;s fixed sooner, so avoid duplicate bugs.</string>
+	<string>If you pick a color from the color picker (Edit→Font→Show Colors) when nothing is selected and text isn&apos;t being edited, the color will be the default for new shapes and text</string>
 </array>
 </plist>
