@@ -158,17 +158,19 @@
 - (void)mainWindowChanged:(NSNotification *)notification
 {
     NSLog(@"got main window: 0x%08x\n", [notification object]);
-    assert([FPDocumentWindow class] == [[notification object] class]);
-    _main_window = (FPDocumentWindow *)[notification object];
-    [self selectionOrMainWindowChanged];
+    if ([FPDocumentWindow class] == [[notification object] class]) {
+        _main_window = (FPDocumentWindow *)[notification object];
+        [self selectionOrMainWindowChanged];
+    }
 }
 
 - (void)mainWindowResigned:(NSNotification *)notification
 {
     NSLog(@"lost main window: 0x%08x\n", [notification object]);
-    assert([FPDocumentWindow class] == [[notification object] class]);
-    _main_window = nil;
-    [self selectionOrMainWindowChanged];
+    if ([FPDocumentWindow class] == [[notification object] class]) {
+        _main_window = nil;
+        [self selectionOrMainWindowChanged];
+    }
 }
 
 @end

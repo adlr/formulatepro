@@ -20,11 +20,13 @@ int main(int argc, char *argv[])
     } else if (Gestalt(gestaltSystemVersion, &os_version) == noErr) {
         char buf[5];
         NSString *feedURL;
-       
+        NSString *appVersion =
+            [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleVersion"];
         sprintf(buf, "%0x", (unsigned)os_version);
         buf[3] = '\0'; // chop off minor version number
         feedURL = [NSString stringWithFormat:
-                   @"http://adlr.info/appcasts/formulatepro-%s.xml", buf];
+                   @"http://adlr.info/appcasts/formulatepro-%s-v%@.xml", buf, appVersion];
+        NSLog(@"feed url: %@\n", feedURL);
         [[NSUserDefaults standardUserDefaults] setObject:feedURL
                                                   forKey:@"SUFeedURL"];
     }
