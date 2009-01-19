@@ -11,6 +11,8 @@
 				<string>id</string>
 				<key>previousTip</key>
 				<string>id</string>
+				<key>showExportAsPDFTip</key>
+				<string>id</string>
 			</dict>
 			<key>CLASS</key>
 			<string>FPTipsController</string>
@@ -106,6 +108,40 @@
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
+				<key>placeImage</key>
+				<string>id</string>
+				<key>toggleContinuous</key>
+				<string>id</string>
+				<key>toggleOneUpTwoUpBookMode</key>
+				<string>id</string>
+				<key>zoomIn</key>
+				<string>id</string>
+				<key>zoomOut</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>MyDocument</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>_document_view</key>
+				<string>FPDocumentView</string>
+				<key>_document_window</key>
+				<string>NSWindow</string>
+				<key>_one_up_vs_two_up_vs_book</key>
+				<string>NSSegmentedControl</string>
+				<key>_print_accessory_view</key>
+				<string>NSView</string>
+				<key>_single_vs_continuous</key>
+				<string>NSSegmentedControl</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSDocument</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
 				<key>checkForUpdates</key>
 				<string>id</string>
 			</dict>
@@ -165,6 +201,30 @@
 			<string>ObjC</string>
 			<key>SUPERCLASS</key>
 			<string>NSWindow</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>placeImage</key>
+				<string>id</string>
+				<key>zoomIn</key>
+				<string>id</string>
+				<key>zoomOut</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FPDocumentView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>_doc</key>
+				<string>MyDocument</string>
+				<key>_scrollView</key>
+				<string>NSScrollView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSView</string>
 		</dict>
 	</array>
 	<key>IBVersion</key>

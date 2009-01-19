@@ -57,8 +57,6 @@ static NSString *kFPNextToolTip = @"FPNextToolTip";
 {
     _tips = nil;
     id values = [[NSUserDefaultsController sharedUserDefaultsController] values];
-    if (NO == [[values valueForKey:kFPShowTipsAtStartup] boolValue])
-        return;
     NSString *path = [[NSBundle mainBundle] pathForResource:@"tips" ofType:@"plist"];
     if (nil == path) {
         NSLog(@"unable to locate tips.plist\n");
@@ -76,6 +74,8 @@ static NSString *kFPNextToolTip = @"FPNextToolTip";
     [_tips retain];
     _tipOnDisplay = [self getNextTipIndexFromDefaults];
     [self displayTip:_tipOnDisplay];
+    if (NO == [[values valueForKey:kFPShowTipsAtStartup] boolValue])
+        return;
     [_tipWindow center];
     [_tipWindow makeKeyAndOrderFront:self];
 }
@@ -96,13 +96,15 @@ static NSString *kFPNextToolTip = @"FPNextToolTip";
     [self displayTip:_tipOnDisplay];
 }
 
+- (IBAction)showExportAsPDFTip:(id)sender
+{
+    [self displayTip:2];
+    [_tipWindow center];
+    [_tipWindow makeKeyAndOrderFront:self];
+}
 
 - (void)windowWillClose:(NSNotification *)aNotification
 {
-    if (_tips) {
-        [_tips release];
-        _tips = nil;
-    }
 }
 
 @end

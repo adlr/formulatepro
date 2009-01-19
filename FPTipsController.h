@@ -18,5 +18,6 @@
 
 - (IBAction)nextTip:(id)sender;
 - (IBAction)previousTip:(id)sender;
+- (IBAction)showExportAsPDFTip:(id)sender;
 
 @end
