@@ -1,1 +1,1 @@
-This is the english-only sparkle 1.1 framework
+This is the Sparkle 1.5 b6 framework
