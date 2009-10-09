@@ -121,11 +121,16 @@
 
 - (void)draw:(BOOL)selected
 {
+    NSLog(@"drawing text\n");
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:NSInsetRect(_bounds, 0.0, 0.0)];
     [[NSColor blueColor] set];
     [path stroke];
-    if (_isPlacing || _isEditing) return;
+    if (_isPlacing || _isEditing) {
+        NSLog(@"abortingn b/c isplacing %d or isediting %d\n", _isPlacing, _isEditing);
+        return;
+    }
     if (_editor && [[_editor textStorage] length] > 0) {
+        NSLog(@"has editor and text storage length\n");
         NSWindow *w = [(AppDelegate *)[NSApp delegate] renderWindow];
         [w setContentSize:_bounds.size];
         [w setContentView:_editor];
@@ -426,7 +431,7 @@ flippedFont(NSFont * font)
 
 - (void)stopEditing
 {
-	NSLog(@"stop editing\n");
+    NSLog(@"stop editing\n");
     assert(_editor);
     [_editor setDelegate:nil];
 	[[_editor layoutManager] setDelegate:nil];

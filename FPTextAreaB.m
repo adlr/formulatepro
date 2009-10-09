@@ -155,6 +155,7 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
         [self resizeWithEvent:theEvent byKnob:LowerRightKnob];
     }
     _isPlacing = NO;
+    NSLog(@"0x%08x placed w/ bounds: %@\n", self, NSStringFromRect(_bounds));
     return YES;
 }
 
@@ -208,18 +209,22 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
 
 - (void)draw:(BOOL)selected
 {
+    NSLog(@"0x%08x drawing text area %@\n", self, _textStorage);
     if (_gFlags.drawsStroke) {
+        NSLog(@"draws stroke\n");
         NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self bounds]];
         [path setLineWidth:[self strokeWidth]];
         [[NSColor blackColor] set];
         [path stroke];
     } else if (selected || _isPlacing) {
+        NSLog(@"drawing text area: selected || _isPlacing\n");
         NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self bounds]];
         [path setLineWidth:[self strokeWidth]];
         [[NSColor lightGrayColor] set];
         [path stroke];
     }
     if (!_isEditing) {
+        NSLog(@"drawing text area: !_isEditing\n");
         NSAffineTransform *transform = [NSAffineTransform transform];
         [transform scaleXBy:1.0 yBy:-1.0];
         [transform translateXBy:0.0
@@ -227,16 +232,20 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
         [transform concat];
     
         //NSTextStorage *contents = [_editor textStorage];
+        NSLog(@"text storage length: %d\n", [_textStorage length]);
         if ([_textStorage length] > 0) {
             NSLayoutManager *lm = sharedDrawingLayoutManager();
             NSTextContainer *tc = [[lm textContainers] objectAtIndex:0];
             NSRange glyphRange;
             [tc setContainerSize:_bounds.size];
+            NSLog(@"bounds: %@\n", NSStringFromRect(_bounds));
+            NSLog(@"tc setContainerSize: %@\n", NSStringFromSize(_bounds.size));
             [_textStorage addLayoutManager:lm];
             // Force layout of the text and find out how much of it fits in
             // the container.
             glyphRange = [lm glyphRangeForTextContainer:tc];
 
+            NSLog(@"glyphRange.length: %d\n", glyphRange.length);
             if (glyphRange.length > 0) {
                 [lm drawBackgroundForGlyphRange:glyphRange
                                         atPoint:_bounds.origin];
@@ -288,7 +297,7 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
         isFirstEdit = YES;
         DLog(@"allocating\n");
         [self instantiateVariableWidthEditor];
-	}
+    }
     [self documentDidZoom];
     [_textStorage addLayoutManager:[_editor layoutManager]];
 	
@@ -357,12 +366,12 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
 
 - (void)stopEditing
 {
-	NSLog(@"stop editing\n");
+    NSLog(@"0x%08x stop editing bounds %@\n", self, NSStringFromRect(_bounds));
     assert(_editor);
     [_textStorage removeLayoutManager:[_editor layoutManager]];
     [_editor setSelectedRange:NSMakeRange(0, 0)];
     [_editor setDelegate:nil];
-	//[[_editor layoutManager] setDelegate:nil];
+    //[[_editor layoutManager] setDelegate:nil];
     [_editor removeFromSuperview];
     _isEditing = NO;
 }

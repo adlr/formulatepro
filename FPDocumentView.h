@@ -77,4 +77,7 @@
 
 // private
 - (NSAffineTransform *)transformForPage:(unsigned int)page;
+
+// debugging
+- (IBAction)doDebugAction:(id)sender;
 @end

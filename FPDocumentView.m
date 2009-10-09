@@ -505,6 +505,63 @@ static const float ZoomScaleFactor = 1.3;
                                        object:self]];
 }
 
+- (void)doClickInPoint:(NSPoint)p {
+    NSEvent *evt = [NSEvent mouseEventWithType:NSLeftMouseDown
+        location:p
+        modifierFlags:0
+        timestamp:nil windowNumber:[[self window] windowNumber]
+        context:nil
+        eventNumber:0
+        clickCount:1
+        pressure:0.0];
+    [NSApp sendEvent:evt];
+    evt = [NSEvent mouseEventWithType:NSLeftMouseUp
+        location:p
+        modifierFlags:0
+        timestamp:nil windowNumber:[[self window] windowNumber]
+        context:nil
+        eventNumber:0
+        clickCount:1
+        pressure:0.0];
+    [NSApp sendEvent:evt];
+}
+
+- (void)doKeyCode:(unsigned short)code chars:(NSString*)chars {
+    NSEvent *evt = [NSEvent keyEventWithType:NSKeyDown
+        location:NSZeroPoint
+        modifierFlags:0
+        timestamp:nil
+        windowNumber:[[self window] windowNumber]
+        context:nil
+        characters:chars
+        charactersIgnoringModifiers:chars
+        isARepeat:NO
+        keyCode:code];
+    [NSApp sendEvent:evt];
+    evt = [NSEvent keyEventWithType:NSKeyUp
+        location:NSZeroPoint
+        modifierFlags:0
+        timestamp:nil
+        windowNumber:[[self window] windowNumber]
+        context:nil
+        characters:chars
+        charactersIgnoringModifiers:chars
+        isARepeat:NO
+        keyCode:code];
+    [NSApp sendEvent:evt];
+}
+
+- (IBAction)doDebugAction:(id)sender {
+    NSLog(@"doing debug action\n");
+    // make a mouse action, then 6 keyboard events, then another click
+    [self doClickInPoint:NSMakePoint(29, 159)];
+    [self doKeyCode:0 chars:@"a"];
+    [self doKeyCode:1 chars:@"s"];
+    [self doKeyCode:2 chars:@"d"];
+    [self doKeyCode:3 chars:@"f"];
+    [self doClickInPoint:NSMakePoint(28, 143)];
+}
+
 // this is possibly the harriest method in the whole program. This receives
 // all mouse clicks in the view, except clicks inside an editing view. We
 // must handle both clicks in a double click, and when we get the first click
@@ -518,6 +575,7 @@ static const float ZoomScaleFactor = 1.3;
     [_doc updateChangeCount:NSChangeDone];
     BOOL justStoppedEditing = NO;
     if (_editingGraphic) {
+        NSLog(@"was editing. stopping\n");
         [_editingGraphic stopEditing];
         assert([_selectedGraphics count] == 1);
         _editingGraphic = nil;
@@ -530,6 +588,8 @@ static const float ZoomScaleFactor = 1.3;
     unsigned int page = [self pageForPointFromEvent:theEvent];
     NSPoint pagePoint =
         [self pagePointForPointFromEvent:theEvent page:page];
+    NSLog(@"pagePoint: %@, window point %@\n", NSStringFromPoint(pagePoint),
+          NSStringFromPoint([theEvent locationInWindow]));
         
     if (_inQuickMove) {
         assert(1 == [_selectedGraphics count]);

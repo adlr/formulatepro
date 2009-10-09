@@ -25,6 +25,8 @@ static NSString *MyDocToolbarIdentifierNextPage =
     @"info.adlr.formulatepro.documenttoolbaridentifier.nextpage";
 static NSString *MyDocToolbarIdentifierPreviousPage =
     @"info.adlr.formulatepro.documenttoolbaridentifier.previouspage";
+static NSString *MyDocToolbarIdentifierDebug =
+    @"info.adlr.formulatepro.documenttoolbaridentifier.debug";
 
 @interface MyDocument (Private)
 - (void)setupToolbar;
@@ -529,6 +531,27 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
         // Tell the item what message to send when it is clicked 
         [toolbarItem setTarget: self];
         [toolbarItem setAction: @selector(goToPreviousPage:)];
+    } else if ([itemIdent isEqual: MyDocToolbarIdentifierDebug]) {
+        toolbarItem =
+            [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent]
+             autorelease];
+        
+        // Set the text label to be displayed in the toolbar and customization
+        // palette 
+        [toolbarItem setLabel: @"Debug"];
+        [toolbarItem setPaletteLabel: @"Debug"];
+        
+        // Set up a reasonable tooltip, and image   Note, these aren't
+        // localized, but you will likely want to localize many of the item's
+        // properties 
+        [toolbarItem setToolTip: @"Debug"];
+        //[toolbarItem setImage: [NSImage imageNamed: @"viewmag-"]];
+        
+        // Tell the item what message to send when it is clicked 
+        [toolbarItem setTarget: _document_view];
+        [toolbarItem setAction: @selector(doDebugAction:)];
+        //NSLog(@"debug\n");
+        //[_document_view doDebugAction:self];
     } else {
         // itemIdent refered to a toolbar item that is not provide or
         // supported by us or cocoa. Returning nil will inform the toolbar
@@ -547,6 +570,7 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
     return [NSArray arrayWithObjects:
         MyDocToolbarIdentifierZoomIn,
         MyDocToolbarIdentifierZoomOut,
+        MyDocToolbarIdentifierDebug,
         NSToolbarSeparatorItemIdentifier,
         NSToolbarFlexibleSpaceItemIdentifier,
         NSToolbarCustomizeToolbarItemIdentifier,
@@ -562,6 +586,7 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
     return [NSArray arrayWithObjects:
         MyDocToolbarIdentifierZoomIn,
         MyDocToolbarIdentifierZoomOut,
+        MyDocToolbarIdentifierDebug,
         //MyDocToolbarIdentifierOneUpTwoUpBook,
         //MyDocToolbarIdentifierSingleContinuous,
         MyDocToolbarIdentifierPreviousPage,

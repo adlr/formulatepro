@@ -38,6 +38,7 @@ static NSString *imageArchiveKey = @"image";
     if (self) {
         _image = [[NSUnarchiver unarchiveObjectWithData:
                    [dict objectForKey:imageArchiveKey]] retain];
+        [_image setCacheMode:NSImageCacheNever];
     }
     return self;
 }
