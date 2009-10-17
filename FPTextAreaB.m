@@ -179,6 +179,10 @@ static NSLayoutManager *sharedDrawingLayoutManager();
         bounds.size.height = NSHeight(glyphRect);
         NSLog(@"glyph: %@\n", NSStringFromRect(glyphRect));
     }
+    // Correct bounds that have a decimal part like .999... as it screws up text
+    // layout on tiger, leopard (but not snow leopard)
+    bounds.size.width = round(bounds.size.width);
+    bounds.size.height = round(bounds.size.height);
     [super setBounds:bounds];
 }
 
