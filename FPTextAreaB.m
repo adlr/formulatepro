@@ -180,6 +180,10 @@ static NSLayoutManager *sharedDrawingLayoutManager();
         bounds.size.height = NSHeight(glyphRect);
         NSLog(@"glyph: %@\n", NSStringFromRect(glyphRect));
     }
+    // Correct bounds that have a decimal part like .999... as it screws up text
+    // layout on tiger, leopard (but not snow leopard)
+    bounds.size.width = round(bounds.size.width);
+    bounds.size.height = round(bounds.size.height);
     [super setBounds:bounds];
 }
 
@@ -207,9 +211,19 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
     return sharedLM;
 }
 
+union foou {
+    struct {
+        unsigned long long int a;
+        unsigned long long int b;
+        unsigned long long int c;
+    } ints;
+    NSSize sz;
+};
+
 - (void)draw:(BOOL)selected
 {
     NSLog(@"0x%08x drawing text area %@\n", self, _textStorage);
+    [_textStorage ensureAttributesAreFixedInRange:NSMakeRange(0, [_textStorage length])];
     if (_gFlags.drawsStroke) {
         NSLog(@"draws stroke\n");
         NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self bounds]];
@@ -238,9 +252,18 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
             NSTextContainer *tc = [[lm textContainers] objectAtIndex:0];
             NSRange glyphRange;
             [tc setContainerSize:_bounds.size];
+            union foou f;
+            f.ints.a = 0;
+            f.ints.b = 0;
+            f.ints.c = 0;
+            f.sz = _bounds.size;
+            NSLog(@"abc: %llu %llu %llu\n", f.ints.a, f.ints.b, f.ints.c);
             NSLog(@"bounds: %@\n", NSStringFromRect(_bounds));
-            NSLog(@"tc setContainerSize: %@\n", NSStringFromSize(_bounds.size));
+            NSLog(@"tc setContainerSize: (%10.10f, %10.10f)\n", _bounds.size.width, _bounds.size.height);
             [_textStorage addLayoutManager:lm];
+            NSLog(@"tc: sz %@ wtv %d htv %d lfp %f isr %d\n", NSStringFromSize([tc containerSize]),
+                [tc widthTracksTextView], [tc heightTracksTextView], (double)[tc lineFragmentPadding],
+                [tc isSimpleRectangularTextContainer]);
             // Force layout of the text and find out how much of it fits in
             // the container.
             glyphRange = [lm glyphRangeForTextContainer:tc];

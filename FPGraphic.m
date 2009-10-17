@@ -611,6 +611,7 @@ const float knobSize = 6.0;
 {
     assert(bounds.size.width >= 0.0);
     assert(bounds.size.height >= 0.0);
+    NSLog(@"set bounds to: (%10.10f, %10.10f) (%10.10f, %10.10f)\n", bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
     _bounds = bounds;
 }
 

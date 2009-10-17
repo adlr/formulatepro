@@ -505,50 +505,70 @@ static const float ZoomScaleFactor = 1.3;
                                        object:self]];
 }
 
+CGPoint NSPointToCGPoint(NSPoint nspoint) {
+   union _ {NSPoint ns; CGPoint cg;};
+   return ((union _ *)&nspoint)->cg;
+}
+
 - (void)doClickInPoint:(NSPoint)p {
-    NSEvent *evt = [NSEvent mouseEventWithType:NSLeftMouseDown
-        location:p
-        modifierFlags:0
-        timestamp:nil windowNumber:[[self window] windowNumber]
-        context:nil
-        eventNumber:0
-        clickCount:1
-        pressure:0.0];
-    [NSApp sendEvent:evt];
-    evt = [NSEvent mouseEventWithType:NSLeftMouseUp
-        location:p
-        modifierFlags:0
-        timestamp:nil windowNumber:[[self window] windowNumber]
-        context:nil
-        eventNumber:0
-        clickCount:1
-        pressure:0.0];
-    [NSApp sendEvent:evt];
+    NSPoint window_origin = [self window].frame.origin;
+    p.x += window_origin.x;
+    p.y += window_origin.y;
+    
+    NSRect screenRect = [[NSScreen mainScreen] frame];
+    //p.x = screenRect.size.width - p.x;
+    p.y = screenRect.size.height - p.y;
+    NSLog(@"window origin: %@. rect: %@, p %@\n", NSStringFromPoint(window_origin), NSStringFromSize(screenRect.size), NSStringFromPoint(p));
+    
+    assert(kCGErrorSuccess == CGPostMouseEvent(NSPointToCGPoint(p), FALSE, 1, TRUE));
+    assert(kCGErrorSuccess == CGPostMouseEvent(NSPointToCGPoint(p), FALSE, 1, FALSE));
+
+//    NSEvent *evt = [NSEvent mouseEventWithType:NSLeftMouseDown
+//        location:p
+//        modifierFlags:0
+//        timestamp:nil windowNumber:[[self window] windowNumber]
+//        context:nil
+//        eventNumber:0
+//        clickCount:1
+//        pressure:0.0];
+//    [NSApp sendEvent:evt];
+//    evt = [NSEvent mouseEventWithType:NSLeftMouseUp
+//        location:p
+//        modifierFlags:0
+//        timestamp:nil windowNumber:[[self window] windowNumber]
+//        context:nil
+//        eventNumber:0
+//        clickCount:1
+//        pressure:0.0];
+//    [NSApp sendEvent:evt];
 }
 
 - (void)doKeyCode:(unsigned short)code chars:(NSString*)chars {
-    NSEvent *evt = [NSEvent keyEventWithType:NSKeyDown
-        location:NSZeroPoint
-        modifierFlags:0
-        timestamp:nil
-        windowNumber:[[self window] windowNumber]
-        context:nil
-        characters:chars
-        charactersIgnoringModifiers:chars
-        isARepeat:NO
-        keyCode:code];
-    [NSApp sendEvent:evt];
-    evt = [NSEvent keyEventWithType:NSKeyUp
-        location:NSZeroPoint
-        modifierFlags:0
-        timestamp:nil
-        windowNumber:[[self window] windowNumber]
-        context:nil
-        characters:chars
-        charactersIgnoringModifiers:chars
-        isARepeat:NO
-        keyCode:code];
-    [NSApp sendEvent:evt];
+    
+    assert(kCGErrorSuccess == CGPostKeyboardEvent([chars characterAtIndex:0], code, TRUE));
+    assert(kCGErrorSuccess == CGPostKeyboardEvent([chars characterAtIndex:0], code, FALSE));
+//    NSEvent *evt = [NSEvent keyEventWithType:NSKeyDown
+//        location:NSZeroPoint
+//        modifierFlags:0
+//        timestamp:nil
+//        windowNumber:[[self window] windowNumber]
+//        context:nil
+//        characters:chars
+//        charactersIgnoringModifiers:chars
+//        isARepeat:NO
+//        keyCode:code];
+//    [NSApp sendEvent:evt];
+//    evt = [NSEvent keyEventWithType:NSKeyUp
+//        location:NSZeroPoint
+//        modifierFlags:0
+//        timestamp:nil
+//        windowNumber:[[self window] windowNumber]
+//        context:nil
+//        characters:chars
+//        charactersIgnoringModifiers:chars
+//        isARepeat:NO
+//        keyCode:code];
+//    [NSApp sendEvent:evt];
 }
 
 - (IBAction)doDebugAction:(id)sender {
