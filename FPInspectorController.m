@@ -1,5 +1,6 @@
 #import "FPInspectorController.h"
 #import "FPDocumentView.h"
+#import "FPLogging.h"
 
 @implementation FPInspectorController
 
@@ -120,13 +121,13 @@
 
 - (void)selectionOrMainWindowChanged
 {
-    NSLog(@"there are %d graphics selected", [[[_main_window docView] selectedGraphics] count]);
+    DLog(@"there are %d graphics selected", [[[_main_window docView] selectedGraphics] count]);
     [self updateFromSelectedGraphics];
 }
 
 - (void)selectionChangedNotification:(NSNotification *)notification
 {
-    NSLog(@"selection did change\n");
+    DLog(@"selection did change\n");
     assert([FPDocumentWindow class] == [[notification object] class]);
     FPDocumentWindow *window = [notification object];
     if (window == _main_window)
@@ -135,12 +136,12 @@
 
 //- (void)windowDidBecomeKey:(id)sender
 //{
-//    NSLog(@"window did become key: 0x%08x\n", (int)sender);
+//    DLog(@"window did become key: 0x%08x\n", (int)sender);
 //    
-//    NSLog(@"docs:\n");
+//    DLog(@"docs:\n");
 //    NSArray *docs = [NSApp orderedDocuments];
 //    for (int i = 0; i < [docs count]; i++) {
-//        NSLog(@"%i of %i: 0x%08x\n", i, [docs count], [docs objectAtIndex:i]);
+//        DLog(@"%i of %i: 0x%08x\n", i, [docs count], [docs objectAtIndex:i]);
 //    }
 //    
 //    MyDocument *new_frontmost_doc = nil;
@@ -157,7 +158,7 @@
 
 - (void)mainWindowChanged:(NSNotification *)notification
 {
-    NSLog(@"got main window: 0x%08x\n", [notification object]);
+    DLog(@"got main window: 0x%08x\n", [notification object]);
     if ([FPDocumentWindow class] == [[notification object] class]) {
         _main_window = (FPDocumentWindow *)[notification object];
         [self selectionOrMainWindowChanged];
@@ -166,7 +167,7 @@
 
 - (void)mainWindowResigned:(NSNotification *)notification
 {
-    NSLog(@"lost main window: 0x%08x\n", [notification object]);
+    DLog(@"lost main window: 0x%08x\n", [notification object]);
     if ([FPDocumentWindow class] == [[notification object] class]) {
         _main_window = nil;
         [self selectionOrMainWindowChanged];

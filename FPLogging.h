@@ -14,7 +14,7 @@ static inline void DLog(NSString *format, ...)
     va_list args;
     
     va_start(args, format);
-    NSLogv(format, args);
+    DLogv(format, args);
     va_end(args);
 }
 #else

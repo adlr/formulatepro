@@ -59,12 +59,12 @@ static NSString *kFPNextToolTip = @"FPNextToolTip";
     id values = [[NSUserDefaultsController sharedUserDefaultsController] values];
     NSString *path = [[NSBundle mainBundle] pathForResource:@"tips" ofType:@"plist"];
     if (nil == path) {
-        NSLog(@"unable to locate tips.plist\n");
+        DLog(@"unable to locate tips.plist\n");
         return;
     }
     NSData *data = [NSData dataWithContentsOfFile:path];
     if (nil == data) {
-        NSLog(@"unable to load tips.plist\n");
+        DLog(@"unable to load tips.plist\n");
         return;
     }
     _tips = [NSPropertyListSerialization propertyListFromData:data

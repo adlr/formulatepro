@@ -52,14 +52,14 @@
     
     [arrowToolButton setImage:[[NSCursor arrowCursor] image]];
     arrow = [[NSCursor arrowCursor] image];
-    NSLog(@"reps %d\n", i, [[arrow representations] count]);
+    DLog(@"reps %d\n", i, [[arrow representations] count]);
     d = [[arrow bestRepresentationForDevice:nil]
         representationUsingType:NSTIFFFileType
                      properties:nil];
-    NSLog(@"d = %x\n", d);
+    DLog(@"d = %x\n", d);
     pb = [NSPasteboard generalPasteboard];
     [pb declareTypes:[NSArray arrayWithObject:NSTIFFPboardType] owner:nil];
-    NSLog(@"ok? %d\n", [pb setData:d forType:NSTIFFPboardType]);*/
+    DLog(@"ok? %d\n", [pb setData:d forType:NSTIFFPboardType]);*/
 }
 
 @end

@@ -27,13 +27,6 @@
 - (NSCell *)cell
 {
     NSSegmentedCell *cell = [super cell];
-    NSLog(@"cell!\n");
-    switch ([cell controlSize]) {
-        case NSRegularControlSize: NSLog(@"NSRegularControlSize\n"); break;
-        case NSSmallControlSize: NSLog(@"NSSmallControlSize\n"); break;
-        case NSMiniControlSize: NSLog(@"NSMiniControlSize\n"); break;
-        default: NSLog(@"other control size: %d\n", [cell controlSize]); break;
-    }
     //[cell setControlSize:NSRegularControlSize];
     [cell _setSegmentedCellStyle:NSSegmentedCellMetalStyle];
     return cell;

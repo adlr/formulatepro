@@ -38,7 +38,7 @@ static const float ZoomScaleFactor = 1.3;
 - (NSRect)frame
 {
     if (nil == _pdf_document) {
-        NSLog(@"small frame\n");
+        DLog(@"small frame\n");
         return NSMakeRect(0.0, 0.0, 10.0, 10.0);
     }
     NSRect ret = NSMakeRect(0.0, 0.0, 0.0, 0.0);
@@ -105,7 +105,7 @@ static const float ZoomScaleFactor = 1.3;
 
 - (id)initWithFrame:(NSRect)frameRect
 {
-    NSLog(@"init w/ frame: %@\n", NSStringFromRect(frameRect));
+    DLog(@"init w/ frame: %@\n", NSStringFromRect(frameRect));
     frameRect = [self frame];
     if ((self = [super initWithFrame:frameRect]) != nil) {
         // Add initialization code here
@@ -153,7 +153,7 @@ static const float ZoomScaleFactor = 1.3;
 {
     [_pdf_document release];
     _pdf_document = [pdf_document retain];
-    NSLog(@"set pdf doc\n");
+    DLog(@"set pdf doc\n");
     [self setFrame:[self frame]];
     [self setNeedsDisplay:YES];
 }
@@ -518,7 +518,7 @@ CGPoint NSPointToCGPoint(NSPoint nspoint) {
     NSRect screenRect = [[NSScreen mainScreen] frame];
     //p.x = screenRect.size.width - p.x;
     p.y = screenRect.size.height - p.y;
-    NSLog(@"window origin: %@. rect: %@, p %@\n", NSStringFromPoint(window_origin), NSStringFromSize(screenRect.size), NSStringFromPoint(p));
+    DLog(@"window origin: %@. rect: %@, p %@\n", NSStringFromPoint(window_origin), NSStringFromSize(screenRect.size), NSStringFromPoint(p));
     
     assert(kCGErrorSuccess == CGPostMouseEvent(NSPointToCGPoint(p), FALSE, 1, TRUE));
     assert(kCGErrorSuccess == CGPostMouseEvent(NSPointToCGPoint(p), FALSE, 1, FALSE));
@@ -572,7 +572,7 @@ CGPoint NSPointToCGPoint(NSPoint nspoint) {
 }
 
 - (IBAction)doDebugAction:(id)sender {
-    NSLog(@"doing debug action\n");
+    DLog(@"doing debug action\n");
     // make a mouse action, then 6 keyboard events, then another click
     [self doClickInPoint:NSMakePoint(29, 159)];
     [self doKeyCode:0 chars:@"a"];
@@ -595,7 +595,7 @@ CGPoint NSPointToCGPoint(NSPoint nspoint) {
     [_doc updateChangeCount:NSChangeDone];
     BOOL justStoppedEditing = NO;
     if (_editingGraphic) {
-        NSLog(@"was editing. stopping\n");
+        DLog(@"was editing. stopping\n");
         [_editingGraphic stopEditing];
         assert([_selectedGraphics count] == 1);
         _editingGraphic = nil;
@@ -608,7 +608,7 @@ CGPoint NSPointToCGPoint(NSPoint nspoint) {
     unsigned int page = [self pageForPointFromEvent:theEvent];
     NSPoint pagePoint =
         [self pagePointForPointFromEvent:theEvent page:page];
-    NSLog(@"pagePoint: %@, window point %@\n", NSStringFromPoint(pagePoint),
+    DLog(@"pagePoint: %@, window point %@\n", NSStringFromPoint(pagePoint),
           NSStringFromPoint([theEvent locationInWindow]));
         
     if (_inQuickMove) {
@@ -796,7 +796,7 @@ CGPoint NSPointToCGPoint(NSPoint nspoint) {
 
 - (void)beginQuickMove:(id)unused
 {
-    NSLog(@"beginQuickMove\n");
+    DLog(@"beginQuickMove\n");
     if (_editingGraphic) {
         [_editingGraphic stopEditing];
         _editingGraphic = nil;
@@ -819,7 +819,7 @@ CGPoint NSPointToCGPoint(NSPoint nspoint) {
 - (void)endQuickMove:(id)unused
 {
     if (NO == _inQuickMove) return;
-    NSLog(@"endQuickMove\n");
+    DLog(@"endQuickMove\n");
     _inQuickMove = NO;
 
     _editingGraphic = [_selectedGraphics anyObject];
@@ -839,7 +839,7 @@ CGPoint NSPointToCGPoint(NSPoint nspoint) {
 
 - (IBAction)placeImage:(id)sender
 {
-    NSLog(@"DocView's plageImage\n");
+    DLog(@"DocView's plageImage\n");
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     [panel setAllowsMultipleSelection:NO];
     [panel beginSheetForDirectory:nil
@@ -903,7 +903,7 @@ CGPoint NSPointToCGPoint(NSPoint nspoint) {
 {
     range->location = 1;
     range->length = [_pdf_document pageCount];
-    NSLog(@"page range: %d,%d\n", range->location, range->length);
+    DLog(@"page range: %d,%d\n", range->location, range->length);
     return YES;
 }
 

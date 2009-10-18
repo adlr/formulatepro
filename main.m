@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "FPLogging.h"
 
 int main(int argc, char *argv[])
 {
@@ -26,7 +27,7 @@ int main(int argc, char *argv[])
         buf[3] = '\0'; // chop off minor version number
         feedURL = [NSString stringWithFormat:
                    @"http://adlr.info/appcasts/formulatepro-%s-v%@.xml", buf, appVersion];
-        NSLog(@"feed url: %@\n", feedURL);
+        DLog(@"feed url: %@\n", feedURL);
         [[NSUserDefaults standardUserDefaults] setObject:feedURL
                                                   forKey:@"SUFeedURL"];
     }

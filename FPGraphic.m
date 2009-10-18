@@ -295,14 +295,14 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
     
     for (;;) {
         // print event info for now
-        NSLog(@"event info:\n");
-        NSLog(@"  pressure:           %f\n", [theEvent pressure]);
-        NSLog(@"  tangentialPressure: %f\n", [theEvent tangentialPressure]);
-        NSLog(@"  tilt: %@\n", NSStringFromPoint([theEvent tilt]));
-        NSLog(@"  loc: %@\n", NSStringFromPoint([theEvent locationInWindow]));
-        NSLog(@"  absolute X: %d\n", [theEvent absoluteX]);
-        NSLog(@"  absolute Y: %d\n", [theEvent absoluteY]);
-        NSLog(@"  absolute Z: %d\n", [theEvent absoluteZ]);
+        DLog(@"event info:\n");
+        DLog(@"  pressure:           %f\n", [theEvent pressure]);
+        DLog(@"  tangentialPressure: %f\n", [theEvent tangentialPressure]);
+        DLog(@"  tilt: %@\n", NSStringFromPoint([theEvent tilt]));
+        DLog(@"  loc: %@\n", NSStringFromPoint([theEvent locationInWindow]));
+        DLog(@"  absolute X: %d\n", [theEvent absoluteX]);
+        DLog(@"  absolute Y: %d\n", [theEvent absoluteY]);
+        DLog(@"  absolute Z: %d\n", [theEvent absoluteZ]);
     
     
         NSRect newBounds = _bounds;
@@ -312,7 +312,7 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
         assert(_bounds.size.height >= 0.0);
         
         /*
-        NSLog(@"resize x: %.1f y: %.1f w: %.1f h: %.1f\n",
+        DLog(@"resize x: %.1f y: %.1f w: %.1f h: %.1f\n",
               _bounds.origin.x,
               _bounds.origin.y,
               _bounds.size.width,
@@ -611,7 +611,7 @@ const float knobSize = 6.0;
 {
     assert(bounds.size.width >= 0.0);
     assert(bounds.size.height >= 0.0);
-    NSLog(@"set bounds to: (%10.10f, %10.10f) (%10.10f, %10.10f)\n", bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
+    DLog(@"set bounds to: (%10.10f, %10.10f) (%10.10f, %10.10f)\n", bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
     _bounds = bounds;
 }
 

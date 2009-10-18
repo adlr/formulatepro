@@ -97,7 +97,7 @@
         // we are assuming if both left and right edge change,
         // that they're moving and so the width will still be an integer
         if (bounds.size.width != floorf(bounds.size.width)) {
-            NSLog(@"b.s.wid: %f, f(b.s.wid): %f\n",
+            DLog(@"b.s.wid: %f, f(b.s.wid): %f\n",
                   bounds.size.width,
                   floorf(bounds.size.width));
         }
@@ -121,16 +121,16 @@
 
 - (void)draw:(BOOL)selected
 {
-    NSLog(@"drawing text\n");
+    DLog(@"drawing text\n");
     NSBezierPath *path = [NSBezierPath bezierPathWithRect:NSInsetRect(_bounds, 0.0, 0.0)];
     [[NSColor blueColor] set];
     [path stroke];
     if (_isPlacing || _isEditing) {
-        NSLog(@"abortingn b/c isplacing %d or isediting %d\n", _isPlacing, _isEditing);
+        DLog(@"abortingn b/c isplacing %d or isediting %d\n", _isPlacing, _isEditing);
         return;
     }
     if (_editor && [[_editor textStorage] length] > 0) {
-        NSLog(@"has editor and text storage length\n");
+        DLog(@"has editor and text storage length\n");
         NSWindow *w = [(AppDelegate *)[NSApp delegate] renderWindow];
         [w setContentSize:_bounds.size];
         [w setContentView:_editor];
@@ -152,7 +152,7 @@
         NSPDFImageRep *rep = [[image representations] objectAtIndex:0];
         [rep drawInRect:_bounds];
 #else
-        NSLog(@"img size: %@, bnd size: %@\n",
+        DLog(@"img size: %@, bnd size: %@\n",
               NSStringFromSize([image size]),
               NSStringFromSize(_bounds.size));
         //[image drawInRect:_bounds
@@ -286,7 +286,7 @@ printSubviews(NSView *view, int level)
     for (i = 0; i < level; i++) {
         printf("  ");
     }
-    NSLog(@"view: %@\n", view);
+    DLog(@"view: %@\n", view);
     subs = [view subviews];
     for (i = 0; i < [subs count]; i++) {
         printSubviews([subs objectAtIndex:i], level+1);
@@ -332,7 +332,7 @@ PDFDisplayViewForMatteView(NSView *p)
 
 - (void)startEditing
 {
-	NSLog(@"start editing\n");
+	DLog(@"start editing\n");
     NSRect frame;
     if (_editor == nil) {
         _editor = [[NSTextView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 40.0, 40.0)];
@@ -359,7 +359,7 @@ PDFDisplayViewForMatteView(NSView *p)
 	}
 
     frame = [_docView convertRect:[_docView convertRect:_bounds fromPage:_page] toView:PDFDisplayViewForMatteView(documentViewForPDFView(_docView))];
-    NSLog(@"frame: %@\n", NSStringFromRect(frame));
+    DLog(@"frame: %@\n", NSStringFromRect(frame));
     [_editor setFrame:frame];
     
     /*
@@ -399,8 +399,8 @@ PDFDisplayViewForMatteView(NSView *p)
 didCompleteLayoutForTextContainer:(NSTextContainer *)aTextContainer
 atEnd:(BOOL)flag
 {
-	NSLog(@"layoutManager:didCompleteLayoutForTextContainer:atEnd:\n");
-	NSLog(@"Test: size: %@\n", NSStringFromSize([self containerSizeOfString:@"a\nb"
+	DLog(@"layoutManager:didCompleteLayoutForTextContainer:atEnd:\n");
+	DLog(@"Test: size: %@\n", NSStringFromSize([self containerSizeOfString:@"a\nb"
 		withFontname:@"Helvetica"
 		fontSize:12.0]));
 	//NSTextContainer tempContainer = [[[NSTextContainer alloc] initWithContainerSize:NSMakeSize(300.0,300.0)] autorelease];
@@ -411,7 +411,7 @@ atEnd:(BOOL)flag
 	//[[_editor textContainer] containerSize];
     frame = [_docView convertRect:[_docView convertRect:_bounds fromPage:_page] toView:PDFDisplayViewForMatteView(documentViewForPDFView(_docView))];
 	[_editor setFrame:frame];
-	NSLog(@"setting frame to : %@\n", NSStringFromRect(frame));
+	DLog(@"setting frame to : %@\n", NSStringFromRect(frame));
 }
 
 /*
@@ -431,7 +431,7 @@ flippedFont(NSFont * font)
 
 - (void)stopEditing
 {
-    NSLog(@"stop editing\n");
+    DLog(@"stop editing\n");
     assert(_editor);
     [_editor setDelegate:nil];
 	[[_editor layoutManager] setDelegate:nil];
@@ -521,14 +521,14 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
     BOOL fixedWidth = ([[notification object] isHorizontallyResizable] ? NO : YES);
     
     textSize = NSMakeSize(1000.0, 1000.0);
-    NSLog(@"textSize: %@\n", NSStringFromSize(textSize));
+    DLog(@"textSize: %@\n", NSStringFromSize(textSize));
     
     if ((textSize.width > _bounds.size.width) || (textSize.height > _bounds.size.height)) {
         _bounds = NSMakeRect(_bounds.origin.x, _bounds.origin.y, ((!fixedWidth && (textSize.width > _bounds.size.width)) ? textSize.width : _bounds.size.width), ((textSize.height > _bounds.size.height) ? textSize.height : _bounds.size.height));
     }
      */
-    NSLog(@"editor frame:  %@\n", NSStringFromRect([_editor frame]));
-    NSLog(@"editor bounds: %@\n", NSStringFromRect([_editor bounds]));
+    DLog(@"editor frame:  %@\n", NSStringFromRect([_editor frame]));
+    DLog(@"editor bounds: %@\n", NSStringFromRect([_editor bounds]));
 }
 
 @end

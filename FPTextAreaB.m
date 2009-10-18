@@ -155,7 +155,7 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
         [self resizeWithEvent:theEvent byKnob:LowerRightKnob];
     }
     _isPlacing = NO;
-    NSLog(@"0x%08x placed w/ bounds: %@\n", self, NSStringFromRect(_bounds));
+    DLog(@"0x%08x placed w/ bounds: %@\n", self, NSStringFromRect(_bounds));
     return YES;
 }
 
@@ -178,7 +178,7 @@ static NSLayoutManager *sharedDrawingLayoutManager();
         float heightChange = NSHeight(glyphRect) - NSHeight(bounds);
         bounds.origin.y -= heightChange;
         bounds.size.height = NSHeight(glyphRect);
-        NSLog(@"glyph: %@\n", NSStringFromRect(glyphRect));
+        DLog(@"glyph: %@\n", NSStringFromRect(glyphRect));
     }
     // Correct bounds that have a decimal part like .999... as it screws up text
     // layout on tiger, leopard (but not snow leopard)
@@ -222,23 +222,23 @@ union foou {
 
 - (void)draw:(BOOL)selected
 {
-    NSLog(@"0x%08x drawing text area %@\n", self, _textStorage);
+    DLog(@"0x%08x drawing text area %@\n", self, _textStorage);
     [_textStorage ensureAttributesAreFixedInRange:NSMakeRange(0, [_textStorage length])];
     if (_gFlags.drawsStroke) {
-        NSLog(@"draws stroke\n");
+        DLog(@"draws stroke\n");
         NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self bounds]];
         [path setLineWidth:[self strokeWidth]];
         [[NSColor blackColor] set];
         [path stroke];
     } else if (selected || _isPlacing) {
-        NSLog(@"drawing text area: selected || _isPlacing\n");
+        DLog(@"drawing text area: selected || _isPlacing\n");
         NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self bounds]];
         [path setLineWidth:[self strokeWidth]];
         [[NSColor lightGrayColor] set];
         [path stroke];
     }
     if (!_isEditing) {
-        NSLog(@"drawing text area: !_isEditing\n");
+        DLog(@"drawing text area: !_isEditing\n");
         NSAffineTransform *transform = [NSAffineTransform transform];
         [transform scaleXBy:1.0 yBy:-1.0];
         [transform translateXBy:0.0
@@ -246,7 +246,7 @@ union foou {
         [transform concat];
     
         //NSTextStorage *contents = [_editor textStorage];
-        NSLog(@"text storage length: %d\n", [_textStorage length]);
+        DLog(@"text storage length: %d\n", [_textStorage length]);
         if ([_textStorage length] > 0) {
             NSLayoutManager *lm = sharedDrawingLayoutManager();
             NSTextContainer *tc = [[lm textContainers] objectAtIndex:0];
@@ -257,18 +257,18 @@ union foou {
             f.ints.b = 0;
             f.ints.c = 0;
             f.sz = _bounds.size;
-            NSLog(@"abc: %llu %llu %llu\n", f.ints.a, f.ints.b, f.ints.c);
-            NSLog(@"bounds: %@\n", NSStringFromRect(_bounds));
-            NSLog(@"tc setContainerSize: (%10.10f, %10.10f)\n", _bounds.size.width, _bounds.size.height);
+            DLog(@"abc: %llu %llu %llu\n", f.ints.a, f.ints.b, f.ints.c);
+            DLog(@"bounds: %@\n", NSStringFromRect(_bounds));
+            DLog(@"tc setContainerSize: (%10.10f, %10.10f)\n", _bounds.size.width, _bounds.size.height);
             [_textStorage addLayoutManager:lm];
-            NSLog(@"tc: sz %@ wtv %d htv %d lfp %f isr %d\n", NSStringFromSize([tc containerSize]),
+            DLog(@"tc: sz %@ wtv %d htv %d lfp %f isr %d\n", NSStringFromSize([tc containerSize]),
                 [tc widthTracksTextView], [tc heightTracksTextView], (double)[tc lineFragmentPadding],
                 [tc isSimpleRectangularTextContainer]);
             // Force layout of the text and find out how much of it fits in
             // the container.
             glyphRange = [lm glyphRangeForTextContainer:tc];
 
-            NSLog(@"glyphRange.length: %d\n", glyphRange.length);
+            DLog(@"glyphRange.length: %d\n", glyphRange.length);
             if (glyphRange.length > 0) {
                 [lm drawBackgroundForGlyphRange:glyphRange
                                         atPoint:_bounds.origin];
@@ -284,7 +284,7 @@ union foou {
 
 - (void)documentDidZoom
 {
-    NSLog(@"document did zoom\n");
+    DLog(@"document did zoom\n");
     if (nil == _editor) return;
     [_editor scaleUnitSquareToSize:NSMakeSize([_docView scaleFactor] /
                                               _editorScaleFactor,
@@ -296,16 +296,16 @@ union foou {
 
 - (void)myFrameChanged:(NSTextView *)foo
 {
-//    NSLog(@"frame changed\n");
-//    NSLog(@"editor frame:  %@\n", NSStringFromRect([_editor frame]));
-//    NSLog(@"editor bounds: %@\n", NSStringFromRect([_editor bounds]));
-    NSLog(@"myFrameChanged:\n");
+//    DLog(@"frame changed\n");
+//    DLog(@"editor frame:  %@\n", NSStringFromRect([_editor frame]));
+//    DLog(@"editor bounds: %@\n", NSStringFromRect([_editor bounds]));
+    DLog(@"myFrameChanged:\n");
     [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds]
                                                  fromPage:_page]];
-    NSLog(@"new bounds: %@\n", NSStringFromRect([self bounds]));
+    DLog(@"new bounds: %@\n", NSStringFromRect([self bounds]));
 //    NSRect frame = [_editor frame];
-//    NSLog(@"my frame: %@\n", NSStringFromRect(frame));
-//    NSLog(@"used rect fc: %@\n", NSStringFromRect([[_editor layoutManager] usedRectForTextContainer:[_editor textContainer]]));
+//    DLog(@"my frame: %@\n", NSStringFromRect(frame));
+//    DLog(@"used rect fc: %@\n", NSStringFromRect([[_editor layoutManager] usedRectForTextContainer:[_editor textContainer]]));
 //    [self setBounds:[_docView convertRect:frame toPage:_page]];
 //    [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds] fromPage:_page]];
 }
@@ -389,7 +389,7 @@ union foou {
 
 - (void)stopEditing
 {
-    NSLog(@"0x%08x stop editing bounds %@\n", self, NSStringFromRect(_bounds));
+    DLog(@"0x%08x stop editing bounds %@\n", self, NSStringFromRect(_bounds));
     assert(_editor);
     [_textStorage removeLayoutManager:[_editor layoutManager]];
     [_editor setSelectedRange:NSMakeRange(0, 0)];
