@@ -45,6 +45,7 @@
 		C4AB447F0A718D7600EE29B2 /* continuous.psd in Resources */ = {isa = PBXBuildFile; fileRef = C4AB447E0A718D7600EE29B2 /* continuous.psd */; };
 		C4B25AAB0B431F8800DADA0F /* FPImage.m in Sources */ = {isa = PBXBuildFile; fileRef = C4B25AA90B431F8800DADA0F /* FPImage.m */; };
 		C4B25D980B4ADF8100DADA0F /* NSMutableDictionaryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C4B25D960B4ADF8100DADA0F /* NSMutableDictionaryAdditions.m */; };
+		C4C68333108AEE5F00771440 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = C4C68332108AEE5F00771440 /* dsa_pub.pem */; };
 		C4DC0D980A82D28800DB476E /* viewmag-.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0D960A82D28800DB476E /* viewmag-.png */; };
 		C4DC0D990A82D28800DB476E /* viewmag+.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0D970A82D28800DB476E /* viewmag+.png */; };
 		C4DC0DA60A82D35500DB476E /* next.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DC0DA40A82D35500DB476E /* next.png */; };
@@ -123,6 +124,7 @@
 		C4B25D530B4AD7C900DADA0F /* FPArchiveExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPArchiveExtras.h; sourceTree = "<group>"; };
 		C4B25D950B4ADF8100DADA0F /* NSMutableDictionaryAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMutableDictionaryAdditions.h; sourceTree = "<group>"; };
 		C4B25D960B4ADF8100DADA0F /* NSMutableDictionaryAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMutableDictionaryAdditions.m; sourceTree = "<group>"; };
+		C4C68332108AEE5F00771440 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = SOURCE_ROOT; };
 		C4D1094F0C8CA529003A767D /* FPLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPLogging.h; sourceTree = "<group>"; };
 		C4DC0D960A82D28800DB476E /* viewmag-.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "viewmag-.png"; sourceTree = SOURCE_ROOT; };
 		C4DC0D970A82D28800DB476E /* viewmag+.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "viewmag+.png"; sourceTree = SOURCE_ROOT; };
@@ -262,6 +264,7 @@
 				C4DC0D970A82D28800DB476E /* viewmag+.png */,
 				C4DC0DA50A82D35500DB476E /* previous.png */,
 				C45E44A70B3C8C2700D41543 /* FormulatePro.icns */,
+				C4C68332108AEE5F00771440 /* dsa_pub.pem */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -366,6 +369,7 @@
 				C4DC0DB70A82D99700DB476E /* LICENSE.txt in Resources */,
 				C45E44A80B3C8C2700D41543 /* FormulatePro.icns in Resources */,
 				C493CE0E0C8D222900BFAEE8 /* tips.plist in Resources */,
+				C4C68333108AEE5F00771440 /* dsa_pub.pem in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
