@@ -177,7 +177,7 @@ static NSLayoutManager *sharedDrawingLayoutManager();
         float heightChange = NSHeight(glyphRect) - NSHeight(bounds);
         bounds.origin.y -= heightChange;
         bounds.size.height = NSHeight(glyphRect);
-        NSLog(@"glyph: %@\n", NSStringFromRect(glyphRect));
+        DLog(@"glyph: %@\n", NSStringFromRect(glyphRect));
     }
     // Correct bounds that have a decimal part like .999... as it screws up text
     // layout on tiger, leopard (but not snow leopard)
@@ -256,7 +256,7 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
 
 - (void)documentDidZoom
 {
-    NSLog(@"document did zoom\n");
+    DLog(@"document did zoom\n");
     if (nil == _editor) return;
     [_editor scaleUnitSquareToSize:NSMakeSize([_docView scaleFactor] /
                                               _editorScaleFactor,
@@ -268,16 +268,16 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
 
 - (void)myFrameChanged:(NSTextView *)foo
 {
-//    NSLog(@"frame changed\n");
-//    NSLog(@"editor frame:  %@\n", NSStringFromRect([_editor frame]));
-//    NSLog(@"editor bounds: %@\n", NSStringFromRect([_editor bounds]));
-    NSLog(@"myFrameChanged:\n");
+//    DLog(@"frame changed\n");
+//    DLog(@"editor frame:  %@\n", NSStringFromRect([_editor frame]));
+//    DLog(@"editor bounds: %@\n", NSStringFromRect([_editor bounds]));
+    DLog(@"myFrameChanged:\n");
     [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds]
                                                  fromPage:_page]];
-    NSLog(@"new bounds: %@\n", NSStringFromRect([self bounds]));
+    DLog(@"new bounds: %@\n", NSStringFromRect([self bounds]));
 //    NSRect frame = [_editor frame];
-//    NSLog(@"my frame: %@\n", NSStringFromRect(frame));
-//    NSLog(@"used rect fc: %@\n", NSStringFromRect([[_editor layoutManager] usedRectForTextContainer:[_editor textContainer]]));
+//    DLog(@"my frame: %@\n", NSStringFromRect(frame));
+//    DLog(@"used rect fc: %@\n", NSStringFromRect([[_editor layoutManager] usedRectForTextContainer:[_editor textContainer]]));
 //    [self setBounds:[_docView convertRect:frame toPage:_page]];
 //    [_docView setNeedsDisplayInRect:[_docView convertRect:[self safeBounds] fromPage:_page]];
 }
@@ -361,7 +361,7 @@ static NSLayoutManager *sharedDrawingLayoutManager() {
 
 - (void)stopEditing
 {
-	NSLog(@"stop editing\n");
+	DLog(@"stop editing\n");
     assert(_editor);
     [_textStorage removeLayoutManager:[_editor layoutManager]];
     [_editor setSelectedRange:NSMakeRange(0, 0)];

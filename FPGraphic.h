@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "FPDocumentView.h"
+#import "FPLogging.h"
 
 @class MyPDFView;
 @class PDFPage;

@@ -8,6 +8,7 @@
 
 #import "MyDocument.h"
 #import "FPArchivalDictionaryUpgrader.h"
+#import "FPLogging.h"
 
 //static NSString *nativeDocumentFormat = @"FormulatePro Document";
 
@@ -175,17 +176,17 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
 
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError
 {
-    NSLog(@"dataOfType:%@\n", typeName);
+    DLog(@"dataOfType:%@\n", typeName);
     NSMutableDictionary *d = [NSMutableDictionary dictionary];
-    NSLog(@"line %d\n", __LINE__);
+    DLog(@"line %d\n", __LINE__);
     [d setObject:_originalPDFData forKey:@"originalPDFData"];
-    NSLog(@"line %d\n", __LINE__);
+    DLog(@"line %d\n", __LINE__);
     [d setObject:[_document_view archivalOverlayGraphics]
           forKey:@"archivalOverlayGraphics"];
-    NSLog(@"line %d\n", __LINE__);
+    DLog(@"line %d\n", __LINE__);
     [d setObject:[NSNumber numberWithInt:[FPArchivalDictionaryUpgrader currentVersion]]
           forKey:@"version"];
-    NSLog(@"line %d\n", __LINE__);
+    DLog(@"line %d\n", __LINE__);
     
 
     NSString *errorDesc;
@@ -195,7 +196,7 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
                        format:NSPropertyListXMLFormat_v1_0
              errorDescription:&errorDesc];
     if (nil == ret) {
-        NSLog(@"error: %@\n", errorDesc);
+        DLog(@"error: %@\n", errorDesc);
         [errorDesc release];
         return [NSData data];
     }
@@ -206,7 +207,7 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
               ofType:(NSString *)typeName
                error:(NSError **)outError
 {
-    NSLog(@"readFromData:0x%08x ofType:%@\n", (unsigned)data, typeName);
+    DLog(@"readFromData:0x%08x ofType:%@\n", (unsigned)data, typeName);
     if ([typeName isEqualToString:@"PDF Document"]) {
         _originalPDFData = [data retain];
         [self setFileURL:nil];  // causes document to be "untitled" and otherwise
@@ -240,7 +241,7 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
     _pdf_document = [[PDFDocument alloc] initWithData:_originalPDFData];
     if (nil == _pdf_document) {
         // report error
-        NSLog(@"error with PDF format!\n");
+        DLog(@"error with PDF format!\n");
         return NO;
     }
     return YES;
@@ -576,7 +577,7 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
 
 - (IBAction)placeImage:(id)sender;
 {
-    NSLog(@"MyDocument's plageImage\n");
+    DLog(@"MyDocument's plageImage\n");
     [_document_view placeImage:sender];
 }
 
@@ -588,7 +589,7 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
 // -printShowingPrintPanel: instead.
 - (NSPrintOperation *)printOperationWithSettings:(NSDictionary *)printSettings
                                            error:(NSError **)outError {
-    NSLog(@"print operations\n");
+    DLog(@"print operations\n");
     // Create a view that will be used just for printing.
     //NSSize documentSize = [self documentSize];
     //SKTRenderingView *renderingView = [[SKTRenderingView alloc]
@@ -635,8 +636,8 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
 
 - (void)setPrintInfo:(NSPrintInfo *)printInfo
 {
-    NSLog(@"setPrintInfo\n");
-    NSLog(@"print info dict: %@\n", [printInfo dictionary]);
+    DLog(@"setPrintInfo\n");
+    DLog(@"print info dict: %@\n", [printInfo dictionary]);
     [super setPrintInfo:printInfo];
 }
 

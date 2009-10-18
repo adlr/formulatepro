@@ -38,7 +38,7 @@ static const float ZoomScaleFactor = 1.3;
 - (NSRect)frame
 {
     if (nil == _pdf_document) {
-        NSLog(@"small frame\n");
+        DLog(@"small frame\n");
         return NSMakeRect(0.0, 0.0, 10.0, 10.0);
     }
     NSRect ret = NSMakeRect(0.0, 0.0, 0.0, 0.0);
@@ -105,7 +105,7 @@ static const float ZoomScaleFactor = 1.3;
 
 - (id)initWithFrame:(NSRect)frameRect
 {
-    NSLog(@"init w/ frame: %@\n", NSStringFromRect(frameRect));
+    DLog(@"init w/ frame: %@\n", NSStringFromRect(frameRect));
     frameRect = [self frame];
     if ((self = [super initWithFrame:frameRect]) != nil) {
         // Add initialization code here
@@ -153,7 +153,7 @@ static const float ZoomScaleFactor = 1.3;
 {
     [_pdf_document release];
     _pdf_document = [pdf_document retain];
-    NSLog(@"set pdf doc\n");
+    DLog(@"set pdf doc\n");
     [self setFrame:[self frame]];
     [self setNeedsDisplay:YES];
 }
@@ -716,7 +716,7 @@ static const float ZoomScaleFactor = 1.3;
 
 - (void)beginQuickMove:(id)unused
 {
-    NSLog(@"beginQuickMove\n");
+    DLog(@"beginQuickMove\n");
     if (_editingGraphic) {
         [_editingGraphic stopEditing];
         _editingGraphic = nil;
@@ -739,7 +739,7 @@ static const float ZoomScaleFactor = 1.3;
 - (void)endQuickMove:(id)unused
 {
     if (NO == _inQuickMove) return;
-    NSLog(@"endQuickMove\n");
+    DLog(@"endQuickMove\n");
     _inQuickMove = NO;
 
     _editingGraphic = [_selectedGraphics anyObject];
@@ -759,7 +759,7 @@ static const float ZoomScaleFactor = 1.3;
 
 - (IBAction)placeImage:(id)sender
 {
-    NSLog(@"DocView's plageImage\n");
+    DLog(@"DocView's plageImage\n");
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     [panel setAllowsMultipleSelection:NO];
     [panel beginSheetForDirectory:nil
@@ -823,7 +823,7 @@ static const float ZoomScaleFactor = 1.3;
 {
     range->location = 1;
     range->length = [_pdf_document pageCount];
-    NSLog(@"page range: %d,%d\n", range->location, range->length);
+    DLog(@"page range: %d,%d\n", range->location, range->length);
     return YES;
 }
 

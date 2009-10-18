@@ -13,7 +13,7 @@ if [ "$1" = "-v" ]; then
 	SRC="./build/Release/FormulatePro.app"
 	VOL="FormulatePro-$2"
 	OUT="$VOL.dmg"
-	VERS=$1
+	VERS=$2
 else
 	SRC="$1"
 	VOL="$2"

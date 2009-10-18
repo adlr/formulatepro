@@ -77,7 +77,7 @@ static FPToolPaletteController *_sharedController;
 {
     for (unsigned int i = 0; i < [_buttonArray count]; i++) {
         NSButton *b = [_buttonArray objectAtIndex:i];
-        NSLog(@"button = 0x%08x\n", (unsigned)b);
+        DLog(@"button = 0x%08x\n", (unsigned)b);
         if ([[_buttonArray objectAtIndex:i] state] == NSOnState)
             return i;
     }
@@ -88,12 +88,12 @@ static FPToolPaletteController *_sharedController;
 - (Class)classForCurrentTool
 {
     switch ([self currentTool]) {
-        case FPToolEllipse: NSLog(@"ellispe\n"); return [FPEllipse class];
-        case FPToolRectangle: NSLog(@"rect\n"); return [FPRectangle class];
-        case FPToolSquiggle: NSLog(@"squiggle\n"); return [FPSquiggle class];
-        case FPToolTextArea: NSLog(@"text area\n"); return [FPTextAreaB class];
-        case FPToolCheckmark: NSLog(@"checkmark\n"); return [FPCheckmark class];
-        //case FPToolTextField: NSLog(@"text field\n"); return [FPTextField class];
+        case FPToolEllipse: DLog(@"ellispe\n"); return [FPEllipse class];
+        case FPToolRectangle: DLog(@"rect\n"); return [FPRectangle class];
+        case FPToolSquiggle: DLog(@"squiggle\n"); return [FPSquiggle class];
+        case FPToolTextArea: DLog(@"text area\n"); return [FPTextAreaB class];
+        case FPToolCheckmark: DLog(@"checkmark\n"); return [FPCheckmark class];
+        //case FPToolTextField: DLog(@"text field\n"); return [FPTextField class];
     }
     return [FPRectangle class];
 }
