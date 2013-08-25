@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "FPGraphic.h"
 
-@interface FPTextAreaB : FPGraphic {
+@interface FPTextAreaB : FPGraphic <NSTextViewDelegate> {
     NSTextView *_editor;
     
     NSTextStorage *_textStorage;
