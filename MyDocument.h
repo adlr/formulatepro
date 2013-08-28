@@ -13,7 +13,7 @@
 
 #import "FPDocumentView.h"
 
-@interface MyDocument : NSDocument
+@interface MyDocument : NSDocument <NSToolbarDelegate>
 {
     IBOutlet FPDocumentView *_document_view;
     IBOutlet NSWindow *_document_window;

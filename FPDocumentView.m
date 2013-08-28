@@ -160,8 +160,8 @@ static const float ZoomScaleFactor = 1.3;
 
 - (unsigned int)getViewingMidpointToPage:(unsigned int*)page pagePoint:(NSPoint*)pagePoint
 {
-    NSPoint midpoint = NSMakePoint(NSMidX([_scrollView documentVisibleRect]),
-                                   NSMidY([_scrollView documentVisibleRect]));
+    NSPoint midpoint = NSMakePoint(NSMidX([self visibleRect]),
+                                   NSMidY([self visibleRect]));
     unsigned int ret = [self pageForPoint:midpoint];
     if (page)
         *page = ret;
