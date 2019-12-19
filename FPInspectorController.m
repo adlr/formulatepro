@@ -34,7 +34,7 @@
 
 - (void)cascadeEnabledness
 {
-    BOOL doStroke = ([_strokeCheckbox state] == NSOnState);
+    BOOL doStroke = ([_strokeCheckbox state] == NSControlStateValueOn);
     [_widthTextField setEnabled:doStroke];
     [_widthStepper setEnabled:doStroke];
     [_strokeColorWell setEnabled:doStroke];
@@ -46,7 +46,7 @@
         [_widthLabel setTextColor:[NSColor grayColor]];
     }
     
-    BOOL doFill = ([_fillCheckbox state] == NSOnState);
+    BOOL doFill = ([_fillCheckbox state] == NSControlStateValueOn);
     [_fillColorWell setEnabled:doFill];
 }
 
