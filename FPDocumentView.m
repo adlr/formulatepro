@@ -178,7 +178,7 @@ static const float ZoomScaleFactor = 1.3;
     NSPoint viewOrigin = NSMakePoint(floorf(viewPoint.x - viewWidth/2.0),
                                      floorf(viewPoint.y - viewHeight/2.0));
     [[_scrollView contentView] scrollToPoint:
-        [[_scrollView contentView] constrainScrollPoint:viewOrigin]];
+        [[_scrollView contentView] constrainBoundsRect:viewOrigin]];
     [_scrollView reflectScrolledClipView:[_scrollView contentView]];
 }
 
@@ -453,9 +453,9 @@ static const float ZoomScaleFactor = 1.3;
     for (;;) {
         // get ready for next iteration of the loop, or break out of loop
         theEvent =
-            [[self window] nextEventMatchingMask:(NSLeftMouseDraggedMask |
-                                                  NSLeftMouseUpMask)];
-        if ([theEvent type] == NSLeftMouseUp)
+        [[self window] nextEventMatchingMask:(NSEventMaskLeftMouseDragged |
+                                              NSEventMaskLeftMouseUp)];
+        if ([theEvent type] == NSEventTypeLeftMouseUp)
             break;
         
         // main loop body
@@ -586,7 +586,7 @@ static const float ZoomScaleFactor = 1.3;
             if (([graphic page] == page) &&
                 NSPointInRect(pagePoint, [graphic safeBounds])) {
                 // we hit 'graphic'
-                if ([theEvent modifierFlags] & NSShiftKeyMask) {
+                if ([theEvent modifierFlags] & NSEventModifierFlagShift) {
                     [_selectedGraphics invertMembershipForObject:graphic];
                     [[NSNotificationCenter defaultCenter] postNotificationName:FPSelectionChangedNotification
                                                                         object:[self window]
@@ -630,7 +630,7 @@ static const float ZoomScaleFactor = 1.3;
         } else {
             if ([_selectedGraphics count]) {
                 [self setNeedsDisplay:YES];
-                if ([theEvent modifierFlags] & NSAlternateKeyMask) {
+                if ([theEvent modifierFlags] & NSEventModifierFlagOption) {
                     DLog(@"will copy\n");
                     // if option key is down, and a drag is begun, 
                     // copy the elements and drag those new ones
@@ -775,7 +775,7 @@ static const float ZoomScaleFactor = 1.3;
              returnCode:(int)returnCode
             contextInfo:(void *)contextInfo
 {
-    if (NSOKButton != returnCode) return;
+    if (NSModalResponseOK != returnCode) return;
 
     NSImage *image = [[[NSImage alloc]
                        initWithContentsOfFile:[panel filename]] autorelease];
