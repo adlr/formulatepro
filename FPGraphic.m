@@ -218,8 +218,8 @@ static NSString *versionArchiveKey = @"version";
         
         // get ready for next iteration of the loop, or break out of loop
         theEvent = [[_docView window] nextEventMatchingMask:
-                    (NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
-        if ([theEvent type] == NSLeftMouseUp)
+                    (NSEventMaskLeftMouseDragged | NSEventMaskLeftMouseUp)];
+        if ([theEvent type] == NSEventTypeLeftMouseUp)
             break;
     }
     assert(_hasPage);
@@ -365,7 +365,7 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
             }
         }
         
-        if ([theEvent modifierFlags] & NSShiftKeyMask) {
+        if ([theEvent modifierFlags] & NSEventModifierFlagShift) {
             BOOL didFlip;
             switch (knob) {
                 case UpperRightKnob:
@@ -395,8 +395,8 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
 
         // get ready for next iteration of the loop, or break out of loop
         theEvent = [[_docView window] nextEventMatchingMask:
-                    (NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
-        if ([theEvent type] == NSLeftMouseUp)
+                    (NSEventMaskLeftMouseDragged | NSEventMaskLeftMouseUp)];
+        if ([theEvent type] == NSEventTypeLeftMouseUp)
             break;
     }
     [_docView discardCursorRects];
