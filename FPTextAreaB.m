@@ -148,10 +148,16 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
     _naturalBounds.size = NSMakeSize(1.0, 1.0);
     
     // if the next event is mouse up, then the user didn't drag at all
+/*
+ DEPRECATED
+ 'NSLeftMouseDraggedMask' is deprecated: first deprecated in macOS 10.12
+ 'NSLeftMouseUpMask' is deprecated: first deprecated in macOS 10.12
+ 'NSLeftMouseUp' is deprecated: first deprecated in macOS 10.12
+ */
     theEvent = [[_docView window] nextEventMatchingMask:
-                (NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
+                (NSEventMaskLeftMouseDragged | NSEventMaskLeftMouseUp)];
     _isAutoSizedX = _isAutoSizedY = YES;
-    if ([theEvent type] != NSLeftMouseUp) {
+    if ([theEvent type] != NSEventTypeLeftMouseUp) {
         [self resizeWithEvent:theEvent byKnob:LowerRightKnob];
     }
     _isPlacing = NO;
