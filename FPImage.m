@@ -36,8 +36,14 @@ static NSString *imageArchiveKey = @"image";
     self = [super initWithArchivalDictionary:dict
                               inDocumentView:docView];
     if (self) {
-        _image = [[NSUnarchiver unarchiveObjectWithData:
-                   [dict objectForKey:imageArchiveKey]] retain];
+/*
+ DEPRECATED
+ 'NSUnarchiver' is deprecated: first deprecated in macOS 10.13 - Use NSKeyedUnarchiver instead
+ _image = [[NSKeyedUnarchiver unarchiveObjectWithData:[dict objectForKey:imageArchiveKey]] retain];
+ https://stackoverflow.com/questions/55419373/how-to-unarchive-data-with-unarchivedobjectofclassfromdataerror
+ PurchasedSubscription *purchasedSubscription = [NSKeyedUnarchiver unarchivedObjectOfClass:PurchasedSubscription.class fromData:data error:&error];
+ */
+        _image=[[NSKeyedUnarchiver unarchivedObjectOfClass:[FPImage class] fromData:[dict objectForKey:imageArchiveKey] error:nil] retain];
     }
     return self;
 }
@@ -47,7 +53,11 @@ static NSString *imageArchiveKey = @"image";
     NSMutableDictionary *ret =
         [NSMutableDictionary
          dictionaryWithDictionary:[super archivalDictionary]];
-    [ret setObject:[NSArchiver archivedDataWithRootObject:_image]
+/*
+ DEPRECATED
+ 'NSArchiver' is deprecated: first deprecated in macOS 10.13 - Use NSKeyedArchiver instead
+ */
+    [ret setObject:[NSKeyedArchiver archivedDataWithRootObject:_image requiringSecureCoding:YES error:nil]
      forNonexistentKey:imageArchiveKey];
     return ret;
 }
@@ -79,9 +89,13 @@ static NSString *imageArchiveKey = @"image";
 
 - (void)draw:(BOOL)selected
 {
+/*
+ DEPRECATED
+ 'NSCompositeSourceOver' is deprecated: first deprecated in macOS 10.12
+ */
     [_image drawInRect:[self bounds]
               fromRect:NSZeroRect
-             operation:NSCompositeSourceOver
+             operation:NSCompositingOperationSourceOver
               fraction:1.0]; // 1.0 means fully opaque
 }
 
