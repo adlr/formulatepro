@@ -776,9 +776,13 @@ static const float ZoomScaleFactor = 1.3;
             contextInfo:(void *)contextInfo
 {
     if (NSModalResponseOK != returnCode) return;
-
+/*
+ DEPRECATED
+ 'filename' is deprecated: first deprecated in macOS 10.6 - Use -URL instead
+ initWithContentsOfFile:[panel filename] autorelease];
+ */
     NSImage *image = [[[NSImage alloc]
-                       initWithContentsOfFile:[panel filename]] autorelease];
+                       initWithContentsOfFile:[[panel URL] path]] autorelease];
 
     if (nil == image) {
         // failed to open
