@@ -153,10 +153,15 @@ static NSString *pathArchiveKey = @"path";
 
         // get ready for next iteration of the loop, or break out of loop
         point = new_point;
-        
+/*
+ DEPRECATED
+ 'NSLeftMouseDraggedMask' is deprecated: first deprecated in macOS 10.12
+ 'NSLeftMouseUpMask' is deprecated: first deprecated in macOS 10.12
+ 'NSLeftMouseUp' is deprecated: first deprecated in macOS 10.12
+ */
         theEvent = [[_docView window] nextEventMatchingMask:
-                    (NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
-        if ([theEvent type] == NSLeftMouseUp)
+                    (NSEventMaskLeftMouseDragged | NSEventMaskLeftMouseUp)];
+        if ([theEvent type] == NSEventTypeLeftMouseUp)
             break;
     }
     _bounds = [_path bounds];
