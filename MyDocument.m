@@ -189,15 +189,25 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
     DLog(@"line %d\n", __LINE__);
     
 
-    NSString *errorDesc;
-    NSData *ret =
+/*
+ DEPRECATED
+ 'dataFromPropertyList:format:errorDescription:' is deprecated: first deprecated in macOS 10.10 - Use dataWithPropertyList:format:options:error: instead.
         [NSPropertyListSerialization
          dataFromPropertyList:d
                        format:NSPropertyListXMLFormat_v1_0
              errorDescription:&errorDesc];
+ */
+//    NSString *errorDesc;
+    NSError *errorData;
+    NSData *ret =
+        [NSPropertyListSerialization
+         dataWithPropertyList:d
+                       format:NSPropertyListXMLFormat_v1_0
+                      options:0
+                        error:&errorData];
     if (nil == ret) {
-        DLog(@"error: %@\n", errorDesc);
-        [errorDesc release];
+        DLog(@"error: %@\n", errorData);
+        [errorData release];
         return [NSData data];
     }
     return ret;
@@ -214,12 +224,19 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
                                 // act like a brand new document. e.g. file->save
                                 // pops the save-as dialog
     } else if ([typeName isEqualToString:@"FormulatePro Document"]) {
+/*
+ DEPRECATED
+ 'propertyListFromData:mutabilityOption:format:errorDescription:' is deprecated: first deprecated in macOS 10.10 - Use propertyListWithData:options:format:error: instead.
+ propertyListFromData:data
+     mutabilityOption:NSPropertyListMutableContainersAndLeaves
+               format:nil
+     errorDescription:nil];
+ */
         NSMutableDictionary *dict =
-            [NSPropertyListSerialization
-             propertyListFromData:data
-                 mutabilityOption:NSPropertyListMutableContainersAndLeaves
-                           format:nil
-                 errorDescription:nil];
+            [NSPropertyListSerialization propertyListWithData:data
+                                                      options:NSPropertyListMutableContainersAndLeaves
+                                                       format:nil
+                                                        error:nil];
         assert(nil != dict);
         // TODO(adlr): check for error, version, convert these keys to
         // constants
@@ -625,7 +642,13 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
     
     // add option for (not) printing original PDF
     // this uses deprecated method b/c the replacement method is 10.5 only
-    [printOperation setAccessoryView:_print_accessory_view];
+/*
+ TODO FIX THE printOperation
+ DEPRECATED
+ 'setAccessoryView:' is deprecated: first deprecated in macOS 10.5 - Use -[NSPrintPanel addAccessoryController:] and -[NSPrintPanel removeAccessoryController:] instead
+ [printOperation setAccessoryView:_print_accessory_view];
+ */
+    //  [printOperation setAccessoryView:_print_accessory_view];
     
     // We don't have to autorelease the print operation because
     // +[NSPrintOperation printOperationWithView:printInfo:] of course already
