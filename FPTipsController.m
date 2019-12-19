@@ -67,10 +67,19 @@ static NSString *kFPNextToolTip = @"FPNextToolTip";
         DLog(@"unable to load tips.plist\n");
         return;
     }
-    _tips = [NSPropertyListSerialization propertyListFromData:data
-                                            mutabilityOption:NSPropertyListImmutable
-                                                      format:nil
-                                            errorDescription:nil];
+/*
+ DEPRECATED
+ 'propertyListFromData:mutabilityOption:format:errorDescription:' is deprecated: first deprecated in macOS 10.10 - Use propertyListWithData:options:format:error: instead.
+ _tips = [NSPropertyListSerialization propertyListFromData:data
+                                         mutabilityOption:NSPropertyListImmutable
+                                                   format:nil
+                                         errorDescription:nil];
+
+ */
+    _tips = [NSPropertyListSerialization propertyListWithData:data
+                                                      options:NSPropertyListImmutable
+                                                       format:nil
+                                                        error:nil];
     [_tips retain];
     _tipOnDisplay = [self getNextTipIndexFromDefaults];
     [self displayTip:_tipOnDisplay];
