@@ -762,6 +762,9 @@ static const float ZoomScaleFactor = 1.3;
     DLog(@"DocView's plageImage\n");
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     [panel setAllowsMultipleSelection:NO];
+/*
+ DEPRECATED
+ 'beginSheetForDirectory:file:types:modalForWindow:modalDelegate:didEndSelector:contextInfo:' is deprecated: first deprecated in macOS 10.6
     [panel beginSheetForDirectory:nil
                              file:nil
                             types:nil
@@ -769,6 +772,31 @@ static const float ZoomScaleFactor = 1.3;
                     modalDelegate:self
                    didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:)
                       contextInfo:nil];
+ 
+ https://patchwork.ozlabs.org/patch/247062/
+ +        // Compatibility code for pre-10.6, using deprecated method
+ +   [panel beginSheetForDirectory:nil
+                              file:nil
+                             types:filetypes
+                    modalForWindow:normalWindow
+                     modalDelegate:self
+                    didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:)
+                       contextInfo:NULL];
+ +#else
+ +    [panel beginSheetModalForWindow:normalWindow
+ +            completionHandler:^(NSInteger returnCode)
+ +            { [self openPanelDidEnd:panel
+ +                  returnCode:returnCode contextInfo:NULL ]; } ];
+ 
+ 
+ */
+    [panel beginSheetModalForWindow:[self window]
+                  completionHandler:^(NSInteger returnCode) {
+        [self openPanelDidEnd:panel
+                   returnCode:returnCode
+                  contextInfo:NULL ];
+    } ];
+
 }
 
 - (void)openPanelDidEnd:(NSOpenPanel *)panel
