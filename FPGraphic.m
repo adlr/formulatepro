@@ -141,14 +141,16 @@ static NSString *versionArchiveKey = @"version";
             [[dict objectForKey:drawsStrokeArchiveKey] boolValue];
         _strokeWidth =
             [[dict objectForKey:strokeWidthArchiveKey] floatValue];
+/*
+ DEPRECATED
+ 'unarchiveObjectWithData:' is deprecated: first deprecated in macOS 10.14 - Use +unarchivedObjectOfClass:fromData:error: instead
+  [[NSUnarchiver unarchiveObjectWithData:[dict objectForKey:fillColorArchiveKey]] retain];
+  [[NSKeyedUnarchiver unarchivedObjectOfClass:[NSColor class] fromData:[dict objectForKey:fillColorArchiveKey] error:nil] retain];
+ */
         _fillColor =
-            [[NSUnarchiver
-              unarchiveObjectWithData:
-              [dict objectForKey:fillColorArchiveKey]] retain];
+            [[NSKeyedUnarchiver unarchivedObjectOfClass:[NSColor class] fromData:[dict objectForKey:fillColorArchiveKey] error:nil] retain];
         _strokeColor =
-            [[NSUnarchiver
-              unarchiveObjectWithData:
-              [dict objectForKey:strokeColorArchiveKey]] retain];
+        [[NSKeyedUnarchiver unarchivedObjectOfClass:[NSColor class] fromData:[dict objectForKey:strokeColorArchiveKey] error:nil] retain];
         _knobMask =
             [[dict objectForKey:knobMaskArchiveKey] intValue];
         _gFlags.hidesWhenPrinting =
@@ -171,9 +173,16 @@ static NSString *versionArchiveKey = @"version";
             forKey:drawsStrokeArchiveKey];
     [ret setObject:[NSNumber numberWithFloat:_strokeWidth]
             forKey:strokeWidthArchiveKey];
-    [ret setObject:[NSArchiver archivedDataWithRootObject:_fillColor]
+/*
+ DEPRECATED
+ 'archivedDataWithRootObject:' is deprecated: first deprecated in macOS 10.14 - Use +archivedDataWithRootObject:requiringSecureCoding:error: instead
+ archivedDataWithRootObject:_fillColor
+ archivedDataWithRootObject:_fillColor requiringSecureCoding:YES error:nil
+ 
+ */
+    [ret setObject:[NSKeyedArchiver archivedDataWithRootObject:_fillColor requiringSecureCoding:YES error:nil]
             forKey:fillColorArchiveKey];
-    [ret setObject:[NSArchiver archivedDataWithRootObject:_strokeColor]
+    [ret setObject:[NSKeyedArchiver archivedDataWithRootObject:_strokeColor requiringSecureCoding:YES error:nil]
             forKey:strokeColorArchiveKey];
     [ret setObject:[NSNumber numberWithInt:_knobMask]
             forKey:knobMaskArchiveKey];
