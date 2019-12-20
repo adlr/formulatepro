@@ -278,6 +278,7 @@ static const float ZoomScaleFactor = 1.3;
 - (void)drawRect:(NSRect)rect
 {
     NSGraphicsContext* theContext = [NSGraphicsContext currentContext];
+
     //DLog(@"draw rect %@\n", NSStringFromRect(rect));
 
     if (nil == _pdf_document) return;
@@ -308,8 +309,15 @@ static const float ZoomScaleFactor = 1.3;
         NSAffineTransform *at = [self transformForPage:i];
         [at concat];
 
+/*
+ DEPRECATED
+ 'drawWithBox:' is deprecated: first deprecated in macOS 10.12
+ [[_pdf_document pageAtIndex:i] drawWithBox:_box];
+ Maybe https://stackoverflow.com/questions/24016668/how-to-use-implicitly-unwrapped-optionals/24056236#24056236
+ */
         if (!_is_printing || [_doc drawsOriginalPDF])
-            [[_pdf_document pageAtIndex:i] drawWithBox:_box];
+            [[_pdf_document pageAtIndex:i] drawWithBox:_box
+                                             toContext:theContext.CGContext];
 
         for (unsigned int j = 0; j < [_overlayGraphics count]; j++) {
             FPGraphic *g;
