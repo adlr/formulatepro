@@ -177,8 +177,15 @@ static const float ZoomScaleFactor = 1.3;
     NSPoint viewPoint = [self convertPoint:midPoint fromPage:page];
     NSPoint viewOrigin = NSMakePoint(floorf(viewPoint.x - viewWidth/2.0),
                                      floorf(viewPoint.y - viewHeight/2.0));
+/*
+ TODO
+ Fix the error:
+ Sending 'NSPoint' (aka 'struct CGPoint') to parameter of incompatible type 'NSRect' (aka 'struct CGRect')
     [[_scrollView contentView] scrollToPoint:
         [[_scrollView contentView] constrainBoundsRect:viewOrigin]];
+ */
+    [[_scrollView contentView] scrollToPoint:viewOrigin];
+
     [_scrollView reflectScrolledClipView:[_scrollView contentView]];
 }
 
