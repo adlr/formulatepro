@@ -70,17 +70,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FBA07B3F13500E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDocument.m; sourceTree = "<group>"; };
 		2A37F4AEFDCFA73011CA2CEA /* MyDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDocument.h; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		2A37F4B5FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MyDocument.nib; sourceTree = "<group>"; };
-		2A37F4B7FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32DBCF750370BD2300C91783 /* FormulatePro_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormulatePro_Prefix.pch; sourceTree = "<group>"; };
+		8509150923AFDCE3004B320B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = en; path = en.lproj/Credits.html; sourceTree = "<group>"; };
+		8509150A23AFDCE3004B320B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8509150D23AFDCEA004B320B /* Base */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Base; path = Base.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		8509150E23AFDCEA004B320B /* Base */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Base; path = Base.lproj/MyDocument.nib; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* FormulatePro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FormulatePro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C43595C40D306E02006A7FF5 /* FPNonMainWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPNonMainWindow.m; sourceTree = "<group>"; };
@@ -113,7 +114,6 @@
 		C4AB423C0A5FA01D00EE29B2 /* arrowTool.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = arrowTool.psd; sourceTree = "<group>"; };
 		C4AB42800A623A6800EE29B2 /* FPToolPaletteController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FPToolPaletteController.h; sourceTree = "<group>"; };
 		C4AB42810A623A6800EE29B2 /* FPToolPaletteController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FPToolPaletteController.m; sourceTree = "<group>"; };
-		C4AB42D10A6245F100EE29B2 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = English; path = English.lproj/Credits.html; sourceTree = "<group>"; };
 		C4AB437F0A67C3E600EE29B2 /* stampTool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stampTool.png; sourceTree = "<group>"; };
 		C4AB43960A6A3B0D00EE29B2 /* oneUp.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = oneUp.psd; sourceTree = "<group>"; };
 		C4AB440A0A711A0C00EE29B2 /* twoUp.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = twoUp.psd; sourceTree = "<group>"; };
@@ -333,14 +333,15 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 1130;
 			};
 			buildConfigurationList = C4AB3E9F0A5AFE1100EE29B2 /* Build configuration list for PBXProject "FormulatePro" */;
 			compatibilityVersion = "Xcode 2.4";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 1;
 			knownRegions = (
-				English,
 				en,
+				Base,
 			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* FormulatePro */;
 			projectDirPath = "";
@@ -417,7 +418,7 @@
 		089C165FFE840EACC02AAC07 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				089C1660FE840EACC02AAC07 /* English */,
+				8509150A23AFDCE3004B320B /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -425,7 +426,7 @@
 		2A37F4B4FDCFA73011CA2CEA /* MyDocument.nib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				2A37F4B5FDCFA73011CA2CEA /* English */,
+				8509150E23AFDCEA004B320B /* Base */,
 			);
 			name = MyDocument.nib;
 			sourceTree = "<group>";
@@ -433,7 +434,7 @@
 		2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				2A37F4B7FDCFA73011CA2CEA /* English */,
+				8509150D23AFDCEA004B320B /* Base */,
 			);
 			name = MainMenu.nib;
 			sourceTree = "<group>";
@@ -441,7 +442,7 @@
 		C4AB42D00A6245F100EE29B2 /* Credits.html */ = {
 			isa = PBXVariantGroup;
 			children = (
-				C4AB42D10A6245F100EE29B2 /* English */,
+				8509150923AFDCE3004B320B /* en */,
 			);
 			name = Credits.html;
 			sourceTree = SOURCE_ROOT;
@@ -532,6 +533,7 @@
 		C4AB3EA00A5AFE1100EE29B2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -552,6 +554,7 @@
 					ppc,
 					i386,
 				);
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = "";
