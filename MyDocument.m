@@ -189,15 +189,6 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
     DLog(@"line %d\n", __LINE__);
     
 
-/*
- DEPRECATED
- 'dataFromPropertyList:format:errorDescription:' is deprecated: first deprecated in macOS 10.10 - Use dataWithPropertyList:format:options:error: instead.
-        [NSPropertyListSerialization
-         dataFromPropertyList:d
-                       format:NSPropertyListXMLFormat_v1_0
-             errorDescription:&errorDesc];
- */
-//    NSString *errorDesc;
     NSError *errorData;
     NSData *ret =
         [NSPropertyListSerialization
@@ -206,7 +197,7 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
                       options:0
                         error:&errorData];
     if (nil == ret) {
-        DLog(@"error: %@\n", errorData);
+        DLog(@"error: %@\n", errorData.localizedDescription);
         [errorData release];
         return [NSData data];
     }
@@ -224,14 +215,6 @@ static NSString *MyDocToolbarIdentifierPreviousPage =
                                 // act like a brand new document. e.g. file->save
                                 // pops the save-as dialog
     } else if ([typeName isEqualToString:@"FormulatePro Document"]) {
-/*
- DEPRECATED
- 'propertyListFromData:mutabilityOption:format:errorDescription:' is deprecated: first deprecated in macOS 10.10 - Use propertyListWithData:options:format:error: instead.
- propertyListFromData:data
-     mutabilityOption:NSPropertyListMutableContainersAndLeaves
-               format:nil
-     errorDescription:nil];
- */
         NSMutableDictionary *dict =
             [NSPropertyListSerialization propertyListWithData:data
                                                       options:NSPropertyListMutableContainersAndLeaves

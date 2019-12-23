@@ -91,11 +91,6 @@ enum {FPDeleteKey = 0x7f};
 - (void)flagsChanged:(NSEvent *)theEvent
 {
     DLog(@"flags changed\n");
-/*
- DEPRECATED
- 'NSAlternateKeyMask' is deprecated: first deprecated in macOS 10.12
- 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
- */
     if ((NO == _sentQuickMove) &&
         ([theEvent modifierFlags] & NSEventModifierFlagOption) &&
         ([theEvent modifierFlags] & NSEventModifierFlagCommand) &&

@@ -278,7 +278,6 @@ static const float ZoomScaleFactor = 1.3;
 - (void)drawRect:(NSRect)rect
 {
     NSGraphicsContext* theContext = [NSGraphicsContext currentContext];
-
     //DLog(@"draw rect %@\n", NSStringFromRect(rect));
 
     if (nil == _pdf_document) return;
@@ -309,12 +308,6 @@ static const float ZoomScaleFactor = 1.3;
         NSAffineTransform *at = [self transformForPage:i];
         [at concat];
 
-/*
- DEPRECATED
- 'drawWithBox:' is deprecated: first deprecated in macOS 10.12
- [[_pdf_document pageAtIndex:i] drawWithBox:_box];
- Maybe https://stackoverflow.com/questions/24016668/how-to-use-implicitly-unwrapped-optionals/24056236#24056236
- */
         if (!_is_printing || [_doc drawsOriginalPDF])
             [[_pdf_document pageAtIndex:i] drawWithBox:_box
                                              toContext:theContext.CGContext];
@@ -468,8 +461,7 @@ static const float ZoomScaleFactor = 1.3;
     for (;;) {
         // get ready for next iteration of the loop, or break out of loop
         theEvent =
-        [[self window] nextEventMatchingMask:(NSEventMaskLeftMouseDragged |
-                                              NSEventMaskLeftMouseUp)];
+            [[self window] nextEventMatchingMask:(NSEventMaskLeftMouseDragged | NSEventMaskLeftMouseUp)];
         if ([theEvent type] == NSEventTypeLeftMouseUp)
             break;
         
@@ -777,34 +769,6 @@ static const float ZoomScaleFactor = 1.3;
     DLog(@"DocView's plageImage\n");
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     [panel setAllowsMultipleSelection:NO];
-/*
- DEPRECATED
- 'beginSheetForDirectory:file:types:modalForWindow:modalDelegate:didEndSelector:contextInfo:' is deprecated: first deprecated in macOS 10.6
-    [panel beginSheetForDirectory:nil
-                             file:nil
-                            types:nil
-                   modalForWindow:[self window]
-                    modalDelegate:self
-                   didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:)
-                      contextInfo:nil];
- 
- https://patchwork.ozlabs.org/patch/247062/
- +        // Compatibility code for pre-10.6, using deprecated method
- +   [panel beginSheetForDirectory:nil
-                              file:nil
-                             types:filetypes
-                    modalForWindow:normalWindow
-                     modalDelegate:self
-                    didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:)
-                       contextInfo:NULL];
- +#else
- +    [panel beginSheetModalForWindow:normalWindow
- +            completionHandler:^(NSInteger returnCode)
- +            { [self openPanelDidEnd:panel
- +                  returnCode:returnCode contextInfo:NULL ]; } ];
- 
- 
- */
     [panel beginSheetModalForWindow:[self window]
                   completionHandler:^(NSInteger returnCode) {
         [self openPanelDidEnd:panel
@@ -819,11 +783,6 @@ static const float ZoomScaleFactor = 1.3;
             contextInfo:(void *)contextInfo
 {
     if (NSModalResponseOK != returnCode) return;
-/*
- DEPRECATED
- 'filename' is deprecated: first deprecated in macOS 10.6 - Use -URL instead
- initWithContentsOfFile:[panel filename] autorelease];
- */
     NSImage *image = [[[NSImage alloc]
                        initWithContentsOfFile:[[panel URL] path]] autorelease];
 

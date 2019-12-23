@@ -99,19 +99,9 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
          dictionaryWithDictionary:[super archivalDictionary]];
     [ret setObject:arrayFromRect([_editor frame])
          forNonexistentKey:editorFrameKey];
-/*
- ERROR Format String Issue
- Null passed to a callee that requires a non-null argument
- [_textStorage RTFFromRange:NSMakeRange(0, [_textStorage length]) documentAttributes:nil]
- 
- https://stackoverflow.com/questions/32589869/xcode-generating-warning-when-invoking-rtffromrange-on-nsattributedstring-with-n
- NSAttributedString *anEntry = ...
- someData = [anEntry RTFFromRange: NSMakeRange(0,[anEntry length]) documentAttributes: nil];
- someData = [anEntry RTFFromRange: NSMakeRange(0,[anEntry length]) documentAttributes: @{NSDocumentTypeDocumentAttribute: NSRTFTextDocumentType}];
-
- */
     NSData *d =
-        [_textStorage RTFFromRange:NSMakeRange(0, [_textStorage length]) documentAttributes: @{}];
+        [_textStorage RTFFromRange:NSMakeRange(0, [_textStorage length])
+                documentAttributes: @{}];
     NSString *rtfstr =
         [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
 
@@ -158,12 +148,6 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
     _naturalBounds.size = NSMakeSize(1.0, 1.0);
     
     // if the next event is mouse up, then the user didn't drag at all
-/*
- DEPRECATED
- 'NSLeftMouseDraggedMask' is deprecated: first deprecated in macOS 10.12
- 'NSLeftMouseUpMask' is deprecated: first deprecated in macOS 10.12
- 'NSLeftMouseUp' is deprecated: first deprecated in macOS 10.12
- */
     theEvent = [[_docView window] nextEventMatchingMask:
                 (NSEventMaskLeftMouseDragged | NSEventMaskLeftMouseUp)];
     _isAutoSizedX = _isAutoSizedY = YES;
