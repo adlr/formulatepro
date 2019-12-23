@@ -61,8 +61,8 @@
 
         // get ready for next iteration of the loop, or break out of loop
         theEvent = [[_docView window] nextEventMatchingMask:
-            (NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
-        if ([theEvent type] == NSLeftMouseUp)
+                    (NSEventMaskLeftMouseDragged | NSEventMaskLeftMouseUp)];
+        if ([theEvent type] == NSEventTypeLeftMouseUp)
             break;
     }
 

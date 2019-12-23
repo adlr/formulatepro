@@ -101,7 +101,7 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
          forNonexistentKey:editorFrameKey];
     NSData *d =
         [_textStorage RTFFromRange:NSMakeRange(0, [_textStorage length])
-                documentAttributes:nil];
+                documentAttributes: @{}];
     NSString *rtfstr =
         [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
 
@@ -149,9 +149,9 @@ static NSString *autoSizedYArchiveKey = @"autoSizedY";
     
     // if the next event is mouse up, then the user didn't drag at all
     theEvent = [[_docView window] nextEventMatchingMask:
-                (NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
+                (NSEventMaskLeftMouseDragged | NSEventMaskLeftMouseUp)];
     _isAutoSizedX = _isAutoSizedY = YES;
-    if ([theEvent type] != NSLeftMouseUp) {
+    if ([theEvent type] != NSEventTypeLeftMouseUp) {
         [self resizeWithEvent:theEvent byKnob:LowerRightKnob];
     }
     _isPlacing = NO;

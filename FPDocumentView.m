@@ -177,8 +177,15 @@ static const float ZoomScaleFactor = 1.3;
     NSPoint viewPoint = [self convertPoint:midPoint fromPage:page];
     NSPoint viewOrigin = NSMakePoint(floorf(viewPoint.x - viewWidth/2.0),
                                      floorf(viewPoint.y - viewHeight/2.0));
+/*
+ TODO
+ Fix the error:
+ Sending 'NSPoint' (aka 'struct CGPoint') to parameter of incompatible type 'NSRect' (aka 'struct CGRect')
     [[_scrollView contentView] scrollToPoint:
-        [[_scrollView contentView] constrainScrollPoint:viewOrigin]];
+        [[_scrollView contentView] constrainBoundsRect:viewOrigin]];
+ */
+    [[_scrollView contentView] scrollToPoint:viewOrigin];
+
     [_scrollView reflectScrolledClipView:[_scrollView contentView]];
 }
 
@@ -302,7 +309,8 @@ static const float ZoomScaleFactor = 1.3;
         [at concat];
 
         if (!_is_printing || [_doc drawsOriginalPDF])
-            [[_pdf_document pageAtIndex:i] drawWithBox:_box];
+            [[_pdf_document pageAtIndex:i] drawWithBox:_box
+                                             toContext:theContext.CGContext];
 
         for (unsigned int j = 0; j < [_overlayGraphics count]; j++) {
             FPGraphic *g;
@@ -453,9 +461,8 @@ static const float ZoomScaleFactor = 1.3;
     for (;;) {
         // get ready for next iteration of the loop, or break out of loop
         theEvent =
-            [[self window] nextEventMatchingMask:(NSLeftMouseDraggedMask |
-                                                  NSLeftMouseUpMask)];
-        if ([theEvent type] == NSLeftMouseUp)
+            [[self window] nextEventMatchingMask:(NSEventMaskLeftMouseDragged | NSEventMaskLeftMouseUp)];
+        if ([theEvent type] == NSEventTypeLeftMouseUp)
             break;
         
         // main loop body
@@ -586,7 +593,7 @@ static const float ZoomScaleFactor = 1.3;
             if (([graphic page] == page) &&
                 NSPointInRect(pagePoint, [graphic safeBounds])) {
                 // we hit 'graphic'
-                if ([theEvent modifierFlags] & NSShiftKeyMask) {
+                if ([theEvent modifierFlags] & NSEventModifierFlagShift) {
                     [_selectedGraphics invertMembershipForObject:graphic];
                     [[NSNotificationCenter defaultCenter] postNotificationName:FPSelectionChangedNotification
                                                                         object:[self window]
@@ -630,7 +637,7 @@ static const float ZoomScaleFactor = 1.3;
         } else {
             if ([_selectedGraphics count]) {
                 [self setNeedsDisplay:YES];
-                if ([theEvent modifierFlags] & NSAlternateKeyMask) {
+                if ([theEvent modifierFlags] & NSEventModifierFlagOption) {
                     DLog(@"will copy\n");
                     // if option key is down, and a drag is begun, 
                     // copy the elements and drag those new ones
@@ -762,23 +769,22 @@ static const float ZoomScaleFactor = 1.3;
     DLog(@"DocView's plageImage\n");
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     [panel setAllowsMultipleSelection:NO];
-    [panel beginSheetForDirectory:nil
-                             file:nil
-                            types:nil
-                   modalForWindow:[self window]
-                    modalDelegate:self
-                   didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:)
-                      contextInfo:nil];
+    [panel beginSheetModalForWindow:[self window]
+                  completionHandler:^(NSInteger returnCode) {
+        [self openPanelDidEnd:panel
+                   returnCode:returnCode
+                  contextInfo:NULL ];
+    } ];
+
 }
 
 - (void)openPanelDidEnd:(NSOpenPanel *)panel
              returnCode:(int)returnCode
             contextInfo:(void *)contextInfo
 {
-    if (NSOKButton != returnCode) return;
-
+    if (NSModalResponseOK != returnCode) return;
     NSImage *image = [[[NSImage alloc]
-                       initWithContentsOfFile:[panel filename]] autorelease];
+                       initWithContentsOfFile:[[panel URL] path]] autorelease];
 
     if (nil == image) {
         // failed to open

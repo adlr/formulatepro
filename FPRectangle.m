@@ -47,8 +47,8 @@
     _naturalBounds.size = NSMakeSize(1.0, 1.0);
     
     // if the next event is mouse up, then the user didn't drag at all, so scrap the shape.
-    theEvent = [[_docView window] nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
-    if ([theEvent type] == NSLeftMouseUp)
+    theEvent = [[_docView window] nextEventMatchingMask:(NSEventMaskLeftMouseDragged | NSEventMaskLeftMouseUp)];
+    if ([theEvent type] == NSEventTypeLeftMouseUp)
         return NO;
     // ok, we have a shape, and user is dragging to size it
     [self resizeWithEvent:theEvent byKnob:LowerRightKnob];

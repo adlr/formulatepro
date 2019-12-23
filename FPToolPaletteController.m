@@ -66,8 +66,8 @@ static FPToolPaletteController *_sharedController;
 - (IBAction)chooseTool:(id)sender
 {
     [_buttonArray makeObjectsPerformSelector:@selector(setState:)
-                                  withObject:(id)NSOffState];
-    [sender setState:NSOnState];
+                                  withObject:(id)NSControlStateValueOff];
+    [sender setState:NSControlStateValueOn];
     [[NSNotificationCenter defaultCenter] postNotification:
         [NSNotification notificationWithName:FPToolChosen
                                       object:self]];
@@ -78,7 +78,7 @@ static FPToolPaletteController *_sharedController;
     for (unsigned int i = 0; i < [_buttonArray count]; i++) {
         NSButton *b = [_buttonArray objectAtIndex:i];
         DLog(@"button = 0x%08x\n", (unsigned)b);
-        if ([[_buttonArray objectAtIndex:i] state] == NSOnState)
+        if ([[_buttonArray objectAtIndex:i] state] == NSControlStateValueOn)
             return i;
     }
     assert(0);
@@ -103,7 +103,7 @@ static FPToolPaletteController *_sharedController;
     if (1 != [[theEvent charactersIgnoringModifiers] length])
         return;
     // we don't want any modifiers, except numeric pad is okay
-    if ((NSDeviceIndependentModifierFlagsMask ^ NSNumericPadKeyMask) & [theEvent modifierFlags]) {
+    if ((NSEventModifierFlagDeviceIndependentFlagsMask ^ NSEventModifierFlagNumericPad) & [theEvent modifierFlags]) {
         return;
     }
     unichar c = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];

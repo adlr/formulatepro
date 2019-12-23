@@ -142,13 +142,9 @@ static NSString *versionArchiveKey = @"version";
         _strokeWidth =
             [[dict objectForKey:strokeWidthArchiveKey] floatValue];
         _fillColor =
-            [[NSUnarchiver
-              unarchiveObjectWithData:
-              [dict objectForKey:fillColorArchiveKey]] retain];
+            [[NSKeyedUnarchiver unarchivedObjectOfClass:[NSColor class] fromData:[dict objectForKey:fillColorArchiveKey] error:nil] retain];
         _strokeColor =
-            [[NSUnarchiver
-              unarchiveObjectWithData:
-              [dict objectForKey:strokeColorArchiveKey]] retain];
+        [[NSKeyedUnarchiver unarchivedObjectOfClass:[NSColor class] fromData:[dict objectForKey:strokeColorArchiveKey] error:nil] retain];
         _knobMask =
             [[dict objectForKey:knobMaskArchiveKey] intValue];
         _gFlags.hidesWhenPrinting =
@@ -171,9 +167,9 @@ static NSString *versionArchiveKey = @"version";
             forKey:drawsStrokeArchiveKey];
     [ret setObject:[NSNumber numberWithFloat:_strokeWidth]
             forKey:strokeWidthArchiveKey];
-    [ret setObject:[NSArchiver archivedDataWithRootObject:_fillColor]
+    [ret setObject:[NSKeyedArchiver archivedDataWithRootObject:_fillColor requiringSecureCoding:YES error:nil]
             forKey:fillColorArchiveKey];
-    [ret setObject:[NSArchiver archivedDataWithRootObject:_strokeColor]
+    [ret setObject:[NSKeyedArchiver archivedDataWithRootObject:_strokeColor requiringSecureCoding:YES error:nil]
             forKey:strokeColorArchiveKey];
     [ret setObject:[NSNumber numberWithInt:_knobMask]
             forKey:knobMaskArchiveKey];
@@ -218,8 +214,8 @@ static NSString *versionArchiveKey = @"version";
         
         // get ready for next iteration of the loop, or break out of loop
         theEvent = [[_docView window] nextEventMatchingMask:
-                    (NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
-        if ([theEvent type] == NSLeftMouseUp)
+                    (NSEventMaskLeftMouseDragged | NSEventMaskLeftMouseUp)];
+        if ([theEvent type] == NSEventTypeLeftMouseUp)
             break;
     }
     assert(_hasPage);
@@ -365,7 +361,7 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
             }
         }
         
-        if ([theEvent modifierFlags] & NSShiftKeyMask) {
+        if ([theEvent modifierFlags] & NSEventModifierFlagShift) {
             BOOL didFlip;
             switch (knob) {
                 case UpperRightKnob:
@@ -395,8 +391,8 @@ BOOL FPRectSetLeftAbs(NSRect *rect, float left)
 
         // get ready for next iteration of the loop, or break out of loop
         theEvent = [[_docView window] nextEventMatchingMask:
-                    (NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
-        if ([theEvent type] == NSLeftMouseUp)
+                    (NSEventMaskLeftMouseDragged | NSEventMaskLeftMouseUp)];
+        if ([theEvent type] == NSEventTypeLeftMouseUp)
             break;
     }
     [_docView discardCursorRects];

@@ -92,8 +92,8 @@ enum {FPDeleteKey = 0x7f};
 {
     DLog(@"flags changed\n");
     if ((NO == _sentQuickMove) &&
-        ([theEvent modifierFlags] & NSAlternateKeyMask) &&
-        ([theEvent modifierFlags] & NSCommandKeyMask) &&
+        ([theEvent modifierFlags] & NSEventModifierFlagOption) &&
+        ([theEvent modifierFlags] & NSEventModifierFlagCommand) &&
         ([_docView shouldEnterQuickMove])) {
         DLog(@"got apple-option\n");
         [[NSNotificationCenter defaultCenter] postNotification:
